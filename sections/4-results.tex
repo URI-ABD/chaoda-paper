@@ -1,0 +1,131 @@
+\section{Results}
+\label{sec:results}
+
+
+\begin{table*}[!t]
+\renewcommand{\arraystretch}{1.25}
+\caption{Performance on Train Datasets}
+\label{results:train-performance}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+\textbf{dataset} & \textbf{annthyroid} & \textbf{mnist} & \textbf{pendigits} & \textbf{satellite} & \textbf{shuttle} & \textbf{thyroid} \\
+\hline
+ensemble-L2 & 0.62 & 0.63 & 0.77 & \bfseries 0.63 & 0.84 & 0.87 \\
+\hline
+ensemble-L1 & 0.62 & 0.59 & \bfseries 0.96 & 0.41 & 0.81 & \bfseries 0.96 \\
+\hline
+CBLOF & \bfseries 0.76 & 0.56 & 0.64 & 0.58 & \bfseries 0.98 & \bfseries 0.96 \\
+\hline
+COF & 0.51 & 0.58 & 0.55 & 0.54 & \textit{time} & 0.52 \\
+\hline
+HBOS & 0.62 & 0.51 & 0.83 & \bfseries 0.65 & 0.96 & 0.88 \\
+\hline
+IFOREST & 0.65 & 0.60 & 0.92 & \bfseries 0.64 & \bfseries 0.98 & 0.94 \\
+\hline
+KNN & 0.72 & 0.62 & 0.56 & 0.57 & 0.60 & 0.93 \\
+\hline
+LMDD & 0.70 & \textit{time} & 0.69 & 0.44 & \textit{time} & 0.93 \\
+\hline
+LOCI & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} \\
+\hline
+LODA & 0.53 & 0.62 & 0.77 & \bfseries 0.64 & 0.53 & 0.61 \\
+\hline
+LOF & 0.52 & 0.55 & 0.55 & 0.53 & 0.53 & 0.54 \\
+\hline
+MCD & 0.73 & \bfseries 0.67 & 0.60 & \bfseries 0.65 & \bfseries 0.96 & 0.94 \\
+\hline
+OCSVM & 0.71 & 0.63 & 0.80 & \bfseries 0.64 & \bfseries 0.98 & 0.94 \\
+\hline
+SOD & 0.69 & 0.57 & 0.58 & 0.56 & \textit{time} & 0.87 \\
+\hline
+SOS & 0.50 & 0.51 & 0.51 & 0.48 & \textit{time} & 0.50 \\
+\hline
+\end{tabular}
+\end{table*}
+
+
+\begin{table*}[!t]
+\renewcommand{\arraystretch}{1.25}
+\caption{Performance on the first half of the Test Datasets}
+\label{results:test-performance-1}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{dataset} & \textbf{arrhythmia} & \textbf{breastw} & \textbf{cardio} & \textbf{cover} & \textbf{glass} & \textbf{http} & \textbf{ionosphere} & \textbf{lympho} & \textbf{mammography} \\
+\hline
+ensemble-L2 & \bfseries 0.72 & \bfseries 0.93 & 0.66 & 0.82 & \bfseries 0.82 & \bfseries 1.00 & \bfseries 0.81 & 0.92 & 0.62 \\
+\hline
+ensemble-L1 & 0.63 & 0.85 & 0.50 & 0.75 & 0.76 & \bfseries 0.99 & 0.79 & 0.87 & \bfseries 0.81 \\
+\hline
+CBLOF & \bfseries 0.71 & 0.63 & 0.70 & 0.72 & 0.50 & 0.96 & 0.64 & 0.88 & 0.65 \\
+\hline
+COF & 0.64 & 0.43 & 0.54 & \textit{time} & 0.56 & \textit{time} & 0.63 & 0.71 & 0.60 \\
+\hline
+HBOS & 0.68 & 0.64 & 0.73 & 0.62 & 0.50 & 0.97 & 0.45 & \bfseries 0.97 & 0.68 \\
+\hline
+IFOREST & 0.65 & 0.64 & 0.67 & 0.83 & 0.56 & 0.96 & 0.64 & \bfseries 0.97 & 0.73 \\
+\hline
+KNN & 0.69 & 0.59 & 0.58 & 0.52 & 0.56 & 0.48 & 0.63 & \bfseries 0.98 & 0.68 \\
+\hline
+LMDD & 0.66 & 0.64 & 0.70 & \textit{time} & 0.45 & \textit{time} & 0.62 & 0.71 & 0.77 \\
+\hline
+LOCI & \bfseries 0.70 & \textit{time} & \textit{time} & \textit{time} & 0.52 & \textit{time} & 0.64 & 0.82 & \textit{time} \\
+\hline
+LODA & 0.64 & 0.64 & 0.71 & \bfseries 0.88 & 0.56 & 0.48 & 0.61 & 0.53 & 0.65 \\
+\hline
+LOF & 0.67 & 0.44 & 0.52 & 0.55 & 0.57 & 0.47 & 0.59 & \bfseries 0.97 & 0.63 \\
+\hline
+MCD & 0.70 & 0.64 & 0.71 & 0.52 & 0.45 & 0.96 & 0.64 & 0.80 & 0.49 \\
+\hline
+OCSVM & \bfseries 0.71 & 0.64 & \bfseries 0.75 & \textit{time} & 0.50 & 0.96 & 0.64 & \bfseries 0.97 & 0.75 \\
+\hline
+SOD & 0.62 & 0.62 & 0.57 & \textit{time} & 0.56 & \textit{time} & 0.64 & 0.62 & 0.63 \\
+\hline
+SOS & 0.51 & 0.50 & 0.50 & \textit{time} & 0.50 & \textit{time} & 0.64 & 0.62 & \textit{time} \\
+\hline
+\end{tabular}
+\end{table*}
+
+
+\begin{table*}[!t]
+\renewcommand{\arraystretch}{1.25}
+\caption{Performance on the second half of the Test Datasets}
+\label{results:test-performance-2}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{dataset} & \textbf{musk} & \textbf{optdigits} & \textbf{pima} & \textbf{satimage-2} & \textbf{smtp} & \textbf{vertebral} & \textbf{vowels} & \textbf{wbc} & \textbf{wine} \\
+\hline
+ensemble-L2 & \bfseries 1.00 & 0.58 & 0.45 & 0.95 & \bfseries 0.86 & 0.41 & 0.69 & 0.76 & 0.71 \\
+\hline
+ensemble-L1 & \bfseries 1.00 & 0.49 & \bfseries 0.60 & \bfseries 0.99 & 0.82 & \bfseries 0.46 & 0.81 & 0.78 & 0.70 \\
+\hline
+CBLOF & 0.64 & 0.47 & 0.54 & 0.96 & 0.82 & \bfseries 0.46 & 0.72 & 0.82 & 0.45 \\
+\hline
+COF & 0.53 & 0.52 & 0.54 & 0.61 & \textit{time} & \bfseries 0.46 & 0.89 & 0.78 & 0.45 \\
+\hline
+HBOS & 0.96 & \bfseries 0.75 & 0.57 & 0.93 & 0.81 & \bfseries 0.46 & 0.57 & \bfseries 0.85 & 0.77 \\
+\hline
+IFOREST & 0.96 & 0.53 & 0.56 & 0.95 & 0.83 & \bfseries 0.46 & 0.62 & 0.82 & 0.61 \\
+\hline
+KNN & 0.59 & 0.48 & 0.54 & 0.80 & 0.82 & 0.45 & \bfseries 0.94 & 0.80 & 0.45 \\
+\hline
+LMDD & 0.96 & 0.45 & 0.53 & 0.45 & \textit{time} & 0.44 & 0.51 & 0.75 & 0.66 \\
+\hline
+LOCI & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \bfseries 0.47 & \textit{time} & 0.78 & 0.53 \\
+\hline
+LODA & 0.96 & 0.46 & 0.54 & 0.94 & 0.82 & 0.44 & 0.58 & 0.82 & 0.66 \\
+\hline
+LOF & 0.65 & 0.54 & 0.51 & 0.60 & 0.59 & \bfseries 0.46 & 0.80 & 0.83 & 0.61 \\
+\hline
+MCD & 0.96 & 0.45 & 0.54 & 0.96 & 0.83 & 0.44 & 0.51 & 0.80 & \bfseries 0.88 \\
+\hline
+OCSVM & 0.96 & 0.45 & 0.54 & 0.93 & \textit{time} & 0.44 & 0.59 & 0.82 & 0.50 \\
+\hline
+SOD & 0.62 & 0.48 & 0.55 & 0.69 & \textit{time} & \bfseries 0.46 & 0.82 & 0.80 & 0.45 \\
+\hline
+SOS & 0.49 & 0.52 & 0.52 & 0.50 & \textit{time} & \bfseries 0.48 & 0.61 & 0.52 & 0.45 \\
+\hline
+\end{tabular}
+\end{table*}

@@ -1,0 +1,135 @@
+%! suppress = DiscouragedUseOfDef
+%! suppress = PrimitiveStyle
+\def\year{2021}\relax
+%File: formatting-instructions-latex-2021.tex
+%release 2021.1
+\documentclass[letterpaper]{article} % DO NOT CHANGE THIS
+\usepackage{aaai21}  % DO NOT CHANGE THIS
+\usepackage{times}  % DO NOT CHANGE THIS
+\usepackage{helvet} % DO NOT CHANGE THIS
+\usepackage{courier}  % DO NOT CHANGE THIS
+\usepackage[hyphens]{url}  % DO NOT CHANGE THIS
+\usepackage{graphicx} % DO NOT CHANGE THIS
+\urlstyle{rm} % DO NOT CHANGE THIS
+\def\UrlFont{\rm}  % DO NOT CHANGE THIS
+\usepackage{natbib}  % DO NOT CHANGE THIS AND DO NOT ADD ANY OPTIONS TO IT
+\usepackage{caption} % DO NOT CHANGE THIS AND DO NOT ADD ANY OPTIONS TO IT
+\frenchspacing  % DO NOT CHANGE THIS
+\setlength{\pdfpagewidth}{8.5in}  % DO NOT CHANGE THIS
+\setlength{\pdfpageheight}{11in}  % DO NOT CHANGE THIS
+%\nocopyright
+%PDF Info Is REQUIRED.
+% For /Author, add all authors within the parentheses, separated by commas. No accents or commands.
+% For /Title, add Title in Mixed Case. No accents or commands. Retain the parentheses.
+\pdfinfo{
+/Title (Clustered Hierarchical Anomaly and Outlier Detection Algorithms)
+/Author (Thomas J. Howard III, Najib Ishaq, Noah M. Daniels)
+/TemplateVersion (2021.1)
+} %Leave this
+% DISALLOWED PACKAGES
+% \usepackage{authblk} -- This package is specifically forbidden
+% \usepackage{balance} -- This package is specifically forbidden
+% \usepackage{color (if used in text)
+% \usepackage{CJK} -- This package is specifically forbidden
+% \usepackage{float} -- This package is specifically forbidden
+% \usepackage{flushend} -- This package is specifically forbidden
+% \usepackage{fontenc} -- This package is specifically forbidden
+% \usepackage{fullpage} -- This package is specifically forbidden
+% \usepackage{geometry} -- This package is specifically forbidden
+% \usepackage{grffile} -- This package is specifically forbidden
+% \usepackage{hyperref} -- This package is specifically forbidden
+% \usepackage{navigator} -- This package is specifically forbidden
+% (or any other package that embeds links such as navigator or hyperref)
+% \indentfirst} -- This package is specifically forbidden
+% \layout} -- This package is specifically forbidden
+% \multicol} -- This package is specifically forbidden
+% \nameref} -- This package is specifically forbidden
+% \usepackage{savetrees} -- This package is specifically forbidden
+% \usepackage{setspace} -- This package is specifically forbidden
+% \usepackage{stfloats} -- This package is specifically forbidden
+% \usepackage{tabu} -- This package is specifically forbidden
+% \usepackage{titlesec} -- This package is specifically forbidden
+% \usepackage{tocbibind} -- This package is specifically forbidden
+% \usepackage{ulem} -- This package is specifically forbidden
+% \usepackage{wrapfig} -- This package is specifically forbidden
+% DISALLOWED COMMANDS
+% \nocopyright -- Your paper will not be published if you use this command
+% \addtolength -- This command may not be used
+% \balance -- This command may not be used
+% \baselinestretch -- Your paper will not be published if you use this command
+% \clearpage -- No page breaks of any kind may be used for the final version of your paper
+% \columnsep -- This command may not be used
+% \newpage -- No page breaks of any kind may be used for the final version of your paper
+% \pagebreak -- No page breaks of any kind may be used for the final version of your paperr
+% \pagestyle -- This command may not be used
+% \tiny -- This is not an acceptable font size.
+% \vspace{- -- No negative value may be used in proximity of a caption, figure, table, section, subsection, subsubsection, or reference
+% \vskip{- -- No negative value may be used to alter spacing above or below a caption, figure, table, section, subsection, subsubsection, or reference
+
+\usepackage[utf8]{inputenc} % allow utf-8 input
+% \usepackage[T1]{fontenc}    % use 8-bit T1 fonts (forbidden by AAAI)
+% \usepackage{hyperref}       % hyperlinks
+\usepackage{booktabs}       % professional-quality tables
+\usepackage{amsfonts}       % blackboard math symbols
+\usepackage{nicefrac}       % compact symbols for 1/2, etc.
+\usepackage{microtype}      % microtypography
+\usepackage{mathtools}
+\usepackage{parselines}
+% \usepackage{biblatex}
+\usepackage{verbatim}
+\usepackage[ruled]{algorithm2e}
+
+
+% Title
+
+% Your title must be in mixed case, not sentence case.
+% That means all verbs (including short verbs like be, is, using,and go),
+% nouns, adverbs, adjectives should be capitalized, including both words in hyphenated terms, while
+% articles, conjunctions, and prepositions are lower case unless they
+% directly follow a colon or long dash
+
+
+%Example, Multiple Authors, ->> remove \iffalse,\fi and place them surrounding AAAI title to use it
+\title{Clustered Hierarchical Anomaly and Outlier Detection Algorithms}
+\author {
+    % Authors
+
+        Thomas J. Howard III,\textsuperscript{\rm 1}\thanks{These authors contributed equally to this work.}
+        Najib Ishaq, \textsuperscript{\rm 1}\textsuperscript{*}
+        Noah M. Daniels \textsuperscript{\rm 1} \\
+}
+\affiliations {
+    % Affiliations
+    \textsuperscript{\rm 1} Dept. of Computer Science and Statistics \\
+    University of Rhode Island\\
+    Kingston, RI\\
+    thoward27@uri.edu, najib\_ishaq@uri.edu, noah\_daniels@uri.edu\\
+    
+}
+
+\begin{document}
+
+\maketitle
+
+
+\begin{abstract}
+Anomaly and outlier detection in datasets is a long-standing problem in machine learning.
+In some cases, anomaly detection is easy, such as when data are drawn from well-characterized distributions such as the Gaussian.
+However, when data occupy high-dimensional spaces, anomaly detection becomes more difficult.
+We present CLAM (Clustered Learning of Approximate Manifolds), a fast hierarchical clustering technique that learns a manifold in a Banach space defined by a distance metric.
+CLAM induces a graph at each level of the binary cluster tree, and upon this graph we implement CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms), a collection of simple approaches that explore various properties of the graph and the constituent clusters in order to compute scores of anomalousness.
+On 24 publicly available datasets, we compare the performance of CHAODA (by measure of AUC of a ROC curve) to a one-class SVM as well as several state-of-the art anomaly-detection methods.
+CHAODA performs best in most cases, outperforming a one-class SVM in every case, and matching or exceeding other approaches on 12 of the 20 datasets for which other approaches reported an AUC\@.
+\end{abstract}
+
+\input{sections/1-introduction.tex}
+\input{sections/2-related-works.tex}
+\input{sections/3-methodology.tex}
+\input{sections/4-results.tex}
+\input{sections/5-discussion.tex}
+\input{sections/6-acknowledgements.tex}
+
+\bibliography{references}
+
+
+\end{document}
