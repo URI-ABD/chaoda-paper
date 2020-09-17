@@ -1,5 +1,6 @@
 ## Local folders and files
 .idea
+out
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
