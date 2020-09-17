@@ -1,0 +1,98 @@
+\section{Datasets}
+\label{sec:datasets}
+
+TODO
+
+%\subsection{Datasets}
+%\label{subsec:datasets}
+%
+%For this work, we applied CHAODA to 24 different datasets, all sourced from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}.
+%Datasets on ODDS are taken from the UCI Machine Learning Repository~\cite{UCIMLR}, and are standardized for Anomaly and Outlier detection benchmarks.
+%
+%The \textbf{lympho} dataset is derived from the Lymphography dataset.
+%The two minority classes (with 2 and 4 points respectively) are combined to form the outliers.
+%
+%The \textbf{wbc} dataset is derived from the Wisconsin-Breast Cancer dataset.
+%The malignant class is downsampled to 21 points, which are considered outliers.
+%
+%The \textbf{breastw} dataset is also derived from the Wisconsin-Breast Cancer dataset.
+%The dimensionality is reduced to 9 and the points in the malignant class are considered outliers.
+%
+%The \textbf{glass} dataset is a glass identification dataset inspired by criminological investigations.
+%Points in the minority class, class 6, are marked as outliers.
+%
+%The \textbf{vowels} dataset is derived from the Japanese Vowels dataset.
+%For each utterance by speakers in the original data, 12 features are derived for anomaly detection.
+%Utterances by speaker 1 are downsampled to 50 instances and marked as outliers.
+%
+%The \textbf{cardio} dataset is derived from the Cardiotocography dataset.
+%Points in the normal class form inliers while those in the pathologic class, downsampled to 176 points, form the outliers.
+%
+%The \textbf{thyroid} dataset is derived from the thyroid disease dataset.
+%The hyperfunction class, containing 93 instances, is treated as the outlier class.
+%There are a total of 3,772 points in this dataset.
+%
+%The \textbf{annthyroid} dataset is also derived from the the thyroid disease dataset.
+%The train and test sets are combined to give a total of 7,200 points.
+%The hyperfunction class, containing 534 instances, is treated as the outlier class.
+%
+%The \textbf{musk} dataset is derived from its namesake in the UCI Machine Learning Repository.
+%Three non-musk classes form inliers, two musk classes form outliers, and all other classes are discarded.
+%
+%The \textbf{satimage-2} dataset is derived from the Satlog dataset.
+%Class 2 is downsampled to form 71 outliers.
+%
+%The \textbf{pima} dataset is derived from the Pima Indians diabetes dataset.
+%Among other constraints, this dataset was preprocessed to include only female patients at least 21 years of age.
+%
+%The \textbf{satellite} dataset is derived from the Statlog dataset.
+%The smallest three classes (2, 4, and 5) are considered outliers while the other classes are combined to form the inliers.
+%
+%The \textbf{shuttle} dataset is also derived from the Statlog dataset.
+%Here, the smallest five classes (2, 3, 5, 6, and 7) are combined to form the outliers while class 1 forms the inliers.
+%Class 4 is discarded.
+%
+%The \textbf{arrhythmia} dataset is derived from a 274-dimensional dataset.
+%The five categorical attributes are discarded and the eight smallest classes (3, 4, 5, 7, 8, 9, 14, and 15) are combined to form the outliers.
+%
+%The \textbf{ionosphere} dataset consists of 33-dimensional points.
+%The `bad' class is considered as the outlier class.
+%
+%The \textbf{mnist} dataset is derived from the classic MNIST dataset of handwritten digits.
+%Digit-zero is considered the inlier class while 700 images sampled from digit-six are the outliers.
+%Furthermore, 100 features are randomly selected from the original 784.
+%
+%The \textbf{optdigits} dataset is derived from the Optical Recognition of Handwritten Digits dataset.
+%Digits 1--9 are the inliers while 150 samples of digit-zero form the outliers.
+%
+%The \textbf{http} dataset is derived from the original KDD Cup 1999 dataset.
+%Its 41 attributes are reduced to 4, and the attacks are downsampled to form 3,377 outliers.
+%This dataset contains a total of 567,479 points.
+%
+%The \textbf{smtp} is also derived from the KDD Cup 1999 dataset.
+%There are 4 attributes to use for prediction.
+%This version of the dataset only contains 95,156 points, of which 30 are outliers.
+%
+%The \textbf{cover} dataset is derived from the Forest Cover type dataset.
+%The 10 quantitative attributes of each instance are used for outlier detection.
+%Class 2 forms the normal points while class 4 forms the anomalies.
+%The remaining classes are discarded.
+%
+%The \textbf{mammography} dataset is derived from the original Mammography dataset provided by Aleksandar Lazarevic.
+%It contains 11,183 samples with 260 calcifications that form the outlier class.
+%
+%The \textbf{pendigits} dataset is derived from the Pen-Based Recognition of Handwritten Digits dataset from the UCI Machine Learning Repository.
+%The original collection of handwritten samples is reduced to 6,870 points, of which 156 are outliers.
+%
+%The \textbf{wine} dataset is a collection of results of a chemical analysis of wines from a region in Italy.
+%Classes 2 and 3 form the inliers while class 1, downsampled to 10 instances, is the outlier class.
+%
+%The \textbf{vertebral} dataset is a 6-dimensional dataset build by Dr. Henrique da Mota.
+%The `Abnormal' class of 210 instances are used as inliers while the `Normal' class is downsampled to 30 instances to form the outliers.
+%
+%\subsection{Comparisons to Other Approaches}
+%\label{subsec:chaoda:comparisons-to-other-approaches}
+%
+%For each of the 24 datasets from ODDS, we applied each of the five CHAODA algorithms with each of three distance functions: Cosine distance, Euclidean (L2) distance, and Manhattan (L1) distance.
+%After, allowing CLAM to continue partitioning the data until the underlying manifold had thoroughly shattered, we iterated over depth, applying each algorithm at every level and producing the corresponding ROC curve.
+%In order to compare our methods, we used a standard one-class SVM from the Python \texttt{sklearn} package, and compared the area under a ROC curve (ROC AUC) to those reported by several state-of-the-art anomaly detection approaches: LOF~\cite{breunig2000lof}, HiCS~\cite{keller2012hics}, LODES~\cite{sathe2016lodes}, iForest~\cite{liu2008isolation}, Mass~\cite{ting2009mass}, MassE~\cite{aryal2014improving}, AOD (Active-Outlier)~\cite{abe2006outlier}, HST (HS-Tree)~\cite{tan2011fast}, and iNNE~\cite{bandaragoda2014efficient}.

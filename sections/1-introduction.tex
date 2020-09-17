@@ -1,21 +1,23 @@
 \section{Introduction}
 \label{sec:introduction}
 
-Detecting anomalies and outliers from data is a well-studied problem in machine learning.
-When data occupy easily-described distributions, such as the Gaussian, the task is relatively easy: one need only identify when a datum is sufficiently far from the mean.
-However, in ``big data'' scenarios, where data can occupy high-dimensional spaces, anomalous behavior becomes harder to quantify.
-If the data happen to be uniformly distributed, one can conceive of simple mechanisms, such as a one-class SVM, that would be effective in any number of dimensions.
-However, real-world data are rarely distributed uniformly.
-Instead, data often obey the ``manifold hypothesis''~\cite{fefferman2016testing}, occupying a low-dimensional manifold in a high-dimensional embedding space.
-This low-dimensional manifold may weave itself through the high-dimensional space much like a crumpled sheet of paper does in 3-dimensional space.
-Detecting anomalies in such a landscape is not easy;
-in particular, correctly identifying an anomalous datum that sits within the gaps of a lower-dimensional manifold presents a challenge.
+TODO
 
-Anomalies (data that do not belong to a distribution) and outliers (data which represent extrema of a distribution) can arise from many sources:
-errors in measurement or collection of data;
-novel, previously-unseen instances of data;
-normal behavior evolving into abnormal behavior;
-and adversarial attacks as inputs to machine-learning algorithms~\cite{elsayed2018adversarial}.
-Modern algorithms designed to detect anomalous behavior fail for a variety of reasons, in particular when anomalies live close to, but not on, a complex manifold in high-dimensional space.
-Our approach is designed to learn these complex manifolds.
-Here we briefly survey contemporary approaches to anomaly detection in order to provide the context needed to understand how our approach differs.
+%Detecting anomalies and outliers from data is a well-studied problem in machine learning.
+%When data occupy easily-described distributions, such as the Gaussian, the task is relatively easy: one need only identify when a datum is sufficiently far from the mean.
+%However, in ``big data'' scenarios, where data can occupy high-dimensional spaces, anomalous behavior becomes harder to quantify.
+%If the data happen to be uniformly distributed, one can conceive of simple mechanisms, such as a one-class SVM, that would be effective in any number of dimensions.
+%However, real-world data are rarely distributed uniformly.
+%Instead, data often obey the ``manifold hypothesis''~\cite{fefferman2016testing}, occupying a low-dimensional manifold in a high-dimensional embedding space.
+%This low-dimensional manifold may weave itself through the high-dimensional space much like a crumpled sheet of paper does in 3-dimensional space.
+%Detecting anomalies in such a landscape is not easy;
+%in particular, correctly identifying an anomalous datum that sits within the gaps of a lower-dimensional manifold presents a challenge.
+%
+%Anomalies (data that do not belong to a distribution) and outliers (data which represent extrema of a distribution) can arise from many sources:
+%errors in measurement or collection of data;
+%novel, previously-unseen instances of data;
+%normal behavior evolving into abnormal behavior;
+%and adversarial attacks as inputs to machine-learning algorithms~\cite{elsayed2018adversarial}.
+%Modern algorithms designed to detect anomalous behavior fail for a variety of reasons, in particular when anomalies live close to, but not on, a complex manifold in high-dimensional space.
+%Our approach is designed to learn these complex manifolds.
+%Here we briefly survey contemporary approaches to anomaly detection in order to provide the context needed to understand how our approach differs.
