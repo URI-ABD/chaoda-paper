@@ -1,10 +1,37 @@
 \section{Methodology}
 \label{sec:methodology}
 
+\subsection{The Manifold}
+\label{subsec:methodology:manifold}
+
+The Manifold is built from a dataset and a distance function.
 % describe creation of Cluster Tree
-% describe Graph and graph invariant. Go over layer-graphs and optimal-graphs.
+We start by calculating a divisive-hierarchical clustering on the data.
+This gives us a tree of Clusters, with the root containing every point in the dataset, and the leaves containing single points from the dataset.
+The procedure is detailed in~\cite{ishaq2019entropy}.
+
+% describe Graph and graph invariant.
+Each Cluster has a center, i.e.\ the geometric median of points contained in that cluster, and a radius, i.e.\ the distance to the farthest point from the center.
+Nearby clusters can sometimes have overlapping volumes, i.e.\ the distance between their centers is less than or equal to the sum of their radii.
+We define a Graph as containing clusters as the nodes.
+Overlapping clusters have an edge connecting them in the Graph.
+Further, a Graph has the following two properties:
+\begin{itemize}
+    \item The clusters in the graph collectively contain every point in the dataset.
+    \item Each point in the dataset is in exactly one cluster in the graph.
+\end{itemize}
+% Go over layer-graphs and optimal-graphs.
+A Graph can be built from clusters at a fixed depth in the cluster-tree, or can contain clusters from multiple different depths in the tree.
+
 % describe Manifold as containing the tree and all the graphs.
+We use the Manifold to keep track of the cluster-tree and any associated Graphs.
+The algorithms described in~\ref{subsec:methodology:individual-algorithms} work using one of these Graphs.
+
 % describe individual algorithms.
+\subsection{Individual Algorithms}
+\label{subsec:methodology:individual-algorithms}
+
+
 % describe meta-ml training-data creation.
 % justify meta-ml model choice. describe integration of meta-ml model into manifold.
 % describe selection criteria for optimal-graphs.

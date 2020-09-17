@@ -75,7 +75,7 @@
 \usepackage{microtype}      % microtypography
 \usepackage{mathtools}
 \usepackage{parselines}
-% \usepackage{biblatex}
+%\usepackage{biblatex}
 \usepackage{verbatim}
 \usepackage[ruled]{algorithm2e}
 
@@ -108,28 +108,19 @@
 }
 
 \begin{document}
-
-\maketitle
-
-
-\begin{abstract}
-Anomaly and outlier detection in datasets is a long-standing problem in machine learning.
-In some cases, anomaly detection is easy, such as when data are drawn from well-characterized distributions such as the Gaussian.
-However, when data occupy high-dimensional spaces, anomaly detection becomes more difficult.
-We present CLAM (Clustered Learning of Approximate Manifolds), a fast hierarchical clustering technique that learns a manifold in a Banach space defined by a distance metric.
-CLAM induces a graph at each level of the binary cluster tree, and upon this graph we implement CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms), a collection of simple approaches that explore various properties of the graph and the constituent clusters in order to compute scores of anomalousness.
-On 24 publicly available datasets, we compare the performance of CHAODA (by measure of AUC of a ROC curve) to a one-class SVM as well as several state-of-the art anomaly-detection methods.
-CHAODA performs best in most cases, outperforming a one-class SVM in every case, and matching or exceeding other approaches on 12 of the 20 datasets for which other approaches reported an AUC\@.
-\end{abstract}
-
-\input{sections/1-introduction.tex}
-\input{sections/2-related-works.tex}
-\input{sections/3-methodology.tex}
-\input{sections/4-results.tex}
-\input{sections/5-discussion.tex}
-\input{sections/6-acknowledgements.tex}
-
-\bibliography{references}
+    \maketitle
 
 
+    \begin{abstract}
+        Abstract is written last.
+    \end{abstract}
+
+    \input{sections/1-introduction.tex}
+    \input{sections/2-related-works.tex}
+    \input{sections/3-methodology.tex}
+    \input{sections/4-results.tex}
+    \input{sections/5-discussion.tex}
+    \input{sections/6-acknowledgements.tex}
+
+    \bibliography{references}
 \end{document}
