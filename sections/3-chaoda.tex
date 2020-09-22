@@ -2,7 +2,7 @@
 \label{sec:chaoda}
 
 \subsection{CLAM}
-\label{subsec:chaoda:manifold}
+\label{subsec:chaoda:clam}
 
 We present a Manifold-Mapping algorithm called CLAM (Clustered Learning of Approximate Manifolds).
 This is an extension of earlier work presented in~\cite{ishaq2019entropy}.
@@ -24,6 +24,7 @@ We require any distance function to have the following properties:
 The distance function may or may not obey the triangle-inequality.
 
 \subsubsection*{Clustering:}
+\label{subsubsec:chaoda:clam:clustering}
 % describe creation of Cluster Tree
 We start by building a divisive-hierarchical clustering of the data.
 This gives us a tree of Clusters, with the root containing every point in the dataset, and each leaf containing a single point from the dataset.
@@ -72,7 +73,7 @@ We will demonstrate CLAM to be such a powerful technique in Manifold-Mapping tha
 \label{subsec:chaoda:individual-algorithms}
 
 Here we describe several simple methods for anomaly detection.
-Each of these methods uses a graph of clusters to calculate an anomalousness score for each point in the dataset.
+Each of these methods uses a graph of clusters from CLAM to calculate an anomalousness score for each point in the dataset.
 
 \subsubsection{Relative Cluster Cardinality:}
 We measure the anomalousness of a point by the cardinality of the cluster that point belongs to relative to the cardinalities of the other clusters in the graph.
@@ -97,37 +98,43 @@ We define disconnected components of a graph by the property that no two cluster
 Consider the relative cardinalities of each component in much the same we we considered the relative cardinalities of clusters in the Cluster Cardinality method.
 Points in clusters in the same component are considered equally anomalous and points in clusters in relatively small components are considered more anomalous than points in clusters in relatively large components.
 
-
-\subsection{Normalizing Anomaly Scores}
-\label{subsec:chaoda:normalizing-anomaly-scores}
-
-%Due to the wide range of possible ``anomalousness'' scores from our methods, as a final step, we normalize all of our measurements by scaling them.
-%For this work, we utilized Min-Max Scaling, shown in Equation~\ref{sec:methods:min-max-normalizationn}, to ensure that anomalousness values always in the $[0, 1]$ range.
-%This lets us compare anomalousness of points fairly across our various methods.
-%
-%\begin{gather}
-%x^{\prime} = \frac{x - x_{min}}{x_{max} - x_{min}}
-%\label{sec:chaoda:min-max-normalizationn}
-%\end{gather}
-TODO
+% TODO: Consider a bit on Normalization of scores.
 
 
 \subsection{Meta Machine Learning}
 \label{subsec:chaoda:meta-machine-learning}
-% describe layer-graphs, and selected-graphs.
-% describe meta-ml training-data creation from layer-graphs.
-% justify meta-ml model choice.
-TODO
+The heart of the problem with our methods of anomaly detection is building the right graph to represent the underlying manifold.
+One could try using every possible combination of clusters to form a graph but this quickly leads to combinatorial explosion.
+Instead, we must intelligently select those clusters that, when used to build the graph, perform best for anomaly detection.
 
+AUC ROC is often used to measure the performance of anomaly detectors;
+we will choose clusters so as to maximize this measure.
+Our aim is to learn a function that takes a cluster and predicts contribution to AUC from that cluster.
+Any function of the following form will suffice.
+\begin{gather*}
+    f: Cluster \mapsto \mathbb{R}^+
+\end{gather*}
 
-\subsection{Selecting Better Graphs}
-\label{subsec:chaoda:selecting-better-graphs}
-% describe integration of meta-ml model into manifold and selection criteria for selected-graphs.
-% describe ranking for selecting clusters for selected-graphs.
-TODO
+We chose a simple Linear Regression to fill this role.
+Such a model needs some data to train with.
+To generate this data, we took a random sample of some of the datasets described in~\ref{sec:datasets}.
+We generate CLAM Manifolds for these training datasets, use the Linear Regression model to learn from these datasets, and apply the results to an entirely different set of datasets.
+
+We generate the initial training data by considering graphs built from clusters at a uniform depth in the tree.
+For each such graph, we calculate the means of the cardinality ratio, radius ratio, and local fractal dimension ratio, and the exponential moving averages of these ratios.
+These ratios are described in~\ref{subsubsec:chaoda:clam:clustering}.
+These ratios form the feature vector for one training sample.
+We apply a method described in~\ref{subsec:chaoda:individual-algorithms} to the graph and obtain an AUC ROC\@.
+We then train the Linear Regression model to predict this AUC from the features extracted from the graph.
+We train a separate Linear Regression model for each method described in~\ref{subsec:chaoda:individual-algorithms}.
 
 
 \subsection{Ensemble}
 \label{subsec:chaoda:ensemble}
-% describe ensemble-model built from all selected-graphs.
-TODO
+Given the learned meta-ml model from the training datasets, we can use it to build graphs for any other dataset.
+In our case with linear regression as that meta-ml model, we use the cluster ratios and the associated regression constants to rank every cluster in a CLAM tree.
+These rankings are normalized by the cardinality of each cluster.
+The highest ranked clusters are then used to build a graph.
+This graph is then used with the corresponding individual algorithm to calculate anomaly scores for all points in the dataset.
+The scores from each individual algorithm are then combined into an ensemble.
+We present the AUC scores from this ensemble in the Results section.
