@@ -37,29 +37,44 @@ The study of classification of types of glass was motivated by criminological in
 This dataset contains 214 instances with nine attributes.
 While there are several different types of glass in this dataset, class 6 is a clear minority with only nine instances and, as such, points in class 6 are treated as the outliers while all other classes are treated as inliers.
 
-%The \textbf{http} dataset is derived from the original KDD Cup 1999 dataset.
-%Its 41 attributes are reduced to 4, and the attacks are downsampled to form 3,377 outliers.
-%This dataset contains a total of 567,479 points.
-%
-%The \textbf{ionosphere} dataset consists of 33-dimensional points.
-%The `bad' class is considered as the outlier class.
-%
-%The \textbf{lympho} dataset is derived from the Lymphography dataset.
-%The two minority classes (with 2 and 4 points respectively) are combined to form the outliers.
-%
-%The \textbf{mammography} dataset is derived from the original Mammography dataset provided by Aleksandar Lazarevic.
-%It contains 11,183 samples with 260 calcifications that form the outlier class.
-%
-%The \textbf{mnist} dataset is derived from the classic MNIST dataset of handwritten digits.
-%Digit-zero is considered the inlier class while 700 images sampled from digit-six are the outliers.
-%Furthermore, 100 features are randomly selected from the original 784.
-%
-%The \textbf{musk} dataset is derived from its namesake in the UCI Machine Learning Repository.
-%Three non-musk classes form inliers, two musk classes form outliers, and all other classes are discarded.
-%
-%The \textbf{optdigits} dataset is derived from the Optical Recognition of Handwritten Digits dataset.
-%Digits 1--9 are the inliers while 150 samples of digit-zero form the outliers.
-%
+The \textbf{http} dataset is derived from the original KDD Cup 1999 dataset.
+It contains 41 attributes (34 continuous and 7 categorical) which are reduced to 4 attributes (service, duration, src\_bytes, dst\_bytes).
+Only the ``service'' attribute is categorical, dividing the data into {http, smtp, ftp, ftp\_data, others} subsets.
+Here, only the ``http'' data is used.
+The values of the continuous attributes are centered around 0, so they have been log-transformed far away from 0.
+The original data contains 3,925,651 attacks in 4,898,431 records.
+This smaller dataset is created with only 2,211 attacks in 567,479 records.
+
+The \textbf{ionosphere} dataset consists 351 instances with 34 attributes.
+One of the attributes is always 0 and, so, is discarded, leaving us with a 33-dimensional dataset.
+The data comes from radar measurements of the ionosphere from a system located in Goose Bay, Labrador.
+The data are classified into ``good'' if the radar returns evidence some type of structure in the ionosphere, and ``bad'' if not.
+The ``good'' class serves as the inliers and the ``bad'' class serves as the outliers.
+
+The \textbf{lympho} dataset is derived from the Lymphography dataset.
+The data contain 148 instances with 18 attributes.
+The instances are labelled ``normal find'', ``metastases'', ``malign lymph'', and ``fibrosis''.
+The two minority classes only contain a total of six instances, and are combined to form the outliers.
+The remaining 142 instances form the inliers.
+
+The \textbf{mammography} dataset is derived from the original Mammography dataset provided by Aleksandar Lazarevic.
+Its goal is to use x-ray images of human breasts to find calcified tissue as an early sign of breast cancer.
+As such, the ``calcification'' class is considered as the outlier class while the ``non-clacification'' class is the inliers.
+We have 11,183 instances with 6 attributes, of which 260 are ``calcifications.''
+
+The \textbf{mnist} dataset is derived from the classic MNIST dataset of handwritten digits.
+Digit-zero is considered the inlier class while 700 images of digit-six are the outliers.
+Furthermore, 100 pixels are randomly selected as features from the original 784 pixels.
+
+The \textbf{musk} dataset is derived from its namesake in the UCI Machine Learning Repository.
+It is created from molecules that have been classified by experts as ``musk'' or ``non-musk''.
+The data are downsampled to 3,062 instances with 166 attributes.
+The ``musk'' class forms the outliers while the ``non-musk'' class forms the inliers.
+
+The \textbf{optdigits} dataset is derived from the Optical Recognition of Handwritten Digits dataset.
+Digits 1--9 form the inliers while 150 samples of digit-zero form the outliers.
+This gives us a dataset of 5,216 instances with 64 attributes.
+
 %The \textbf{pendigits} dataset is derived from the Pen-Based Recognition of Handwritten Digits dataset from the UCI Machine Learning Repository.
 %The original collection of handwritten samples is reduced to 6,870 points, of which 156 are outliers.
 %
