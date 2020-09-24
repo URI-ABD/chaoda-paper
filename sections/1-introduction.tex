@@ -3,21 +3,115 @@
 
 TODO
 
-%Detecting anomalies and outliers from data is a well-studied problem in machine learning.
-%When data occupy easily-described distributions, such as the Gaussian, the task is relatively easy: one need only identify when a datum is sufficiently far from the mean.
-%However, in ``big data'' scenarios, where data can occupy high-dimensional spaces, anomalous behavior becomes harder to quantify.
-%If the data happen to be uniformly distributed, one can conceive of simple mechanisms, such as a one-class SVM, that would be effective in any number of dimensions.
-%However, real-world data are rarely distributed uniformly.
-%Instead, data often obey the ``manifold hypothesis''~\cite{fefferman2016testing}, occupying a low-dimensional manifold in a high-dimensional embedding space.
-%This low-dimensional manifold may weave itself through the high-dimensional space much like a crumpled sheet of paper does in 3-dimensional space.
-%Detecting anomalies in such a landscape is not easy;
-%in particular, correctly identifying an anomalous datum that sits within the gaps of a lower-dimensional manifold presents a challenge.
-%
-%Anomalies (data that do not belong to a distribution) and outliers (data which represent extrema of a distribution) can arise from many sources:
-%errors in measurement or collection of data;
-%novel, previously-unseen instances of data;
-%normal behavior evolving into abnormal behavior;
-%and adversarial attacks as inputs to machine-learning algorithms~\cite{elsayed2018adversarial}.
-%Modern algorithms designed to detect anomalous behavior fail for a variety of reasons, in particular when anomalies live close to, but not on, a complex manifold in high-dimensional space.
-%Our approach is designed to learn these complex manifolds.
-%Here we briefly survey contemporary approaches to anomaly detection in order to provide the context needed to understand how our approach differs.
+% Detecting anomalies and outliers from data is a well-studied problem in machine learning.
+% When data occupy easily-described distributions, such as the Gaussian, the task is relatively easy: one need only identify when a datum is sufficiently far from the mean.
+% However, in ``big data'' scenarios, where data can occupy high-dimensional spaces, anomalous behavior becomes harder to quantify.
+% If the data happen to be uniformly distributed, one can conceive of simple mechanisms, such as a one-class SVM, that would be effective in any number of dimensions.
+% However, real-world data are rarely distributed uniformly.
+% Instead, data often obey the ``manifold hypothesis''~\cite{fefferman2016testing}, occupying a low-dimensional manifold in a high-dimensional embedding space.
+% This low-dimensional manifold may weave itself through the high-dimensional space much like a crumpled sheet of paper does in 3-dimensional space.
+% Detecting anomalies in such a landscape is not easy;
+% in particular, correctly identifying an anomalous datum that sits within the gaps of a lower-dimensional manifold presents a challenge.
+
+% Anomalies (data that do not belong to a distribution) and outliers (data which represent extrema of a distribution) can arise from many sources:
+% errors in measurement or collection of data;
+% novel, previously-unseen instances of data;
+% normal behavior evolving into abnormal behavior;
+% and adversarial attacks as inputs to machine-learning algorithms~\cite{elsayed2018adversarial}.
+% Modern algorithms designed to detect anomalous behavior fail for a variety of reasons, in particular when anomalies live close to, but not on, a complex manifold in high-dimensional space.
+% Our approach is designed to learn these complex manifolds.
+% Here we briefly survey contemporary approaches to anomaly detection in order to provide the context needed to understand how our approach differs.
+
+\subsection{Related Works}
+\label{subsec:introduction:related-works}
+
+TODO
+
+% Go over the history of anomaly detection, manifold learning, manifold mapping etc.
+% Describe each of the methods we caompare against.
+% Mention some methods we did not compare against and why.
+% Mention other methods that can be adapted to anomaly detection e.g. DBSCAN.
+
+% \subsection{Clustering-based Approaches}
+% \label{subsec:related-works:clustering-based-approaches}
+
+% Clustering refers to techniques for grouping points in a way that provides value.
+% This is generally done by assigning \textit{similar} points to the same cluster.
+% Given a clustering and a new point, one can estimate the anomalousness of the new point by measuring its distance to its nearest cluster.
+
+% There have been few advancements in clustering techniques over the past decade~\cite{wang2019progress}.
+% This may be explained by the poor performance of clustering in high-dimensional space~\cite{zhang2013advancements} thus far.
+% The major approaches are as follows.
+
+% Distance-based clustering relies on some distance measure to partition data into some number of clusters.
+% Within this approach, the numbers and/or sizes of clusters are often predefined: either user-specified, or chosen at random~\cite{wang2019progress}.
+% Some examples of distance-based clustering are:
+% K-Means~\cite{macqueen1967some},
+% PAM~\cite{kaufman2009finding},
+% CLARANS~\cite{ng1994efficient} and
+% CLARA~\cite{kaufman2009finding}.
+
+% Hierarchical clustering methods utilize a tree-like structure, where points are allocated into leaf nodes~\cite{wang2019progress}.
+% These tree-like structures can be created bottom-up (agglomerative clustering) or top-down (divisive clustering)~\cite{agrawal1998automatic}.
+% A major drawback of these methods is the high cost of pairwise difference computations required to build each level of the tree.
+% Examples of hierarchical clustering include
+% MST~\cite{charles_zahn_graph_1971},
+% CURE~\cite{guha1998cure} and
+% CHAMELEON~\cite{karypis1999hierarchical}.
+
+% Density-based clustering methods rely on finding regions of high point-density separated by regions of low point-density.
+% These algorithms generally do not work well when data are sparse or uniformly distributed.
+% Some examples of density-based clustering algorithms are
+% DBSCAN~\cite{ester1996density} and
+% DENCLUE~\cite{hinneburg1998efficient}.
+
+% Grid-based clustering works via segmenting the entire space into a discrete number of cells, and then scanning those cells to find regions of high density.
+% Utilizing a grid structure for clustering means that these algorithms typically scale well to larger datasets.
+% Some examples of grid-based clustering include
+% STING~\cite{wang1997sting},
+% Wavecluster~\cite{sheikholeslami2000wavecluster}, and
+% CLIQUE~\cite{agrawal1998automatic}.
+
+% \subsection{Distanced-based Approaches}
+% \label{subsec:related-works:distanced-based-approaches}
+
+% Distance-based methods find anomalous points via distance comparisons.
+% These methods largely employ k-Nearest Neighbors as their substrate~\cite{wang2019progress}.
+% Distance-based approaches tend to use the following intuitions:
+% points with fewer than $p$ other points within some distance $d$ are outliers;
+% the $n$ points with the greatest distances to their $k^{th}-$nearest neighbor are outliers;
+% or the $n$ points with the greatest average distance to their $k$ nearest neighbors are outliers.
+
+% \subsection{CHAODA}
+% \label{subsec:related-works:chaoda}
+
+% In this paper we introduce a novel technique, Clustered Learning of Approximate Manifolds (CLAM).
+% This approach uses divisive hierarchical clustering to learn a manifold in a Banach space~\cite{banach1929fonctionnelles} defined by a distance metric.
+% In actuality, we do not require a metric.
+% The space may be defined by a distance \textit{function} that does not obey the triangle inequality, though this is not always optimal.
+% Given a learned approximate manifold, we can almost trivially implement several anomaly-detection algorithms.
+% In this manuscript, we present a collection of five such algorithms implemented on CLAM: CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms).
+
+% The manifold learning component is derived from prior work, CHESS~\cite{ishaq2019entropy}, to accelerate approximate search on large high-dimensional datasets.
+% CLAM begins by divisively clustering the data until each cluster contains only one datum.
+% CLAM then delineates \textit{layers} of clusters at each depth in the tree.
+% Each layer comprises all clusters that would have been leaf nodes if the tree building had been halted at the given depth.
+
+% CLAM then builds a graph for each layer in the tree by creating edges between clusters that have overlapping volumes.
+% This process effectively learns the manifold on which the data lie at various resolutions, given by the depth of the layer.
+% This is analogous to a ``filtration'' in computational topology~\cite{carlsson2009topology}.
+% Once we have learned a manifold, we can ask about the cardinality of various clusters at different depths, how connected a given cluster is, or even how often a cluster is visited by random walks on the manifold.
+
+% We test our methods on 24 real-world datasets.
+% The datasets span a wide variety of domains, each having a different quantity of anomalous data.
+% We consider several different definitions of outliers and anomalies: \textbf{distance-based}, examining several classical distance-based definitions of outliers, relying on CLAM's use of distance to cluster data; \textbf{density-based}, examining the cardinality of clusters, under the hypothesis that clusters with lower cardinality are more likely to contain outliers; \textbf{graph-based}, examining several graph-theoretic methods for anomaly detection, given graphs constructed from layers of clusters.
+
+% Historically, clustering approaches have suffered from several problems.
+% The most common deficiencies are: the effective treatment of high dimensionality, the ability to interpret results, and the ability to scale to exponentially-growing datasets ~\cite{agrawal1998automatic}.
+% CLAM largely resolves these problems.
+
+
+\subsection{CHAODA}
+\label{subsec:introduction:chaoda}
+
+TODO
