@@ -28,6 +28,7 @@ TODO
 TODO
 
 \subsubsection{Clustering Based Local Outlier Factor (CBLOF)}
+\label{subsubsec:introduction:related-works:cblof}
 % https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.cblof
 % http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.20.4242&rep=rep1&type=pdf
 The CBLOF operator calculates the outlier score based on cluster-based local outlier factor.
@@ -43,12 +44,14 @@ By default, kMeans is used for clustering algorithm instead of Squeezer algorith
 \cite{he2003cblof}
 
 \subsubsection{Connectivity-Based Outlier Factor (COF)}
+\label{subsubsec:introduction:related-works:cof}
 % https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.cof
 % https://dl.acm.org/doi/10.5555/646420.693665
 Connectivity-Based Outlier Factor (COF) COF uses the ratio of average chaining distance of data point and the average of average chaining distance of k nearest neighbor of the data point, as the outlier score for observations.
 \cite{tang2002cof}
 
 \subsubsection{Histogram-Based Outlier Detection (HBOS)}
+\label{subsubsec:introduction:related-works:hbos}
 % https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.hbos
 % https://www.semanticscholar.org/paper/Histogram-based-Outlier-Score-(HBOS)%3A-A-fast-Goldstein-Dengel/405bde43709582b0026c0fd6f0afe2c3c57f792e
 Histogram-Based outlier detection (HBOS) is an efficient unsupervised method.
@@ -56,6 +59,7 @@ It assumes the feature independence and calculates the degree of outlyingness by
 \cite{goldstein2012hbos}
 
 \subsubsection{Isolation-Forest Outlier Detector (IFOREST)}
+\label{subsubsec:introduction:related-works:iforest}
 % https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.iforest
 % https://dl.acm.org/doi/10.1145/2133360.2133363
 % https://dl.acm.org/doi/10.1109/ICDM.2008.17
@@ -64,6 +68,7 @@ The IsolationForest ‘isolates’ observations by randomly selecting a feature 
 \cite{tony2008iforest}
 
 \subsubsection{k-Nearest Neighbors (kNN)}
+\label{subsubsec:introduction:related-works:knn}
 % https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.knn
 % https://webdocs.cs.ualberta.ca/~zaiane/pub/check/ramaswamy.pdf
 % https://www.researchgate.net/profile/Clara_Pizzuti/publication/220699183_Fast_Outlier_Detection_in_High_Dimensional_Spaces/links/542ea6a60cf27e39fa9635c6/Fast-Outlier-Detection-in-High-Dimensional-Spaces.pdf
@@ -73,57 +78,80 @@ It could be viewed as a way to measure the density.
 \cite{fabrizio2002knn}
 
 \subsubsection{Linear Model Deviation-base outlier Detection(LMDD)}
+\label{subsubsec:introduction:related-works:lmdd}
 % https://pyod.readthedocs.io/en/latest/pyod.models.html#pyod-models-lmdd-module
 % http://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.40.9276
 LMDD employs the concept of the smoothing factor which indicates how much the dissimilarity can be reduced by removing a subset of elements from the data-set.
 \cite{arning1996lmdd}
 
 \subsubsection{LOcal Correlation Integral (LOCI)}
+\label{subsubsec:introduction:related-works:loci}
 % https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.loci
 % http://www.cs.cmu.edu/~christos/courses/826-resources/FOILS3-pdf/610_LOCI.pdf
-LOCI is highly effective for detecting outliers and groups of outliers ( a.k.a.micro-clusters), which offers the following advantages and novelties: (a) It provides an automatic, data-dictated cut-off to determine whether a point is an outlier—in contrast, previous methods force users to pick cut-offs, without any hints as to what cut-off value is best for a given dataset. (b) It can provide a LOCI plot for each point; this plot summarizes a wealth of information about the data in the vicinity of the point, determining clusters, micro-clusters, their diameters and their inter-cluster distances. None of the existing outlier-detection methods can match this feature, because they output only a single number for each point: its outlierness score.(c) It can be computed as quickly as the best previous methods
-\cite{papadimitriou2003loci}
+LOCI is highly effective for detecting outliers and groups of outliers ( a.k.a.micro-clusters), which offers the following advantages and novelties~\cite{papadimitriou2003loci}:
+\begin{itemize}
+    \item It provides an automatic, data-dictated cut-off to determine whether a point is an outlier—in contrast, previous methods force users to pick cut-offs, without any hints as to what cut-off value is best for a given dataset.
+    \item It can provide a LOCI plot for each point; this plot summarizes a wealth of information about the data in the vicinity of the point, determining clusters, micro-clusters, their diameters and their inter-cluster distances. None of the existing outlier-detection methods can match this feature, because they output only a single number for each point: its outlierness score.
+    \item It can be computed as quickly as the best previous methods.
+\end{itemize}
 
 \subsubsection{Lightweight Online Detector of Anomalies (LODA)}
+\label{subsubsec:introduction:related-works:loda}
 % https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.loda
 % https://link.springer.com/article/10.1007/s10994-015-5521-0#citeas
 \cite{pevny2016loda}
 
 \subsubsection{Local Outlier Factor (LOF)}
+\label{subsubsec:introduction:related-works:lof}
 % https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.lof
 % https://www.dbs.ifi.lmu.de/Publikationen/Papers/LOF.pdf
-The anomaly score of each sample is called Local Outlier Factor. It measures the local deviation of density of a given sample with respect to its neighbors. It is local in that the anomaly score depends on how isolated the object is with respect to the surrounding neighborhood. More precisely, locality is given by k-nearest neighbors, whose distance is used to estimate the local density. By comparing the local density of a sample to the local densities of its neighbors, one can identify samples that have a substantially lower density than their neighbors. These are considered outliers.
+The anomaly score of each sample is called Local Outlier Factor.
+It measures the local deviation of density of a given sample with respect to its neighbors.
+It is local in that the anomaly score depends on how isolated the object is with respect to the surrounding neighborhood.
+More precisely, locality is given by k-nearest neighbors, whose distance is used to estimate the local density.
+By comparing the local density of a sample to the local densities of its neighbors, one can identify samples that have a substantially lower density than their neighbors.
+These are considered outliers.
 \cite{breunig2000lof}
 
 \subsubsection{Minimum Covariance Determinant (MCD)}
+\label{subsubsec:introduction:related-works:mcd}
 % https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.mcd
 % https://ucdavis.pure.elsevier.com/en/publications/outlier-detection-in-the-multiple-cluster-setting-using-the-minim
 % https://www.researchgate.net/publication/2298225_A_Fast_Algorithm_for_the_Minimum_Covariance_Determinant_Estimator
 Detecting outliers in a Gaussian distributed dataset using Minimum Covariance Determinant (MCD): robust estimator of covariance.
 
-The Minimum Covariance Determinant covariance estimator is to be applied on Gaussian-distributed data, but could still be relevant on data drawn from a unimodal, symmetric distribution. It is not meant to be used with multi-modal data (the algorithm used to fit a MinCovDet object is likely to fail in such a case). One should consider projection pursuit methods to deal with multi-modal datasets.
+The Minimum Covariance Determinant covariance estimator is to be applied on Gaussian-distributed data, but could still be relevant on data drawn from a unimodal, symmetric distribution.
+It is not meant to be used with multi-modal data (the algorithm used to fit a MinCovDet object is likely to fail in such a case).
+One should consider projection pursuit methods to deal with multi-modal datasets.
 
 First fit a minimum covariance determinant model and then compute the Mahalanobis distance as the outlier degree of the data
 \cite{rousseeuw1999mcd}
 \cite{hardin2004mcd}
 
 \subsubsection{One-class Support Vector Machine (OCSVM)}
+\label{subsubsec:introduction:related-works:ocsvm}
 % https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.ocsvm
 % https://www.researchgate.net/publication/220499623_Estimating_Support_of_a_High-Dimensional_Distribution
 Estimate the support of a high-dimensional distribution.
 \cite{sholkopf2001ocsvm}
 
 \subsubsection{Subspace Outlier Detection (SOD)}
+\label{subsubsec:introduction:related-works:sod}
 % https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.sod
 % https://www.dbs.ifi.lmu.de/Publikationen/Papers/pakdd09_SOD.pdf
-Subspace outlier detection (SOD) schema aims to detect outlier in varying subspaces of a high dimensional feature space. For each data object, SOD explores the axis-parallel subspace spanned by the data object’s neighbors and determines how much the object deviates from the neighbors in this subspace.
+Subspace outlier detection (SOD) schema aims to detect outlier in varying subspaces of a high dimensional feature space.
+For each data object, SOD explores the axis-parallel subspace spanned by the data object’s neighbors and determines how much the object deviates from the neighbors in this subspace.
 \cite{kriegel2009sod}
 
 \subsubsection{Stochastic Outlier Selection (SOS)}
+\label{subsubsec:introduction:related-works:sos}
 % https://pyod.readthedocs.io/en/latest/pyod.models.html#module-pyod.models.sos
 % https://pure.uvt.nl/portal/files/1517370/Janssens_outlier_11-06-2013.pdf
 % https://www.datascienceworkshops.com/blog/stochastic-outlier-selection/
-SOS employs the concept of affinity to quantify the relationship from one data point to another data point. Affinity is proportional to the similarity between two data points. So, a data point has little affinity with a dissimilar data point. A data point is selected as an outlier when all the other data points have insufficient affinity with it.
+SOS employs the concept of affinity to quantify the relationship from one data point to another data point.
+Affinity is proportional to the similarity between two data points.
+So, a data point has little affinity with a dissimilar data point.
+A data point is selected as an outlier when all the other data points have insufficient affinity with it.
 \cite{janssens2012sos}
 
 % Go over the history of anomaly detection, manifold learning, manifold mapping etc.
