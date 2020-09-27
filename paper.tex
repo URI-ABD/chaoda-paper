@@ -74,6 +74,7 @@
 \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 \usepackage{microtype}      % microtypography
 \usepackage{mathtools}
+\usepackage{afterpage}
 \usepackage{parselines}
 \usepackage{verbatim}
 \usepackage[ruled]{algorithm2e}
@@ -117,6 +118,7 @@
     \input{sections/3-results.tex}
     \input{sections/4-discussion.tex}
     \input{sections/5-acknowledgements.tex}
-    
+
+    \afterpage{\clearpage}
     \bibliography{references}
 \end{document}

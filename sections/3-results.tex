@@ -1,14 +1,18 @@
 \section{Results}
 \label{sec:results}
 
-TODO
+We have sourced 24 datasets from ODDS~\cite{rayana2016odds}.
+These datasets had already been preprocessed to standardize them for outlier detection benchmarks.
 
-% \subsection{Comparisons to Other Approaches}
-% \label{subsec:chaoda:comparisons-to-other-approaches}
+Of these 24 datasets, we selected a random sample of 6 datasets, shown in Table~\ref{table:results:train-performance}, to use for training CHAODA.
+The remaining datasets were used to measure the performance of CHAODA.
+The performance on the test set of datasets is split among Tables~\ref{table:results:test-performance-1} and~\ref{table:results:test-performance-2}.
+Each column shows the AUC ROC scores of CHAODA and every competitor.
+The best, i.e. highest, score, and every score with 0.02 of that best score, are presented in bold.
+If a method took longer than 10 minutes on a dataset, we terminated that run and marked the corresponding cell with ``\textit{time}''.
 
-% For each of the 24 datasets from ODDS, we applied each of the five CHAODA algorithms with each of three distance functions: Cosine distance, Euclidean (L2) distance, and Manhattan (L1) distance.
-% After, allowing CLAM to continue partitioning the data until the underlying manifold had thoroughly shattered, we iterated over depth, applying each algorithm at every level and producing the corresponding ROC curve.
-% In order to compare our methods, we used a standard one-class SVM from the Python \texttt{sklearn} package, and compared the area under a ROC curve (ROC AUC) to those reported by several state-of-the-art anomaly detection approaches: LOF~\cite{breunig2000lof}, HiCS~\cite{keller2012hics}, LODES~\cite{sathe2016lodes}, iForest~\cite{liu2008isolation}, Mass~\cite{ting2009mass}, MassE~\cite{aryal2014improving}, AOD (Active-Outlier)~\cite{abe2006outlier}, HST (HS-Tree)~\cite{tan2011fast}, and iNNE~\cite{bandaragoda2014efficient}.
+Interestengly, CHAODA did not perform too well on the training set of datasets.
+On the test set, CHAODA outperformed all competitors on 10 of the 18 datasets.
 
 
 \begin{table*}[!t]
