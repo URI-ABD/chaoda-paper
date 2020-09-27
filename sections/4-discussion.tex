@@ -1,26 +1,13 @@
 \section{Discussion}
 \label{sec:discussion}
 
+We have presented CHAODA, an ensemble of four algorithms that use the map of the underlying manifold produced by CLAM.
+The four individual algorithms are simple to implement on top of CLAM and, when combined into an ensemble, often outperform the state-of-the-art in anomaly detection.
 
-
-We have presented CHAODA, an ensemble of four algorithms that use the map of the underlying manifolds produced by CLAM.
-The four individual algorithms are simple to write on top of CLAM and, when combined into an ensemble, often outperform the state-of-the-art in anomaly detection.
-CLAM exploits the geometric and topological properties of low fractal dimension and low metric entropy of the data.
+CLAM uses the geometric and topological properties of low fractal dimension and low metric entropy of the data to build a map of the low-dimensional manifold that the data occupy.
 CHAODA builds on this manifold-mapping framework in much the same way as CHESS~\cite{ishaq2019entropy} did for accelerating search.
-
-
-\subsection{Future Directions}
-\label{subsec:discussion:duture-directions}
-
-TODO
-
-% We have presented CHAODA, a collection of five algorithms that exploit properties of a hierarchical cluster tree which represents an approximate manifold in $n$-dimensional space.
-% The five algorithms are simple to implement on top of the manifold-learning framework we call CLAM\@.
-% CHAODA builds on this framework for anomaly detection in much the same way as CHESS~\cite{ishaq2019entropy} did for accelerating approximate search.
-% With CHESS, the geometric and topological properties of low fractal dimension and low metric entropy are advantages;
-% indeed, CHESS does not offer asymptotic improvements over linear search if these properties are absent.
-% CHAODA, on the other hand, while competitive with other state-of-the-art anomaly-detection approaches on ``easy'' datasets (we define as \textit{easy} any dataset where a one-class SVM performs well), outperforms other current methods when the data exhibit precisely those properties that CHESS exploits for acceleration.
-% In particular, CHAODA outperforms other approaches on high-dimensional datasets, with the exception of the ``annthyroid'' dataset where iForest and AOD perform better.
+With CHESS, we saw an acceleration of search when the data obeyed the properties of low fractal dimension and metric entropy.
+With CHAODA, we see that AUC scores are vastly improved when the data obey these properties and are often competitive when the data do not obey these properties.
 
 % Except for the annthyroid dataset, the algorithms presented here outperform or at least nearly match all other approaches.
 % CHAODA outperforms a 1-class SVM on every dataset, and of the datasets where AUC values were available for other results (20 datasets), CHAODA matches or exceeds the AUC of other approaches on 12 of them.
@@ -43,21 +30,18 @@ TODO
 %    \label{fig:conclusions:umap-embeddings}
 % \end{figure*}
 
-% One current limitation in CHAODA is that the depth of the cluster tree at which anomaly detection performs best is not the same for every dataset;
-% thus, our results could be seen as ``cherry-picking'' from a scattershot approach.
-% The optimal depth varies because as depth increases, the induced graph ``shatters'', i.e.\ the number of components in the graph approaches the number of clusters in the graph.
-% Future work should explore optimal stopping criteria so that we can automate stopping just before the graph shatters.
-% Fortunately, as shown in Figures, for most datasets, performance is not overly sensitive to the choice of depth, especially for the Parent-Child algorithm.
-% For now we can treat depth as a hyperparameter to all of the methods described, but a detailed analysis of possible stopping criteria for clustering depth will likely reveal automatic methods to find the optimal depth.
+\subsection{Future Directions}
+\label{subsec:discussion:duture-directions}
 
-% % TODO: Need to look at local fractal dimension, or volume ratios, vs. optimal depth. Ideally we can say something like:
-% % The strong correlation between local fractal dimension and optimal tree depth suggests a guideline for determining an optimal tree depth directly from the data.
+The choice of distance function seems to have a significant impact on anomaly-detection performance.
+In this case, domain knowledge is likely the best way to determine the distance function of choice.
+Future work should explore a more diverse collection of domain-appropriate distance functions, such as Wasserstein distance on images, Levenshtein edit distance on strings, and Jaccard Index on the Maximal Common Sub-Graph of molecular structures.
 
-% The choice of distance function also has a significant impact on anomaly-detection performance.
-% In this case, domain knowledge is likely the best way to determine the distance function of choice.
-% Future work will seek to explore a more diverse collection of domain-appropriate distance functions, such as Wasserstein distance on images, Levenshtein edit distance on strings, and Jaccard Index on the Maximal Common Sub-Graph of molecular structures.
+Since CHAODA is highly effective on high-dimensional datasets, we can apply it to study Neural Networks.
+We can create a dataset where each datum represents the activations of a neural network from an input to the neural network.
+After mapping the manifold of such activations, we can detect malicious inputs to neural networks based on the intuition that malicious inputs produce atypical activation patterns.
 
-% % TODO: Have we proved this?
-% % Say something about applying CHAODA for inputs to an ANN, in particular detecting just-off-manifold malicious inputs, like the school bus / ostrich example.
+\subsection{Conclusion}
+\label{subsec:discussion:conlcusion}
 
-% In conclusion, we have demonstrated that by learning approximate manifolds, we can exploit the embedded knowledge to implement simple algorithms capable of outperforming other state-of-the-art approaches to anomaly detection.
+In conclusion, we have demonstrated that by mapping the manifolds occupied by data, we can exploit that knowledge to implement simple algorithms capable of outperforming other state-of-the-art approaches to anomaly detection.
