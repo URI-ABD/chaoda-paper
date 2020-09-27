@@ -136,24 +136,30 @@ In this paper, we compare against the following miscelaneous approaches:
 \subsection{CHAODA}
 \label{subsec:introduction:chaoda}
 
-TODO: CHAODA is an ensemble approach
-
 In this paper we introduce a novel technique, Clustered Learning of Approximate Manifolds (CLAM).
-This approach uses divisive hierarchical clustering to learn a manifold in a Banach space~\cite{banach1929fonctionnelles} defined by a distance metric.
+This approach uses divisive hierarchical clustering to learn a manifold in a Banach space~\cite{banach1929fonctionnelles} defined by a distance metric, and allows for an ensemble of anomaly- or outlier-detection algorithms to be implemented on this manifold.
 In actuality, we do not require a metric.
 The space may be defined by a distance \textit{function} that does not obey the triangle inequality, though this is not always optimal.
-Given a learned approximate manifold, we can almost trivially implement several anomaly-detection algorithms.
-In this manuscript, we present a collection of five such algorithms implemented on CLAM: CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms).
+In this manuscript, we present an ensemble of four such algorithms implemented on CLAM: CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms).
 
 The manifold learning component is derived from prior work, CHESS~\cite{ishaq2019entropy}, to accelerate approximate search on large high-dimensional datasets.
 CLAM begins by divisively clustering the data until each cluster contains only one datum.
-CLAM then delineates \textit{layers} of clusters at each depth in the tree.
-Each layer comprises all clusters that would have been leaf nodes if the tree building had been halted at the given depth.
+At any depth of this tree, one could consider the center of each cluster as a vertex in a graph, and the diameter of each cluster (the distance to the furthest point within the cluster) as determining whether two clusters ``overlap.''
+Furthermore, the depth at which one chooses to induce a graph need not be uniform across the cluster tree; local geometric properties can be used to determine the ``optimal'' depth; these properties can include local fractal dimension, cardinality of a cluster, and the evolution of these properties along a branch of the tree.
 
-CLAM then builds a graph for each layer in the tree by creating edges between clusters that have overlapping volumes.
+CLAM thus builds a graph for each layer in the tree by creating edges between clusters that have overlapping volumes.
 This process effectively learns the manifold on which the data lie at various resolutions, given by the depth of the layer.
 This is analogous to a ``filtration'' in computational topology~\cite{carlsson2009topology}.
-Once we have learned a manifold, we can ask about the cardinality of various clusters at different depths, how connected a given cluster is, or even how often a cluster is visited by random walks on the manifold.
+Once we have learned a manifold, we can ask about the cardinality of various clusters at different depths, how connected a given cluster is, or even how often a cluster is visited by random walks on the manifold. All of these approaches are combined into an ensemble approach to anomaly or outlier detection.
+
+Figure~\ref{fig:introduction:graph-generation} illustrates how a graph can be induced by clusters and their overlaps at different depths of a tree.
+
+\begin{figure*}
+   \centering
+   \includegraphics[width=2in]{images/tree-graph.pdf}
+   \caption{Cartoon illustration of how CLAM induces a graph from a cluster tree. Dots in the tree represent cluster centers; blue dots represent cluster centers chosen as graph vertices. Circles around those centers represent the volume of a cluster (the radius is the distance from the center to the furthest point contained within that cluster). Gray arrows point to the induced subgraphs, which are indicated in blue below the horizontal line.}
+   \label{fig:introduction:graph-generation}
+\end{figure*}
 
 We test our methods on 24 real-world datasets.
 The datasets span a wide variety of domains, each having a different quantity of anomalous data.
