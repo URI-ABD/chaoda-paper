@@ -6,21 +6,20 @@ When data occupy easily-characterizable distributions, such as the Gaussian, the
 However, in ``big data'' scenarios, where data can occupy high-dimensional spaces, anomalous behavior becomes harder to quantify.
 If the data happen to be uniformly distributed, one can conceive of simple mechanisms, such as a one-class SVM, that would be effective in any number of dimensions.
 However, real-world data are rarely distributed uniformly.
-Instead, data often obey the ``manifold hypothesis''~\cite{fefferman2016testing}, occupying a low-dimensional manifold in a high-dimensional embedding space.
-Low-dimensional manifolds may weave themselves through high-dimensional spaces much like a crumpled sheet of paper does through 3-dimensional space.
-Detecting anomalies in such a landscape is not easy;
-in particular, correctly identifying an anomalous datum that sits within the gaps of a lower-dimensional manifold presents a challenge.
+Instead, data often obey the ``manifold hypothesis''~\cite{fefferman2016testing}, occupying a low-dimensional manifold in a high-dimensional embedding space, similar to how a 2-d sheet of paper, once crumpled, occupies a 3-dimensional space.
+Detecting anomalies in such a landscape is not easy.
+Imagine trying to identify if a point within the sphere of crumpled paper were anomalous, identifying whether or not the point sits on the sheet or within a gap of the lower-dimensional manifold presents a challenge.
 
 Anomalies (data that do not belong to a distribution) and outliers (data which represent the extrema of a distribution) are found in datasets for a variety of reasons.
 Errors in the measurement or collection of data may cause anomalous records to be stored,
 novel instances of data may emerge over time,
 or normal behavior may evolve towards the outliers.
-Moreover, even if data collection is executed perfectly and shifts in behavior accounted for, there is still a risk of adversarial attacks being provided as inputs to machine-learning algorithms~\cite{elsayed2018adversarial}
+Moreover, even if data collection is executed perfectly and shifts in behavior accounted for, there is still a risk of adversarial attacks being provided as inputs to machine-learning algorithms~\cite{elsayed2018adversarial}.
 
-% TODO: should we find a citation for this?  We can't. Najib: This is our hypothesis and the one of the guiding philosophies of our work.
+% TODO: \subsection{Related Works}
+
 Modern algorithms designed to detect anomalous behavior fail for a variety of reasons, in particular when anomalies live close to, but not on, a complex manifold in high-dimensional space.
 Our approach is designed to map these complex manifolds.
-% TODO: I think this should start a related works subsection. Najib: I am taking care of this on a separate branch. For now, let's leave the structure as is.
 Here we briefly survey contemporary approaches to anomaly detection in order to provide the context needed to understand how our approach differs.
 
 \subsection{Clustering-based Approaches}
@@ -63,7 +62,7 @@ STING~\cite{wang1997sting},
 Wavecluster~\cite{sheikholeslami2000wavecluster}, and
 CLIQUE~\cite{agrawal1998automatic}.
 
-In this paper, we compare against the following Clustering-based approaches:
+In this paper, we compare against the following clustering-based approaches:
 \begin{itemize}
     \item Clustering Based Local Outlier Factor (CBLOF)~\cite{he2003cblof},
     \item Local Correlation Integral (LOCI)~\cite{papadimitriou2003loci},
@@ -79,7 +78,7 @@ Some examples of density-based clustering algorithms are
 DBSCAN~\cite{ester1996density} and
 DENCLUE~\cite{hinneburg1998efficient}.
 
-In this paper, we compare against the following Density-based approaches:
+In this paper, we compare against the following density-based approaches:
 \begin{itemize}
     \item Local Outlier Factor (LOF)~\cite{breunig2000lof},
 \end{itemize}
@@ -90,7 +89,7 @@ In this paper, we compare against the following Density-based approaches:
 
 Graph-based methods build graph representations of the data by treating points, or collections of points, as nodes in a graph and drawing edges between them based of various rules.
 
-In this paper, we compare against the following Graph-based approaches:
+In this paper, we compare against the following graph-based approaches:
 \begin{itemize}
     \item Connectivity-based Outlier Factor (COF)~\cite{tang2002cof},
 \end{itemize}
@@ -108,7 +107,7 @@ Distance-based approaches tend to use the following intuitions:
     \item the $n$ points with the greatest average distance to their $k$ nearest neighbors are outliers.
 \end{itemize}
 
-In this paper, we compare against the following Distance-based approaches:
+In this paper, we compare against the following distance-based approaches:
 \begin{itemize}
     \item k-Nearest Neighbors (kNN)~\cite{ramaswamy2000efficient, sridhar2000knn, fabrizio2002knn},
     \item Subspace Outlier Detection (SOD)~\cite{kriegel2009sod},
@@ -119,7 +118,7 @@ In this paper, we compare against the following Distance-based approaches:
 \label{subsec:introduction:other-appraoches}
 
 There are several approaches to anomaly detection that do not fall neatly into any of the aforementioned categories.
-These methods can often rely on Support-Vector Machines, Random Forests, or Histograms to detect outliers.
+These methods often rely on Support-Vector Machines, Random Forests, or Histograms to detect outliers.
 
 In this paper, we compare against the following miscellaneous approaches:
 \begin{itemize}
@@ -138,21 +137,19 @@ In this paper, we compare against the following miscellaneous approaches:
 
 In this paper we introduce a novel technique, Clustered Learning of Approximate Manifolds (CLAM).
 This approach uses divisive hierarchical clustering to build a map of a manifold in a Banach space~\cite{banach1929fonctionnelles} defined by a distance metric.
-The space may be instead defined by a distance \textit{function} that does not obey the triangle inequality, though this is not always optimal.
+The space may also be defined by a distance \textit{function} that does not obey the triangle inequality, though this is not always optimal.
 Once the manifold has been mapped, it can be used as input for a myriad of anomaly- or outlier-detection algorithms.
 In this manuscript, we present an ensemble of four such algorithms implemented on CLAM: CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms).
 
 The manifold learning component is derived from prior work, CHESS~\cite{ishaq2019entropy}, to accelerate approximate search on large high-dimensional datasets.
 CLAM begins by divisively clustering the data until each cluster contains only one datum.
-At any depth of this tree, one could consider the center of each cluster as a vertex in a graph, with edges drawn between clusters that ``overlap'' (i.e. the sum of their radii is less than their distance apart).
-Furthermore, the depth at which one chooses to induce a graph need not be uniform across the cluster tree;
-% TODO: I don't like the flow of this next little bit.
-geometric properties of clusters and their local regions can be used to determine the ``optimal'' depth;
-these properties can include local fractal dimension, cardinality, and radius of a clsuter, and the evolution of such properties along a branch of the tree.
+Graphs can be constructed from this tree by selecting clusters as vertices and drawing edges between ones which ``overlap'' (i.e. the sum of their radii is greater than their distance apart).
+Clusters can be selected by layer, or by geometric properties, such as local fractal dimension, cardinality, or cluster radius, all of which can be considered singularly for the cluster, or as a moving average of the ancestors' values.
+Note that when building a graph using geometric properties, clusters are not constrained to being at the same depth in the tree.
+Graphs that are not constrained to a certain layer will be called \textit{optimal graphs} in this work, whilst those which are constrained will be referred to as \textit{layer graphs}.
 
-% TODO: This sentence does not compute. Najib: How about now?
-CLAM selects clusters from the tree and uses them to build a graph of the manifold by creating edges between clusters that have overlapping volumes.
-This process effectively maps the manifold on which the data lie at various resolutions, given by the depth of the clusters.
+Inducing an optimal graph, across a variety of depths, effectively builds a manifold with a variety of resolutions, given by the depth of the cluster in the tree.
+Clusters that appear higher in the tree are lower-resolution than those that appear at a greater depth, after additional partitioning.
 Once we have mapped a manifold, we can ask about the cardinality of various clusters at different depths, how connected a given cluster is, or even how often a cluster is visited by random walks on the manifold.
 These approaches are combined into an ensemble approach to anomaly and outlier detection.
 
@@ -171,7 +168,7 @@ Figure~\ref{fig:introduction:graph-generation} illustrates how a graph can be in
 
 We test our methods on 24 real-world datasets.
 The datasets span a wide variety of domains, each having a different quantity of anomalous data.
-We consider several different definitions of outliers and anomalies:
+We consider several different approaches to identifying outliers and anomalies:
 \textbf{distance-based}, examining several classical distance-based definitions of outliers, relying on CLAM's use of distance to cluster data;
 \textbf{density-based}, examining the cardinality of clusters, under the hypothesis that clusters with lower cardinality are more likely to contain outliers;
 \textbf{graph-based}, examining several graph-theoretic methods for anomaly detection, using the graphs constructed from clusters.
