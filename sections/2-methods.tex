@@ -39,7 +39,7 @@ Some important Cluster properties to consider are:
     \item \textit{Parent-Child ratios} of cardinality, radius, and local fractal dimension.
     \item \textit{Exponential moving averages} of the parent-child ratios along a branch of the tree.
 \end{itemize}
-% TODO: is this really what we generalize to?
+% TODO: is this really what we generalize to? Najib: PC ratios and EMAs of them are the six values you see in that linear_regression.csv file. They are the features we use. We can add more if we can think of proper features.
 In particular, we use the parent-child ratios and the exponential moving averages of those ratios to help generalize our anomaly detection method from a small set of datasets to a large, distinct set of datasets.
 
 \subsubsection*{Graphs:}
@@ -110,8 +110,8 @@ One could try using every possible combination of clusters to form a graph but t
 Instead, we must intelligently select those clusters that, when used to build the graph, perform best for anomaly detection.
 
 Area Under the Curve (AUC) Receiver Operating Characteristic (ROC) is often used to measure the performance of anomaly detectors;
-we wish to choose clusters that maximize this measure.
-We can accomplish this by learning a function that takes a cluster and predicts contribution to AUC by selecting it.
+we wish to choose clusters that are expected to maximize this measure.
+We can accomplish this by learning a function that takes a cluster and predicts its contribution to AUC if that cluster were selected for the graph.
 Any function of the following form will suffice.
 \begin{gather*}
     f: Cluster \mapsto \mathbb{R}^+
@@ -122,8 +122,9 @@ Such a model needs some data to train with.
 To generate this data, we took a random sample of some of the datasets described in~\ref{subsec:methods:datasets}.
 We generate CLAM Manifolds for these training datasets, use the Linear Regression model to learn from these datasets, and apply the results to an entirely different collection of datasets.
 
-We generate the initial training data by considering layer-graphs built from clusters at a uniform depth in the tree.
-For each such graph, we calculate the means of the cardinality ratio, radius ratio, and local fractal dimension ratio; along with the exponential moving averages of these ratios.
+We generate the initial training data by considering layer-graphs.
+For each such graph, we calculate the means of the cardinality ratio, radius ratio, and local fractal dimension ratio;
+along with the exponential moving averages of these ratios.
 These ratios are described in~\ref{subsubsec:methods:clam:clustering}.
 These ratios form the feature vector for one training sample.
 We apply a method described in~\ref{subsec:methods:individual-algorithms} to the graph and obtain an AUC ROC\@.
@@ -149,7 +150,7 @@ We sourced 24 datasets, all from Outlier Detection Datasets (ODDS)~\cite{rayana2
 All of these datasets are adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and have been standardized, by ODDS, for anomaly and outlier detection benchmarks.
 
 % TODO: This feels like it could be better summarized with a table. Dataset name; n-instances; n-anomalies; dims used; what it's derived from.
-%   Then, this section only needs to contain the frilly details, like what made it into the outlier bin.
+% Then, this section only needs to contain the frilly details, like what made it into the outlier bin. Najib: yeah that's definitely in the cards. For now, we are not limited on space so let's leave this as a low priority.
 The \textbf{annthyroid} dataset is derived from the ``Thyroid Disease'' dataset from the UCIMLR\@.
 The original data has 7200 instances with 15 categorical attributes and 6 real-valued attributes.
 The class labels are ``normal'', ``hypothyroid'', and ``subnormal''.
