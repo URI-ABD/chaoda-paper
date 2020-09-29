@@ -8,7 +8,7 @@ We present a Manifold-Mapping algorithm called CLAM (Clustered Learning of Appro
 This is an extension of earlier work presented in~\cite{ishaq2019entropy}.
 
 To start, we need a dataset and a distance function on the points in that dataset.
-A Dataset is a collection of $n$-points in a $D$-dimensional embedding space.
+A dataset is a collection of $n$-points in a $D$-dimensional embedding space.
 \begin{gather*}
     \textbf{X} = \{x_1 \dots x_n\}, x_i \in \mathbb{R}^D
 \end{gather*}
@@ -18,7 +18,7 @@ A Distance Function takes two points in the dataset and deterministically produc
 \end{gather*}
 We require any distance function to have the following properties:
 \begin{align*}
-    \forall x \in X, & \ f(x, x) = 0 \\
+    \forall x \in X,    & \ f(x, x) = 0       \\
     \forall x, y \in X, & \ f(x, y) = f(y, x)
 \end{align*}
 The distance function may or may not obey the triangle-inequality.
@@ -39,10 +39,11 @@ Some important Cluster properties to consider are:
     \item \textit{Parent-Child ratios} of cardinality, radius, and local fractal dimension.
     \item \textit{Exponential moving averages} of the parent-child ratios along a branch of the tree.
 \end{itemize}
+% TODO: is this really what we generalize to?
 In particular, we use the parent-child ratios and the exponential moving averages of those ratios to help generalize our anomaly detection method from a small set of datasets to a large, distinct set of datasets.
 
 \subsubsection*{Graphs:}
-% describe Graph and graph invariant.
+% TODO: describe Graph and graph invariant.
 Clusters that are near each other in the embedding space sometimes have overlapping volumes, i.e.\ the distance between their centers is less than or equal to the sum of their radii.
 We define a Graph with the clusters as the nodes and with edges between overlapping clusters.
 For our purposes, a Graph also has the following additional properties:
@@ -51,12 +52,13 @@ For our purposes, a Graph also has the following additional properties:
     \item Each point in the dataset is in exactly one cluster in the graph.
 \end{itemize}
 % Go over layer-graphs and optimal-graphs.
-A Graph can be built from clusters at a fixed depth in the cluster-tree, or can contain clusters from multiple different depths in the tree.
-We say that the cardinality of a graph is the number of clusters in that graph.
+A Graph can be built from clusters at a fixed depth in the cluster-tree (a layer-graph), or can contain clusters from multiple different depths in the tree (an optimal-graph).
+In this work we consider the cardinality of a graph to be \textit{vertex cardinality}, i.e.\ the number of clusters in the graph.
 
 \subsubsection*{The Manifold:}
 % describe Manifold as containing the tree and all the graphs.
-According to the Manifold Hypothesis~\cite{fefferman2016testing}, datasets that come from constrained generating processes and are embedded in a high-dimensional space actually only occupy a low-dimensional manifold in that embedding space.
+According to the Manifold Hypothesis~\cite{fefferman2016testing},
+datasets that come from constrained generating processes and are embedded in a high-dimensional space actually only occupy a low-dimensional manifold in that embedding space.
 
 The graphs discussed so far map this low dimensional manifold in the original embedding space.
 Different graph do this at different levels of local and/or global resolution.
@@ -65,8 +67,8 @@ We can then apply various anomaly detection algorithms to these graphs.
 These algorithms will often also incorporate information from the tree.
 
 We describe some algorithms in~\ref{subsec:methods:individual-algorithms}.
-While these algorithms are themselves fairly simple, the real challenge is in selecting the right clusters for the graphs that the algorithms operate on.
-We will demonstrate CLAM to be such a powerful technique in Manifold-Mapping that even such simple algorithms as described in~\ref{subsec:methods:individual-algorithms} more often than not outperform state-ot-the-art anomaly detection algorithms.
+While these algorithms are themselves fairly simple, the real challenge is in selecting the right clusters for the graphs for the algorithms operate on.
+We will demonstrate CLAM to be such a powerful technique in Manifold-Mapping that even such simple algorithms as described in~\ref{subsec:methods:individual-algorithms}, more often than not, outperform state-ot-the-art anomaly detection algorithms.
 
 % describe individual algorithms.
 \subsection{Individual Algorithms}
@@ -107,9 +109,9 @@ The heart of the problem with our methods of anomaly detection is building the r
 One could try using every possible combination of clusters to form a graph but this quickly leads to combinatorial explosion.
 Instead, we must intelligently select those clusters that, when used to build the graph, perform best for anomaly detection.
 
-AUC ROC is often used to measure the performance of anomaly detectors;
-we will choose clusters so as to maximize this measure.
-Our aim is to learn a function that takes a cluster and predicts contribution to AUC from that cluster.
+Area Under the Curve (AUC) Receiver Operating Characteristic (ROC) is often used to measure the performance of anomaly detectors;
+we wish to choose clusters that maximize this measure.
+We can accomplish this by learning a function that takes a cluster and predicts contribution to AUC by selecting it.
 Any function of the following form will suffice.
 \begin{gather*}
     f: Cluster \mapsto \mathbb{R}^+
@@ -118,10 +120,10 @@ Any function of the following form will suffice.
 We chose a simple Linear Regression to fill this role.
 Such a model needs some data to train with.
 To generate this data, we took a random sample of some of the datasets described in~\ref{subsec:methods:datasets}.
-We generate CLAM Manifolds for these training datasets, use the Linear Regression model to learn from these datasets, and apply the results to an entirely different set of datasets.
+We generate CLAM Manifolds for these training datasets, use the Linear Regression model to learn from these datasets, and apply the results to an entirely different collection of datasets.
 
-We generate the initial training data by considering graphs built from clusters at a uniform depth in the tree.
-For each such graph, we calculate the means of the cardinality ratio, radius ratio, and local fractal dimension ratio, and the exponential moving averages of these ratios.
+We generate the initial training data by considering layer-graphs built from clusters at a uniform depth in the tree.
+For each such graph, we calculate the means of the cardinality ratio, radius ratio, and local fractal dimension ratio; along with the exponential moving averages of these ratios.
 These ratios are described in~\ref{subsubsec:methods:clam:clustering}.
 These ratios form the feature vector for one training sample.
 We apply a method described in~\ref{subsec:methods:individual-algorithms} to the graph and obtain an AUC ROC\@.
@@ -131,8 +133,8 @@ We train a separate Linear Regression model for each method described in~\ref{su
 
 \subsection{Ensemble}
 \label{subsec:methods:ensemble}
-Given the learned meta-ml model from the training datasets, we can use it to build graphs for any other dataset.
-In our case with linear regression as that meta-ml model, we use the cluster ratios and the associated regression constants to rank every cluster in a CLAM tree.
+Given the learned meta-ML model from the training datasets, we can use it to build graphs for any other dataset.
+In our case with linear regression as that meta-ML model, we use the cluster ratios and the associated regression constants to rank every cluster in a CLAM tree.
 These rankings are normalized by the cardinality of each cluster.
 The highest ranked clusters are then used to build a graph.
 This graph is then used with the corresponding individual algorithm to calculate anomaly scores for all points in the dataset.
@@ -146,6 +148,8 @@ We present the AUC scores from this ensemble in the Results section.
 We sourced 24 datasets, all from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}, for training CHAODA and testing its performance.
 All of these datasets are adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and have been standardized, by ODDS, for anomaly and outlier detection benchmarks.
 
+% TODO: This feels like it could be better summarized with a table. Dataset name; n-instances; n-anomalies; dims used; what it's derived from.
+%   Then, this section only needs to contain the frilly details, like what made it into the outlier bin.
 The \textbf{annthyroid} dataset is derived from the ``Thyroid Disease'' dataset from the UCIMLR\@.
 The original data has 7200 instances with 15 categorical attributes and 6 real-valued attributes.
 The class labels are ``normal'', ``hypothyroid'', and ``subnormal''.
