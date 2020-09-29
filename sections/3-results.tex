@@ -4,13 +4,16 @@
 We have sourced 24 datasets from ODDS~\cite{rayana2016odds}.
 These datasets had already been preprocessed to standardize them for outlier detection benchmarks.
 
+% TODO: Did we repeat this experiment with a different six? Was it actually at random? 
 Of these 24 datasets, we selected a random sample of 6 datasets, shown in Table~\ref{table:results:train-performance}, to use for training CHAODA\@.
 The remaining datasets were used to measure the performance of CHAODA\@.
 The performance on the test set of datasets is split among Tables~\ref{table:results:test-performance-1} and~\ref{table:results:test-performance-2}.
 Each column shows the AUC ROC scores of CHAODA and every competitor.
 The best, i.e.\ highest, score, and every score with 0.02 of that best score, are presented in bold.
+% TODO: We should definitely let these all run for more than 10 minutes, no? 
 If a method took longer than 10 minutes on a dataset, we terminated that run and marked the corresponding cell with ``\textit{time}''.
 
+% Was this repeated? Reads like we picked the six we don't do well on so that we could do well
 Interestingly, CHAODA did not perform particularly well on the training set of datasets.
 However, on the test set, CHAODA outperformed all competitors on 10 of the 18 datasets.
 
