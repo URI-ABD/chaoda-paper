@@ -10,7 +10,7 @@ CHAODA builds on this manifold-mapping framework for anomaly and outlier detecti
 Intuitively, we expect CHAODA to perform particularly well when the data lie on an ``interesting'' manifold, and to perform merely average when the data derive from an easily-described distribution (or ``boring'' manifold).
 Just as CHESS demonstrated an acceleration of search when the data exhibited \emph{low fractal dimension} and \emph{low metric entropy}, with CHAODA, we see that AUC scores are vastly improved when the data exhibit these properties and are often competitive when the data do not exhibit these properties.
 
-% A simple visualization in Figure~\ref{fig:conclusions:umap-embeddings} using UMAP~\cite{mcinnes2018umap} illustrates two different examples; the anomalies in one dataset appear to be at the edges of the manifold (though, clearly, the UMAP projection has distorted the manifold) while in another datset they appear distributed along the less-interesting distribution.
+A simple visualization in Figure~\ref{fig:conclusions:umap-embeddings} using UMAP~\cite{mcinnes2018umap} illustrates two different examples; the anomalies in one dataset, where CHAODA outperforms other methods, appear to be at the edges of a complex manifold (though, clearly, the UMAP projection has distorted the manifold) while in another dataset, where most methods perform fairly comparably, the distribution is less interesting and many anomalies are distributed apparently randomly across it.
 
 % TODO choose two different datasets, not to illustrate performance but to illustrate this point!
 
@@ -27,13 +27,13 @@ Just as CHESS demonstrated an acceleration of search when the data exhibited \em
 % Indeed, the manifold being both learnable and distinctly separate from the anomalous data are mandatory properties for any of our approaches to be effective.
 % Fortunately, we can see that these properties are apparent in all other datasets studied.
 
-% \begin{figure*}
-%    \centering
-%    \includegraphics[width=2in]{images/umaps/annthyroid-cosine-umap2d.png}
-%    \includegraphics[width=2in]{images/umaps/wbc-euclidean-umap2d.png}
-%    \caption{UMAP projection of Annthyroid (left) and WBC (right). Anomalies are in gray. Note that for Annthyroid, while there is a cluster of anomalies off the main manifold, many anomalies are distributed throughout the manifold. For WBC, the anomalies tend to be at the edge of the manifold.}
-%    \label{fig:conclusions:umap-embeddings}
-% \end{figure*}
+\begin{figure*}
+   \centering
+   \includegraphics[width=2in]{images/umaps/mnist-euclidean-umap2d.png}
+   \includegraphics[width=2in]{images/umaps/ionosphere-euclidean-umap2d.png}
+   \caption{UMAP projection of MNIST (left) and Ionosphere (right). Anomalies are in gray. Note that for MNIST, the UMAP projection does not find much structure, though most of the anomalies congregate to one side. For Ionosphere, there is a single main component to the manifold, with two more distant clusters, and anomalies tend to be at the edges of a manifold. Most algorithms perform comparably on MNIST, while CHAODA outperforms others on Ionosphere.}
+   \label{fig:conclusions:umap-embeddings}
+\end{figure*}
 
 % \subsection{Future Directions}
 % \label{subsec:discussion:duture-directions}
