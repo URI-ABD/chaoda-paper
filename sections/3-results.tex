@@ -14,8 +14,9 @@ The best, i.e.\ highest, score, and every score with 0.02 of that best score, ar
 If a method took longer than 10 minutes on a dataset, we terminated that run and marked the corresponding cell with ``\textit{time}''.
 
 % Was this repeated? Reads like we picked the six we don't do well on so that we could do well. Najib: Technically, CHAODA won 3/6.
-Interestingly, CHAODA did not perform particularly well on the training set of datasets.
-However, on the test set, CHAODA outperformed all competitors on 10 of the 18 datasets.
+% NMD: I'm leaving this out until we do cross-validation with more datasets in test. We didn't cherry-pick those, and need not make it look like we did.
+% Interestingly, CHAODA did not perform particularly well on the training set of datasets.
+% However, on the test set, CHAODA outperformed all competitors on 10 of the 18 datasets.
 
 
 \begin{table*}[!t]
@@ -60,6 +61,7 @@ SOS & 0.50 & 0.51 & 0.51 & 0.48 & \textit{time} & 0.50 \\
 \end{tabular}
 \end{table*}
 
+% \newpage % I hate this but it might look much neater
 
 \begin{table*}[!t]
 \renewcommand{\arraystretch}{1.25}
@@ -104,7 +106,7 @@ SOS & 0.51 & 0.50 & 0.50 & \textit{time} & 0.50 & \textit{time} & 0.64 & 0.62 & 
 \end{table*}
 
 
-\begin{table*}[!t]
+\begin{table*}[!b]
 \renewcommand{\arraystretch}{1.25}
 \caption{Performance on the second half of the Test Datasets}
 \label{table:results:test-performance-2}
