@@ -10,8 +10,10 @@ The remaining datasets were used to measure the performance of CHAODA\@.
 The performance on the test set of datasets is split among Tables~\ref{table:results:test-performance-1} and~\ref{table:results:test-performance-2}.
 Each column shows the AUC ROC scores of CHAODA and every competitor.
 The best, i.e.\ highest, score, and every score with 0.02 of that best score, are presented in bold.
-% TODO: We should definitely let these all run for more than 10 minutes, no? Najib: Yes. Later. I'll give each method several hours.
-If a method took longer than 10 minutes on a dataset, we terminated that run and marked the corresponding cell with ``\textit{time}''.
+% TODO: We should definitely let these all run for more than 10 minutes, no?
+% Najib: Yes. Later. I'll give each method several hours.
+If a method took longer than 10 hours on a dataset, we terminated that run and marked the corresponding cell with ``\textit{time}''.
+For now, the times taken by CHAODA methods are unreported.
 
 %TODO summarize results in text here, but I don't want to rewrite this twice, so let's finalize everything first.
 
@@ -63,6 +65,49 @@ SOS & 0.50 & 0.51 & 0.51 & 0.48 & \textit{time} & 0.50 \\
 \end{tabular}
 \end{table*}
 
+
+\begin{table*}[!t]
+\renewcommand{\arraystretch}{1.25}
+\caption{Time taken on Train Datasets}
+\label{table:results:train-time}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{dataset} & \textbf{annthyroid} & \textbf{mnist} & \textbf{pendigits} & \textbf{satellite} & \textbf{shuttle} & \textbf{thyroid} \\
+    \hline
+    ensemble-L2 & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} \\
+    \hline
+    ensemble-L1 & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} \\
+    \hline
+    CBLOF & 1.52 & 0.69 & 0.22 & 0.29 & 0.23 & 0.13 \\
+    \hline
+    COF & 218.44 & 279.26 & 196.07 & 173.27 & 11854.39 & 53.41 \\
+    \hline
+    HBOS & 1.47 & 0.06 & 0.01 & 0.02 & 0.02 & 0.00 \\
+    \hline
+    IFOREST & 0.70 & 1.40 & 0.78 & 0.81 & 3.08 & 0.49 \\
+    \hline
+    KNN & 0.92 & 12.50 & 1.21 & 2.04 & 10.29 & 0.41 \\
+    \hline
+    LMDD & 108.93 & 1387.66 & 198.58 & 369.73 & 6584.80 & 33.27 \\
+    \hline
+    LOCI & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} \\
+    \hline
+    LODA & 0.11 & 0.13 & 0.12 & 0.11 & 0.49 & 0.07 \\
+    \hline
+    LOF & 0.37 & 12.05 & 0.92 & 1.75 & 9.20 & 0.15 \\
+    \hline
+    MCD & 1.67 & 6.63 & 2.78 & 3.56 & 18.07 & 1.24 \\
+    \hline
+    OCSVM & 2.69 & 11.86 & 3.29 & 4.14 & 158.58 & 0.68 \\
+    \hline
+    SOD & 141.53 & 162.93 & 121.38 & 113.86 & 5983.29 & 37.95 \\
+    \hline
+    SOS & 109.16 & 53.27 & 45.96 & 42.17 & 2267.79 & 45.93 \\
+    \hline
+    \end{tabular}
+\end{table*}
+
 % \newpage % I hate this but it might look much neater
 
 \begin{table*}[!t]
@@ -107,6 +152,48 @@ SOS & 0.51 & 0.50 & 0.50 & \textit{time} & 0.50 & \textit{time} & 0.64 & 0.62 & 
 \end{tabular}
 \end{table*}
 
+\begin{table*}[!t]
+\renewcommand{\arraystretch}{1.25}
+\caption{Time taken on the first half of the Test Datasets}
+\label{table:results:test-time-1}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{dataset} & \textbf{arrhythmia} & \textbf{breastw} & \textbf{cardio} & \textbf{cover} & \textbf{glass} & \textbf{http} & \textbf{ionosphere} & \textbf{lympho} & \textbf{mammography} \\
+    \hline
+    ensemble-L2 & \textit{time} & \textit{time} & 0.59 & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} \\
+    \hline
+    ensemble-L1 & \textit{time} & \textit{time} & 0.52 & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} \\
+    \hline
+    CBLOF & 0.15 & 0.06 & 0.12 & 2.17 & 0.05 & 0.42 & 0.08 & 0.06 & 0.23 \\
+    \hline
+    COF & 1.19 & 1.82 & 12.36 & \textit{time} & 0.22 & \textit{time} & 0.57 & 0.16 & 501.51 \\
+    \hline
+    HBOS & 0.07 & 0.00 & 0.01 & 1.20 & 0.00 & 0.02 & 0.01 & 0.01 & 0.01 \\
+    \hline
+    IFOREST & 0.41 & 0.32 & 0.41 & 6.30 & 0.29 & 5.13 & 0.31 & 0.29 & 0.88 \\
+    \hline
+    KNN & 0.18 & 0.07 & 0.29 & 99.35 & 0.02 & 53.65 & 0.04 & 0.01 & 1.40 \\
+    \hline
+    LMDD & 14.79 & 2.58 & 22.05 & 28119.46 & 0.56 & 9481.89 & 1.68 & 0.40 & 242.79 \\
+    \hline
+    LOCI & 280.33 & 1173.23 & \textit{time} & \textit{time} & 24.76 & \textit{time} & 115.65 & 9.49 & \textit{time} \\
+    \hline
+    LODA & 0.04 & 0.03 & 0.05 & 1.06 & 0.02 & 0.89 & 0.04 & 0.02 & 0.15 \\
+    \hline
+    LOF & 0.16 & 0.02 & 0.18 & 93.24 & 0.00 & 45.76 & 0.02 & 0.00 & 0.58 \\
+    \hline
+    MCD & 2.08 & 0.50 & 0.48 & 13.64 & 0.04 & 3.89 & 0.09 & 0.03 & 2.02 \\
+    \hline
+    OCSVM & 0.10 & 0.03 & 0.24 & 628.09 & 0.00 & 477.33 & 0.01 & 0.00 & 6.50 \\
+    \hline
+    SOD & 0.99 & 1.63 & 10.48 & 28245.95 & 0.20 & 24607.93 & 0.52 & 0.12 & 332.75 \\
+    \hline
+    SOS & 0.45 & 45.42 & 4.02 & \textit{time} & 0.18 & \textit{time} & 0.44 & 0.11 & 5962.80 \\
+    \hline
+    \end{tabular}
+\end{table*}
+
 
 \begin{table*}[!b]
 \renewcommand{\arraystretch}{1.25}
@@ -148,4 +235,46 @@ SOD & 0.62 & 0.48 & 0.55 & 0.69 & \textit{time} & \bfseries 0.46 & 0.82 & 0.80 &
 SOS & 0.49 & 0.52 & 0.52 & 0.50 & \textit{time} & \bfseries 0.48 & 0.61 & 0.52 & 0.45 \\
 \hline
 \end{tabular}
+\end{table*}
+
+\begin{table*}[!b]
+\renewcommand{\arraystretch}{1.25}
+\caption{Time taken on the second half of the Test Datasets}
+\label{table:results:test-time-2}
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+    \hline
+    \textbf{dataset} & \textbf{musk} & \textbf{optdigits} & \textbf{pima} & \textbf{satimage-2} & \textbf{smtp} & \textbf{vertebral} & \textbf{vowels} & \textbf{wbc} & \textbf{wine} \\
+    \hline
+    ensemble-L2 & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} \\
+    \hline
+    ensemble-L1 & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} \\
+    \hline
+    CBLOF & 0.24 & 0.33 & 0.09 & 0.33 & 1.08 & 0.06 & 0.10 & 0.08 & 0.05 \\
+    \hline
+    COF & 44.19 & 116.89 & 2.28 & 137.11 & \textit{time} & 0.27 & 7.66 & 0.64 & 0.10 \\
+    \hline
+    HBOS & 0.07 & 0.03 & 0.00 & 0.02 & 0.02 & 0.00 & 0.00 & 0.01 & 0.00 \\
+    \hline
+    IFOREST & 0.90 & 0.89 & 0.33 & 0.75 & 5.14 & 0.28 & 0.37 & 0.31 & 0.29 \\
+    \hline
+    KNN & 3.81 & 4.79 & 0.08 & 1.90 & 9.17 & 0.02 & 0.16 & 0.04 & 0.01 \\
+    \hline
+    LMDD & 376.76 & 421.83 & 2.81 & 301.64 & 8478.47 & 0.59 & 9.35 & 1.90 & 0.34 \\
+    \hline
+    LOCI & \textit{time} & \textit{time} & 1808.72 & \textit{time} & \textit{time} & 34.97 & 23694.09 & 146.60 & 7.07 \\
+    \hline
+    LODA & 0.12 & 0.10 & 0.03 & 0.10 & 0.93 & 0.02 & 0.05 & 0.03 & 0.02 \\
+    \hline
+    LOF & 4.11 & 4.52 & 0.02 & 1.65 & 2.06 & 0.00 & 0.07 & 0.02 & 0.00 \\
+    \hline
+    MCD & 39.35 & 2.56 & 0.51 & 3.07 & 27.31 & 0.05 & 0.84 & 0.10 & 0.04 \\
+    \hline
+    OCSVM & 2.62 & 4.05 & 0.03 & 3.40 & 614.48 & 0.00 & 0.11 & 0.01 & 0.00 \\
+    \hline
+    SOD & 29.72 & 73.76 & 1.82 & 92.97 & 22000.50 & 0.27 & 6.83 & 0.59 & 0.12 \\
+    \hline
+    SOS & 9.31 & 25.82 & 1.01 & 34.51 & \textit{time} & 0.21 & 2.81 & 0.39 & 0.13 \\
+    \hline
+    \end{tabular}
 \end{table*}
