@@ -37,53 +37,39 @@
 
 
 \author{
-  Najib Ishaq \\
-  Department of Computer Science and Statistics\\
-  University of Rhode Island\\
-  Kingston, RI\\
-  \texttt{najib\_ishaq@uri.edu} \\
-  %% examples of more authors
-   \And
- Thomas J. Howard III \\
-  Department of Computer Science and Statistics\\
-  University of Rhode Island\\
-  Kingston, RI\\
-  \texttt{thoward27@uri.edu} \\
-  \AND
-  Noah M. Daniels \\
-  Department of Computer Science and Statistics\\
-  University of Rhode Island\\
-  Kingston, RI\\
-  \texttt{noah\_daniels@uri.edu} \\
+    Najib Ishaq \\
+    Department of Computer Science and Statistics\\
+    University of Rhode Island\\
+    Kingston, RI\\
+    \texttt{najib\_ishaq@uri.edu} \\
+    
+    \And
+    Thomas J. Howard III \\
+    Department of Computer Science and Statistics\\
+    University of Rhode Island\\
+    Kingston, RI\\
+    \texttt{thoward27@uri.edu} \\
+
+    \AND
+    Noah M. Daniels \\
+    Department of Computer Science and Statistics\\
+    University of Rhode Island\\
+    Kingston, RI\\
+    \texttt{noah\_daniels@uri.edu} \\
 }
-% %Example, Multiple Authors, ->> remove \iffalse,\fi and place them surrounding AAAI title to use it
-% \title{Clustered Hierarchical Anomaly and Outlier Detection Algorithms}
-% \author {
-%     % Authors
-%         Najib Ishaq, \textsuperscript{\rm 1}
-%         Thomas J. Howard III,\textsuperscript{\rm 1}
-%         Noah M. Daniels \textsuperscript{\rm 1} \\
-% }
-% \affiliations {
-%     % Affiliations
-%     \textsuperscript{\rm 1} Dept. of Computer Science and Statistics \\
-%     University of Rhode Island\\
-%     Kingston, RI\\
-%     thoward27@uri.edu, najib\_ishaq@uri.edu, noah\_daniels@uri.edu\\
-% }
 
 \begin{document}
     \maketitle
 
     \begin{abstract}
         Anomaly and outlier detection in datasets is a long-standing problem in machine learning.
-In some cases, anomaly detection is easy, such as when data are drawn from well-characterized distributions such as the Gaussian.
-However, when data occupy high-dimensional spaces, anomaly detection becomes more difficult.
-We present CLAM (Clustered Learning of Approximate Manifolds), a fast hierarchical clustering technique that learns a manifold in a Banach space defined by a distance metric.
-CLAM induces a graph from the cluster tree, based on overlapping clusters at certain levels of the tree determined by several geometric features.
-Upon this graph we implement CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms), an ensemble approach that explores various properties of the graph and the constituent clusters in order to compute scores of anomalousness.
-On 24 publicly available datasets, we compare the performance of CHAODA (by measure of AUC of a ROC curve) to a variety of state-of-the-art anomaly-detection algorithms. Six of the datasets are used for training; of the remaining 18, 
-CHAODA outperforms other approaches on 10 datasets.
+        In some cases, anomaly detection is easy, such as when data are drawn from well-characterized distributions such as the Gaussian.
+        However, when data occupy high-dimensional spaces, anomaly detection becomes more difficult.
+        We present CLAM (Clustered Learning of Approximate Manifolds), a fast hierarchical clustering technique that learns a manifold in a Banach space defined by a distance metric.
+        CLAM induces a graph from the cluster tree, based on overlapping clusters at certain levels of the tree determined by several geometric features.
+        Upon this graph we implement CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms), an ensemble approach that explores various properties of the graph and the constituent clusters in order to compute scores of anomalousness.
+        On 24 publicly available datasets, we compare the performance of CHAODA (by measure of AUC of a ROC curve) to a variety of state-of-the-art anomaly-detection algorithms. Six of the datasets are used for training; of the remaining 18, 
+        CHAODA outperforms other approaches on 10 datasets.
     \end{abstract}
 
     \input{sections/1-introduction.tex}
