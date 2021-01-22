@@ -14,7 +14,19 @@ The best, i.e.\ highest, score, and every score with 0.02 of that best score, ar
 % Najib: Yes. Later. I'll give each method several hours.
 If a method took longer than 10 hours on a dataset, we terminated that run and marked the corresponding cell with ``\textit{time}''.
 
-%TODO summarize results in text here, but I don't want to rewrite this twice, so let's finalize everything first.
+Note that CHAODA is an unsupervised algorithm for outlier detection.
+As such, we compare only against other unsupervised algorithms.
+A supervised version of the algorithm is on its way.
+Once implemented, we will add comparisons against supervised algorithms.
+
+Also note that we implemented CLAM and CHAODA entirely in Python.
+While we use the provided wrappers for each method we compare against, those methods are often implemented in C and C++, with heavy usage of header-only libraries and template-meta-programming (Noah, HAALP!).
+Several other algorithms utilize deep learning frameworks like tensorflow and leverage the GPU.
+Therefore, the comparison on wall-clock time performance is not truly fair to CHAODA.
+We are reimplementing CLAM and CHAODA in Rust.
+With the Rust implementation, we expect a two-orders-of-magnitude improvement in wall-clock times.
+
+% TODO summarize results in text here, but I don't want to rewrite this twice, so let's finalize everything first.
 
 % Was this repeated? Reads like we picked the six we don't do well on so that we could do well. Najib: Technically, CHAODA won 3/6.
 % NMD: I'm leaving this out until we do cross-validation with more datasets in test. We didn't cherry-pick those, and need not make it look like we did.
@@ -28,39 +40,47 @@ If a method took longer than 10 hours on a dataset, we terminated that run and m
 \label{table:results:train-performance}
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|}
-\toprule
-\textbf{dataset} & \textbf{annthyroid} & \textbf{mnist} & \textbf{pendigits} & \textbf{satellite} & \textbf{shuttle} & \textbf{thyroid} \\
-\midrule
-ensemble-L2 & 0.66 & 0.59 & 0.77 & 0.61 & 0.95 & \bfseries 0.95 \\
 \hline
-ensemble-L1 & 0.72 & 0.56 & 0.43 & \bfseries 0.71 & 0.64 & 0.75 \\
+\textbf{\textbf{model}} & \textbf{\textbf{annthyroid}} & \textbf{\textbf{mnist}} & \textbf{\textbf{pendigits}} & \textbf{\textbf{satellite}} & \textbf{\textbf{shuttle}} & \textbf{\textbf{thyroid}} \\
 \hline
-CBLOF & \bfseries 0.76 & 0.56 & 0.64 & 0.58 & \bfseries 0.98 & \bfseries 0.96 \\
+                CHAODA-fast &                         0.64 &           \textbf{0.78} &               \textbf{0.94} &               \textbf{0.79} &                      0.51 &             \textbf{0.89} \\
 \hline
-COF & 0.51 & 0.58 & 0.55 & 0.54 & 0.52 & 0.52 \\
+                        ABOD &                         0.50 &                    0.60 &                        0.53 &                        0.51 &                      0.54 &                      0.50 \\
 \hline
-HBOS & 0.62 & 0.51 & 0.83 & 0.65 & 0.96 & 0.88 \\
+                AutoEncoder &                         0.69 &                    0.67 &                        0.58 &                        0.63 &                      0.94 &                      0.88 \\
 \hline
-IFOREST & 0.65 & 0.60 & \bfseries 0.92 & 0.64 & \bfseries 0.98 & \bfseries 0.94 \\
+                        CBLOF &                         0.59 &                    0.62 &                        0.59 &                        0.68 &             \textbf{0.99} &                      0.87 \\
 \hline
-KNN & 0.72 & 0.62 & 0.56 & 0.57 & 0.60 & 0.93 \\
+                        COF &                         0.59 &                    0.56 &                        0.53 &                        0.56 &                      0.52 &                      0.49 \\
 \hline
-LMDD & 0.70 & \bfseries 0.70 & 0.69 & 0.44 & 0.74 & 0.93 \\
+                        HBOS &                \textbf{0.84} &                    0.53 &                        0.52 &                        0.62 &                      0.74 &                      0.86 \\
 \hline
-LOCI & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} \\
+                IFOREST &                         0.70 &                    0.61 &                        0.63 &                        0.70 &                      0.91 &             \textbf{0.91} \\
 \hline
-LODA & 0.53 & 0.62 & 0.77 & 0.64 & 0.53 & 0.61 \\
+                        KNN &                         0.65 &                    0.65 &                        0.51 &                        0.56 &                      0.53 &                      0.56 \\
 \hline
-LOF & 0.52 & 0.55 & 0.55 & 0.53 & 0.53 & 0.54 \\
+                        LMDD &                         0.52 &                    0.59 &                        0.56 &                        0.42 &                      0.92 &                      0.70 \\
 \hline
-MCD & 0.73 & 0.67 & 0.60 & 0.65 & \bfseries 0.96 & \bfseries 0.94 \\
+                        LOCI &                  \textit{TO} &             \textit{TO} &                 \textit{TO} &                 \textit{TO} &               \textit{TO} &               \textit{TO} \\
 \hline
-OCSVM & 0.71 & 0.63 & 0.80 & 0.64 & \bfseries 0.98 & \bfseries 0.94 \\
+                        LODA &                         0.63 &                    0.66 &                        0.57 &                        0.65 &                      0.96 &             \textbf{0.90} \\
 \hline
-SOD & 0.69 & 0.57 & 0.58 & 0.56 & 0.57 & 0.87 \\
+                        LOF &                         0.60 &                    0.57 &                        0.52 &                        0.57 &                      0.53 &                      0.49 \\
 \hline
-SOS & 0.50 & 0.51 & 0.51 & 0.48 & 0.50 & 0.50 \\
-\bottomrule
+                        MCD &                         0.72 &                    0.57 &                        0.53 &                        0.58 &                      0.96 &                      0.85 \\
+\hline
+                        MOGAAL &                         0.46 &             \textit{TO} &                        0.67 &                        0.59 &               \textit{TO} &                      0.49 \\
+\hline
+                        OCSVM &                         0.62 &                    0.63 &                        0.59 &                        0.62 &             \textbf{0.97} &                      0.78 \\
+\hline
+                        SOD &                         0.64 &                    0.55 &                        0.52 &                        0.52 &               \textit{TO} &                      0.53 \\
+\hline
+                        SOGAAL &                         0.46 &                    0.57 &                        0.57 &                        0.60 &                      0.96 &                      0.49 \\
+\hline
+                        SOS &                         0.50 &                    0.52 &                        0.52 &                        0.47 &               \textit{TO} &                      0.50 \\
+\hline
+                        VAE &                         0.69 &                    0.67 &                        0.58 &                        0.63 &                      0.94 &                      0.88 \\
+\hline
 \end{tabular}
 \end{table*}
 
@@ -70,39 +90,47 @@ SOS & 0.50 & 0.51 & 0.51 & 0.48 & 0.50 & 0.50 \\
 \label{table:results:train-time}
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|}
-    \hline
-    \textbf{dataset} & \textbf{annthyroid} & \textbf{mnist} & \textbf{pendigits} & \textbf{satellite} & \textbf{shuttle} & \textbf{thyroid} \\
-    \hline
-    ensemble-L2 & 44.74 & 193.12 & 149.99 & 136.28 & 17.64 & 149.63 \\
-    \hline
-    ensemble-L1 & 197.63 & 319.57 & 149.08 & 130.41 & 35.78 & 135.42 \\
-    \hline
-    CBLOF & 1.52 & 0.69 & 0.22 & 0.29 & \bfseries 0.23 & \bfseries 0.13 \\
-    \hline
-    COF & 218.44 & 279.26 & 196.07 & 173.27 & 11854.39 & 53.41 \\
-    \hline
-    HBOS & 1.47 & \bfseries 0.06 & \bfseries 0.01 & \bfseries 0.02 & \bfseries 0.02 & \bfseries 0.00 \\
-    \hline
-    IFOREST & 0.70 & 1.40 & 0.78 & 0.81 & 3.08 & 0.49 \\
-    \hline
-    KNN & 0.92 & 12.50 & 1.21 & 2.04 & 10.29 & 0.41 \\
-    \hline
-    LMDD & 108.93 & 1387.66 & 198.58 & 369.73 & 6584.80 & 33.27 \\
-    \hline
-    LOCI & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} & \textit{time} \\
-    \hline
-    LODA & \bfseries 0.11 & \bfseries 0.13 & \bfseries 0.12 & \bfseries 0.11 & 0.49 & \bfseries 0.07 \\
-    \hline
-    LOF & 0.37 & 12.05 & 0.92 & 1.75 & 9.20 & 0.15 \\
-    \hline
-    MCD & 1.67 & 6.63 & 2.78 & 3.56 & 18.07 & 1.24 \\
-    \hline
-    OCSVM & 2.69 & 11.86 & 3.29 & 4.14 & 158.58 & 0.68 \\
-    \hline
-    SOD & 141.53 & 162.93 & 121.38 & 113.86 & 5983.29 & 37.95 \\
-    \hline
-    SOS & 109.16 & 53.27 & 45.96 & 42.17 & 2267.79 & 45.93 \\
-    \hline
+\hline
+\textbf{\textbf{model}} & \textbf{\textbf{annthyroid}} & \textbf{\textbf{mnist}} & \textbf{\textbf{pendigits}} & \textbf{\textbf{satellite}} & \textbf{\textbf{shuttle}} & \textbf{\textbf{thyroid}} \\
+\hline
+                CHAODA-fast &                       161.85 &                 6221.64 &                      617.93 &                      425.03 &                      5.48 &                    117.97 \\
+\hline
+                        ABOD &                         3.42 &                   16.39 &                        2.83 &                        3.53 &                     21.58 &                      1.25 \\
+\hline
+                AutoEncoder &                        22.80 &                   40.54 &                       23.87 &                       26.74 &                    158.72 &                     12.84 \\
+\hline
+                        CBLOF &                         1.01 &                    1.14 &                        0.23 &                        0.30 &                      0.71 &                      0.21 \\
+\hline
+                        COF &                       215.63 &                  277.91 &                      199.03 &                      176.35 &                  12106.63 &                     54.82 \\
+\hline
+                        HBOS &                         1.58 &           \textbf{0.06} &               \textbf{0.01} &               \textbf{0.02} &             \textbf{0.03} &             \textbf{0.00} \\
+\hline
+                IFOREST &                         0.73 &                    1.41 &                        0.80 &                        0.84 &                      3.24 &                      0.54 \\
+\hline
+                        KNN &                         0.84 &                   14.30 &                        1.25 &                        2.05 &                      9.13 &                      0.42 \\
+\hline
+                        LMDD &                       107.05 &                 1383.19 &                      197.48 &                      371.63 &                   6274.43 &                     32.69 \\
+\hline
+                        LOCI &                  \textit{TO} &             \textit{TO} &                 \textit{TO} &                 \textit{TO} &               \textit{TO} &               \textit{TO} \\
+\hline
+                        LODA &                         0.13 &                    0.13 &                        0.12 &                        0.11 &                      0.59 &             \textbf{0.08} \\
+\hline
+                        LOF &                         0.26 &                   14.79 &                        0.90 &                        1.71 &                      6.30 &             \textbf{0.09} \\
+\hline
+                        MCD &                         1.50 &                   20.56 &                        3.01 &                       10.39 &                     10.78 &                      1.03 \\
+\hline
+                        MOGAAL &                       594.69 &             \textit{TO} &                      561.40 &                      513.84 &               \textit{TO} &                    280.80 \\
+\hline
+                        OCSVM &                         2.70 &                   11.30 &                        3.04 &                        3.83 &                    162.18 &                      0.68 \\
+\hline
+                        SOD &                       262.80 &                  281.86 &                      195.81 &                      253.71 &               \textit{TO} &                     91.48 \\
+\hline
+                        SOGAAL &                        61.14 &                   68.03 &                       55.40 &                       50.07 &                    460.66 &                     31.43 \\
+\hline
+                        SOS &                       101.82 &                   54.22 &                       46.02 &                       42.62 &               \textit{TO} &                     42.10 \\
+\hline
+                        VAE &                        27.95 &                   50.16 &                       29.63 &                       33.51 &                    182.23 &                     16.18 \\
+\hline
 \end{tabular}
 \end{table*}
 
@@ -115,37 +143,45 @@ SOS & 0.50 & 0.51 & 0.51 & 0.48 & 0.50 & 0.50 \\
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{dataset} & \textbf{arrhythmia} & \textbf{breastw} & \textbf{cardio} & \textbf{cover} & \textbf{glass} & \textbf{http} & \textbf{ionosphere} & \textbf{lympho} & \textbf{mammography} \\
+\textbf{\textbf{model}} & \textbf{\textbf{arrhythmia}} & \textbf{\textbf{breastw}} & \textbf{\textbf{cardio}} & \textbf{\textbf{cover}} & \textbf{\textbf{glass}} & \textbf{\textbf{http}} & \textbf{\textbf{ionosphere}} & \textbf{\textbf{lympho}} & \textbf{\textbf{mammography}} \\
 \hline
-ensemble-L2 & \bfseries 0.78 & \bfseries 0.83 & \bfseries 0.81 & 0.79 & \bfseries 0.83 & \bfseries 1.00 & \bfseries 0.74 & 0.86 & \bfseries 0.79 \\
+                CHAODA-fast &                \textbf{0.77} &             \textbf{0.97} &            \textbf{0.81} &           \textbf{0.71} &           \textbf{0.70} &          \textbf{1.00} &                         0.88 &            \textbf{0.98} &                 \textbf{0.85} \\
 \hline
-ensemble-L1 & \bfseries 0.79 & 0.77 & 0.77 & 0.71 & 0.32 & \bfseries 0.99 & 0.69 & 0.93 & 0.77 \\
+                        ABOD &                         0.62 &                      0.50 &                     0.49 &                    0.51 &                    0.53 &                   0.50 &                         0.85 &                     0.80 &                          0.50 \\
 \hline
-CBLOF & 0.71 & 0.63 & 0.70 & 0.72 & 0.50 & 0.96 & 0.64 & 0.88 & 0.65 \\
+                AutoEncoder &                         0.65 &                      0.91 &                     0.74 &                    0.52 &                    0.54 &                   0.51 &                         0.65 &                     0.83 &                          0.51 \\
 \hline
-COF & 0.64 & 0.43 & 0.54 & \textit{time} & 0.56 & \textit{time} & 0.63 & 0.71 & 0.60 \\
+                        CBLOF &                         0.70 &                      0.83 &                     0.57 &             \textit{EX} &                    0.54 &            \textit{EX} &                         0.86 &                     0.83 &                          0.50 \\
 \hline
-HBOS & 0.68 & 0.64 & 0.73 & 0.62 & 0.50 & 0.97 & 0.45 & \bfseries 0.97 & 0.68 \\
+                        COF &                         0.65 &                      0.26 &                     0.50 &                    0.50 &                    0.59 &                   0.51 &                         0.81 &                     0.83 &                          0.51 \\
 \hline
-IFOREST & 0.65 & 0.64 & 0.67 & 0.83 & 0.56 & 0.96 & 0.64 & \bfseries 0.97 & 0.73 \\
+                        HBOS &                         0.65 &                      0.93 &                     0.58 &                    0.49 &                    0.48 &                   0.51 &                         0.36 &                     0.91 &                          0.50 \\
 \hline
-KNN & 0.69 & 0.59 & 0.58 & 0.52 & 0.56 & 0.48 & 0.63 & \bfseries 0.98 & 0.68 \\
+                IFOREST &                         0.72 &                      0.91 &                     0.69 &                    0.50 &                    0.54 &                   0.53 &                         0.77 &                     0.83 &                          0.59 \\
 \hline
-LMDD & 0.66 & 0.64 & 0.70 & 0.56 & 0.45 & 0.50 & 0.62 & 0.71 & 0.77 \\
+                        KNN &                         0.68 &                      0.84 &                     0.51 &                    0.51 &                    0.54 &                   0.51 &                \textbf{0.90} &                     0.83 &                          0.51 \\
 \hline
-LOCI & 0.70 & 0.54 & \textit{time} & \textit{time} & 0.52 & \textit{time} & 0.64 & 0.82 & \textit{time} \\
+                        LMDD &                         0.68 &                      0.64 &                     0.60 &                    0.49 &                    0.54 &                   0.51 &                         0.67 &                     0.65 &                          0.56 \\
 \hline
-LODA & 0.64 & 0.64 & 0.71 & \bfseries 0.88 & 0.56 & 0.48 & 0.61 & 0.53 & 0.65 \\
+                        LOCI &                         0.62 &               \textit{TO} &              \textit{TO} &             \textit{TO} &                    0.58 &            \textit{TO} &                         0.58 &                     0.90 &                   \textit{TO} \\
 \hline
-LOF & 0.67 & 0.44 & 0.52 & 0.55 & 0.57 & 0.47 & 0.59 & \bfseries 0.97 & 0.63 \\
+                        LODA &                         0.65 &                      0.93 &                     0.60 &                    0.52 &                    0.48 &                   0.51 &                         0.63 &                     0.48 &                          0.52 \\
 \hline
-MCD & 0.70 & 0.64 & 0.71 & 0.52 & 0.45 & 0.96 & 0.64 & 0.80 & 0.49 \\
+                        LOF &                         0.67 &                      0.30 &                     0.49 &                    0.50 &                    0.54 &                   0.51 &                         0.79 &                     0.83 &                          0.53 \\
 \hline
-OCSVM & 0.71 & 0.64 & 0.75 & \bfseries 0.89 & 0.50 & 0.96 & 0.64 & \bfseries 0.97 & 0.75 \\
+                        MCD &                         0.65 &                      0.94 &                     0.55 &                    0.50 &                    0.48 &                   0.50 &                \textbf{0.90} &                     0.83 &                          0.51 \\
 \hline
-SOD & 0.62 & 0.62 & 0.57 & 0.51 & 0.56 & 0.47 & 0.64 & 0.62 & 0.63 \\
+                        MOGAAL &                         0.42 &                      0.40 &                     0.45 &             \textit{TO} &                    0.59 &            \textit{TO} &                         0.36 &                     0.48 &                   \textit{TO} \\
 \hline
-SOS & 0.51 & 0.50 & 0.50 & \textit{time} & 0.50 & \textit{time} & 0.64 & 0.62 & 0.50 \\
+                        OCSVM &                         0.70 &                      0.77 &                     0.70 &                    0.56 &                    0.54 &                   0.50 &                         0.68 &                     0.83 &                          0.60 \\
+\hline
+                        SOD &                         0.59 &                      0.77 &                     0.48 &             \textit{TO} &                    0.54 &            \textit{TO} &                         0.84 &                     0.65 &                          0.51 \\
+\hline
+                        SOGAAL &                         0.48 &                      0.30 &                     0.45 &                    0.61 &                    0.59 &                   0.51 &                         0.36 &                     0.48 &                          0.50 \\
+\hline
+                        SOS &                         0.51 &                      0.50 &                     0.50 &             \textit{TO} &                    0.48 &            \textit{TO} &                         0.72 &                     0.48 &                   \textit{TO} \\
+\hline
+                        VAE &                         0.65 &             \textbf{0.95} &                     0.74 &                    0.52 &                    0.48 &                   0.51 &                         0.65 &                     0.83 &                          0.56 \\
 \hline
 \end{tabular}
 \end{table*}
@@ -156,39 +192,47 @@ SOS & 0.51 & 0.50 & 0.50 & \textit{time} & 0.50 & \textit{time} & 0.64 & 0.62 & 
 \label{table:results:test-time-1}
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
-    \hline
-    \textbf{dataset} & \textbf{arrhythmia} & \textbf{breastw} & \textbf{cardio} & \textbf{cover} & \textbf{glass} & \textbf{http} & \textbf{ionosphere} & \textbf{lympho} & \textbf{mammography} \\
-    \hline
-    ensemble-L2 & 3.36 & 5.58 & 33.16 & 683.80 & 1.30 & 42.36 & 3.01 & 0.98 & 158.26 \\
-    \hline
-    ensemble-L1 & 7.95 & 5.58 & 34.25 & 778.95 & 1.38 & 201.08 & 3.34 & 0.94 & 147.15 \\
-    \hline
-    CBLOF & 0.15 & \bfseries 0.06 & \bfseries 0.12 & 2.17 & \bfseries 0.05 & \bfseries 0.42 & \bfseries 0.08 & \bfseries 0.06 & 0.23 \\
-    \hline
-    COF & 1.19 & 1.82 & 12.36 & \textit{time} & 0.22 & \textit{time} & 0.57 & 0.16 & 501.51 \\
-    \hline
-    HBOS & \bfseries 0.07 & \bfseries 0.00 & \bfseries 0.01 & 1.20 & \bfseries 0.00 & \bfseries 0.02 & \bfseries 0.01 & \bfseries 0.01 & \bfseries 0.01 \\
-    \hline
-    IFOREST & 0.41 & \bfseries 0.32 & 0.41 & 6.30 & 0.29 & 5.13 & \bfseries 0.31 & 0.29 & 0.88 \\
-    \hline
-    KNN & 0.18 & \bfseries 0.07 & 0.29 & 99.35 & \bfseries 0.02 & 53.65 & \bfseries 0.04 & \bfseries 0.01 & 1.40 \\
-    \hline
-    LMDD & 14.79 & 2.58 & 22.05 & 28119.46 & 0.56 & 9481.89 & 1.68 & 0.40 & 242.79 \\
-    \hline
-    LOCI & 280.33 & 1173.23 & \textit{time} & \textit{time} & 24.76 & \textit{time} & 115.65 & 9.49 & \textit{time} \\
-    \hline
-    LODA & \bfseries 0.04 & \bfseries 0.03 & \bfseries 0.05 & \bfseries 1.06 & \bfseries 0.02 & 0.89 & \bfseries 0.04 & \bfseries 0.02 & \bfseries 0.15 \\
-    \hline
-    LOF & 0.16 & \bfseries 0.02 & 0.18 & 93.24 & \bfseries 0.00 & 45.76 & \bfseries 0.02 & \bfseries 0.00 & 0.58 \\
-    \hline
-    MCD & 2.08 & 0.50 & 0.48 & 13.64 & \bfseries 0.04 & 3.89 & \bfseries 0.09 & \bfseries 0.03 & 2.02 \\
-    \hline
-    OCSVM & \bfseries 0.10 & \bfseries 0.03 & 0.24 & 628.09 & \bfseries 0.00 & 477.33 & \bfseries 0.01 & \bfseries 0.00 & 6.50 \\
-    \hline
-    SOD & 0.99 & 1.63 & 10.48 & 28245.95 & 0.20 & 24607.93 & 0.52 & 0.12 & 332.75 \\
-    \hline
-    SOS & 0.45 & 45.42 & 4.02 & \textit{time} & \bfseries 0.18 & \textit{time} & 0.44 & \bfseries 0.11 & 5962.80 \\
-    \hline
+\hline
+\textbf{\textbf{model}} & \textbf{\textbf{arrhythmia}} & \textbf{\textbf{breastw}} & \textbf{\textbf{cardio}} & \textbf{\textbf{cover}} & \textbf{\textbf{glass}} & \textbf{\textbf{http}} & \textbf{\textbf{ionosphere}} & \textbf{\textbf{lympho}} & \textbf{\textbf{mammography}} \\
+\hline
+                CHAODA-fast &                         6.70 &                      4.71 &                   135.17 &                 1485.24 &                    1.06 &                 119.14 &                         2.64 &                     1.08 &                         46.42 \\
+\hline
+                        ABOD &                         0.34 &                      0.20 &                     0.72 &                   24.02 &           \textbf{0.07} &                  19.08 &                         0.13 &            \textbf{0.05} &                          3.82 \\
+\hline
+                AutoEncoder &                         8.00 &                      6.18 &                     9.05 &                  183.70 &                    3.99 &                 154.20 &                         4.99 &                     3.79 &                         35.26 \\
+\hline
+                        CBLOF &                         0.16 &                      0.13 &                     0.17 &             \textit{EX} &           \textbf{0.06} &            \textit{EX} &                \textbf{0.07} &            \textbf{0.05} &                          0.20 \\
+\hline
+                        COF &                         1.24 &                      1.84 &                    12.63 &                21681.15 &                    0.24 &               21228.44 &                         0.60 &                     0.14 &                        513.46 \\
+\hline
+                        HBOS &                \textbf{0.08} &             \textbf{0.00} &            \textbf{0.01} &                    1.13 &           \textbf{0.00} &          \textbf{0.01} &                \textbf{0.01} &            \textbf{0.01} &                 \textbf{0.01} \\
+\hline
+                IFOREST &                         0.43 &                      0.34 &                     0.43 &                    4.61 &                    0.30 &                   3.95 &                         0.33 &                     0.30 &                          0.95 \\
+\hline
+                        KNN &                         0.19 &             \textbf{0.07} &                     0.30 &                   11.46 &           \textbf{0.02} &                   7.47 &                \textbf{0.05} &            \textbf{0.02} &                          1.58 \\
+\hline
+                        LMDD &                        14.85 &                      2.62 &                    22.12 &                11579.93 &                    0.57 &                3873.99 &                         1.73 &                     0.42 &                        243.01 \\
+\hline
+                        LOCI &                       307.04 &               \textit{TO} &              \textit{TO} &             \textit{TO} &                   25.68 &            \textit{TO} &                       120.92 &                     9.78 &                   \textit{TO} \\
+\hline
+                        LODA &                \textbf{0.04} &             \textbf{0.03} &            \textbf{0.05} &                    0.81 &           \textbf{0.03} &                   0.66 &                \textbf{0.03} &            \textbf{0.03} &                          0.17 \\
+\hline
+                        LOF &                         0.16 &             \textbf{0.01} &                     0.18 &                   10.24 &           \textbf{0.00} &                   1.93 &                \textbf{0.01} &            \textbf{0.00} &                          0.59 \\
+\hline
+                        MCD &                         5.08 &                      0.64 &                     0.89 &                   28.65 &           \textbf{0.05} &                   8.21 &                         0.15 &            \textbf{0.05} &                          2.11 \\
+\hline
+                        MOGAAL &                        46.46 &                     42.09 &                   116.73 &             \textit{TO} &                   40.67 &            \textit{TO} &                        40.86 &                    37.84 &                   \textit{TO} \\
+\hline
+                        OCSVM &                \textbf{0.10} &             \textbf{0.02} &                     0.23 &                  257.95 &           \textbf{0.00} &                 257.28 &                \textbf{0.01} &            \textbf{0.00} &                          6.37 \\
+\hline
+                        SOD &                         1.19 &                      1.89 &                    13.39 &             \textit{TO} &                    0.31 &            \textit{TO} &                         0.76 &                     0.20 &                        521.25 \\
+\hline
+                        SOGAAL &                         6.70 &                      5.03 &                    14.43 &                  591.14 &                    3.95 &                 597.17 &                         4.71 &                     3.96 &                         92.27 \\
+\hline
+                        SOS &                         0.69 &                     47.40 &                     4.11 &             \textit{TO} &                    0.18 &            \textit{TO} &                         0.33 &                     0.11 &                   \textit{TO} \\
+\hline
+                        VAE &                        10.00 &                      7.75 &                    10.89 &                  223.09 &                    5.27 &                 175.59 &                         6.66 &                     5.21 &                         40.87 \\
+\hline
 \end{tabular}
 \end{table*}
 
@@ -200,37 +244,45 @@ SOS & 0.51 & 0.50 & 0.50 & \textit{time} & 0.50 & \textit{time} & 0.64 & 0.62 & 
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{dataset} & \textbf{musk} & \textbf{optdigits} & \textbf{pima} & \textbf{satimage-2} & \textbf{smtp} & \textbf{vertebral} & \textbf{vowels} & \textbf{wbc} & \textbf{wine} \\
+\textbf{\textbf{model}} & \textbf{\textbf{musk}} & \textbf{\textbf{optdigits}} & \textbf{\textbf{pima}} & \textbf{\textbf{satimage-2}} & \textbf{\textbf{smtp}} & \textbf{\textbf{vertebral}} & \textbf{\textbf{vowels}} & \textbf{\textbf{wbc}} & \textbf{\textbf{wine}} \\
 \hline
-ensemble-L2 & \bfseries 0.99 & 0.38 & \bfseries 0.63 & \bfseries 0.99 & \bfseries 0.90 & 0.31 & 0.69 & 0.74 & 0.39 \\
+                CHAODA-fast &          \textbf{1.00} &               \textbf{0.96} &                   0.63 &                \textbf{1.00} &          \textbf{0.92} &                        0.29 &                     0.71 &         \textbf{0.97} &          \textbf{0.99} \\
 \hline
-ensemble-L1 & \bfseries 1.00 & \bfseries 0.73 & 0.52 & 0.97 & 0.85 & \bfseries 0.48 & 0.68 & 0.79 & \bfseries 0.89 \\
+                        ABOD &                   0.47 &                        0.54 &                   0.60 &                         0.53 &                   0.50 &                        0.49 &            \textbf{0.75} &                  0.50 &                   0.43 \\
 \hline
-CBLOF & 0.64 & 0.47 & 0.54 & 0.96 & 0.82 & \bfseries 0.46 & 0.72 & 0.82 & 0.45 \\
+                AutoEncoder &                   0.63 &                        0.48 &                   0.57 &                         0.71 &                   0.50 &                        0.49 &                     0.51 &                  0.77 &                   0.51 \\
 \hline
-COF & 0.53 & 0.52 & 0.54 & 0.61 & \textit{time} & \bfseries 0.46 & 0.89 & 0.78 & 0.45 \\
+                        CBLOF &          \textbf{1.00} &                        0.52 &                   0.64 &                         0.90 &                   0.50 &                        0.49 &                     0.52 &                  0.82 &                   0.46 \\
 \hline
-HBOS & 0.96 & \bfseries 0.75 & 0.57 & 0.93 & 0.81 & \bfseries 0.46 & 0.57 & \bfseries 0.85 & 0.77 \\
+                        COF &                   0.53 &                        0.52 &                   0.54 &                         0.56 &                   0.50 &                        0.51 &                     0.71 &                  0.47 &                   0.46 \\
 \hline
-IFOREST & 0.96 & 0.53 & 0.56 & 0.95 & 0.83 & \bfseries 0.46 & 0.62 & 0.82 & 0.61 \\
+                        HBOS &          \textbf{1.00} &                        0.60 &                   0.55 &                         0.49 &                   0.68 &                        0.47 &                     0.56 &                  0.77 &                   0.57 \\
 \hline
-KNN & 0.59 & 0.48 & 0.54 & 0.80 & 0.82 & 0.45 & \bfseries 0.94 & 0.80 & 0.45 \\
+                IFOREST &                   0.97 &                        0.50 &          \textbf{0.65} &                         0.94 &                   0.50 &                        0.45 &                     0.63 &                  0.72 &                   0.51 \\
 \hline
-LMDD & 0.96 & 0.45 & 0.53 & 0.45 & 0.77 & 0.44 & 0.51 & 0.75 & 0.66 \\
+                        KNN &                   0.51 &                        0.51 &                   0.60 &                         0.61 &                   0.53 &                        0.47 &                     0.72 &                  0.51 &                   0.47 \\
 \hline
-LOCI & \textit{time} & \textit{time} & 0.52 & \textit{time} & \textit{time} & \bfseries 0.47 & 0.52 & 0.78 & 0.53 \\
+                        LMDD &                   0.48 &                        0.49 &                   0.37 &                         0.49 &                   0.65 &                        0.43 &                     0.49 &                  0.80 &                   0.62 \\
 \hline
-LODA & 0.96 & 0.46 & 0.54 & 0.94 & 0.82 & 0.44 & 0.58 & 0.82 & 0.66 \\
+                        LOCI &            \textit{TO} &                 \textit{TO} &            \textit{TO} &                  \textit{TO} &            \textit{TO} &                        0.49 &              \textit{TO} &                  0.72 &                   0.46 \\
 \hline
-LOF & 0.65 & 0.54 & 0.51 & 0.60 & 0.59 & \bfseries 0.46 & 0.80 & 0.83 & 0.61 \\
+                        LODA &                   0.54 &                        0.51 &                   0.62 &                         0.69 &                   0.57 &                        0.43 &                     0.51 &                  0.82 &                   0.57 \\
 \hline
-MCD & 0.96 & 0.45 & 0.54 & 0.96 & 0.83 & 0.44 & 0.51 & 0.80 & \bfseries 0.88 \\
+                        LOF &                   0.50 &                        0.53 &                   0.55 &                         0.55 &                   0.50 &                        0.49 &                     0.69 &                  0.50 &                   0.46 \\
 \hline
-OCSVM & 0.96 & 0.45 & 0.54 & 0.93 & 0.83 & 0.44 & 0.59 & 0.82 & 0.50 \\
+                        MCD &                   0.97 &                        0.48 &          \textbf{0.66} &                         0.61 &                   0.50 &                        0.45 &                     0.63 &                  0.60 &                   0.46 \\
 \hline
-SOD & 0.62 & 0.48 & 0.55 & 0.69 & 0.82 & \bfseries 0.46 & 0.82 & 0.80 & 0.45 \\
+                        MOGAAL &                   0.48 &                        0.48 &                   0.61 &                         0.49 &            \textit{TO} &                        0.51 &                     0.48 &                  0.60 &                   0.46 \\
 \hline
-SOS & 0.49 & 0.52 & 0.52 & 0.50 & \textit{time} & \bfseries 0.48 & 0.61 & 0.52 & 0.45 \\
+                        OCSVM &                   0.48 &                        0.49 &                   0.56 &                         0.84 &                   0.50 &                        0.49 &                     0.50 &                  0.82 &                   0.46 \\
+\hline
+                        SOD &                   0.51 &                        0.51 &                   0.56 &                         0.58 &            \textit{TO} &                        0.45 &                     0.66 &                  0.60 &                   0.46 \\
+\hline
+                        SOGAAL &                   0.48 &                        0.52 &                   0.48 &                         0.49 &                   0.62 &               \textbf{0.54} &                     0.48 &                  0.47 &                   0.46 \\
+\hline
+                        SOS &                   0.52 &                        0.52 &                   0.51 &                         0.52 &            \textit{TO} &                        0.49 &                     0.59 &                  0.52 &                   0.46 \\
+\hline
+                        VAE &                   0.63 &                        0.48 &                   0.61 &                         0.71 &                   0.50 &                        0.45 &                     0.51 &                  0.77 &                   0.67 \\
 \hline
 \end{tabular}
 \end{table*}
@@ -241,248 +293,261 @@ SOS & 0.49 & 0.52 & 0.52 & 0.50 & \textit{time} & \bfseries 0.48 & 0.61 & 0.52 &
 \label{table:results:test-time-2}
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
-    \hline
-    \textbf{dataset} & \textbf{musk} & \textbf{optdigits} & \textbf{pima} & \textbf{satimage-2} & \textbf{smtp} & \textbf{vertebral} & \textbf{vowels} & \textbf{wbc} & \textbf{wine} \\
-    \hline
-    ensemble-L2 & 102.33 & 123.58 & 11.97 & 90.78 & 51.29 & 0.86 & 19.48 & 3.55 & 0.82 \\
-    \hline
-    ensemble-L1 & 70.45 & 151.09 & 14.80 & 100.58 & 52.81 & 0.88 & 20.06 & 3.79 & 0.75 \\
-    \hline
-    CBLOF & 0.24 & 0.33 & \bfseries 0.09 & \bfseries 0.33 & 1.08 & \bfseries 0.06 & \bfseries 0.10 & \bfseries 0.08 & \bfseries 0.05 \\
-    \hline
-    COF & 44.19 & 116.89 & 2.28 & 137.11 & \textit{time} & 0.27 & 7.66 & 0.64 & \bfseries 0.10 \\
-    \hline
-    HBOS & \bfseries 0.07 & \bfseries 0.03 & \bfseries 0.00 & \bfseries 0.02 & \bfseries 0.02 & \bfseries 0.00 & \bfseries 0.00 & \bfseries 0.01 & \bfseries 0.00 \\
-    \hline
-    IFOREST & 0.90 & 0.89 & \bfseries 0.33 & 0.75 & 5.14 & 0.28 & 0.37 & \bfseries 0.31 & 0.29 \\
-    \hline
-    KNN & 3.81 & 4.79 & \bfseries 0.08 & 1.90 & 9.17 & \bfseries 0.02 & 0.16 & \bfseries 0.04 & \bfseries 0.01 \\
-    \hline
-    LMDD & 376.76 & 421.83 & 2.81 & 301.64 & 8478.47 & 0.59 & 9.35 & 1.90 & 0.34 \\
-    \hline
-    LOCI & \textit{time} & \textit{time} & 1808.72 & \textit{time} & \textit{time} & 34.97 & 23694.09 & 146.60 & 7.07 \\
-    \hline
-    LODA & \bfseries 0.12 & \bfseries 0.10 & \bfseries 0.03 & \bfseries 0.10 & \bfseries 0.93 & \bfseries 0.02 & \bfseries 0.05 & \bfseries 0.03 & \bfseries 0.02 \\
-    \hline
-    LOF & 4.11 & 4.52 & \bfseries 0.02 & 1.65 & 2.06 & \bfseries 0.00 & \bfseries 0.07 & \bfseries 0.02 & \bfseries 0.00 \\
-    \hline
-    MCD & 39.35 & 2.56 & 0.51 & 3.07 & 27.31 & \bfseries 0.05 & 0.84 & \bfseries 0.10 & \bfseries 0.04 \\
-    \hline
-    OCSVM & 2.62 & 4.05 & \bfseries 0.03 & 3.40 & 614.48 & \bfseries 0.00 & \bfseries 0.11 & \bfseries 0.01 & \bfseries 0.00 \\
-    \hline
-    SOD & 29.72 & 73.76 & 1.82 & 92.97 & 22000.50 & 0.27 & 6.83 & 0.59 & 0.12 \\
-    \hline
-    SOS & 9.31 & 25.82 & 1.01 & 34.51 & \textit{time} & \bfseries 0.21 & 2.81 & 0.39 & 0.13 \\
-    \hline
+\hline
+\textbf{\textbf{model}} & \textbf{\textbf{musk}} & \textbf{\textbf{optdigits}} & \textbf{\textbf{pima}} & \textbf{\textbf{satimage-2}} & \textbf{\textbf{smtp}} & \textbf{\textbf{vertebral}} & \textbf{\textbf{vowels}} & \textbf{\textbf{wbc}} & \textbf{\textbf{wine}} \\
+\hline
+                CHAODA-fast &                 858.15 &                     3279.67 &                  12.36 &                       358.49 &                 272.61 &                        1.88 &                   123.34 &                  5.26 &                   0.39 \\
+\hline
+                        ABOD &                   4.39 &                        6.81 &                   0.26 &                         3.20 &                  18.00 &               \textbf{0.08} &                     0.51 &                  0.14 &          \textbf{0.04} \\
+\hline
+                AutoEncoder &                  23.40 &                       24.29 &                   4.65 &                        23.73 &                 195.61 &                        2.85 &                     6.98 &                  4.70 &                   3.31 \\
+\hline
+                        CBLOF &                   0.27 &                        0.44 &          \textbf{0.08} &                         0.31 &                   0.65 &               \textbf{0.06} &            \textbf{0.10} &         \textbf{0.08} &          \textbf{0.05} \\
+\hline
+                        COF &                  45.60 &                      119.57 &                   2.40 &                       141.84 &               21283.99 &                        0.28 &                     8.06 &                  0.68 &                   0.11 \\
+\hline
+                        HBOS &          \textbf{0.07} &               \textbf{0.04} &          \textbf{0.00} &                \textbf{0.02} &          \textbf{0.01} &               \textbf{0.00} &            \textbf{0.01} &         \textbf{0.01} &          \textbf{0.00} \\
+\hline
+                IFOREST &                   0.93 &                        0.92 &                   0.35 &                         0.79 &                   3.90 &                        0.30 &                     0.40 &                  0.33 &                   0.29 \\
+\hline
+                        KNN &                   3.50 &                        5.53 &          \textbf{0.09} &                         1.84 &                   6.83 &               \textbf{0.03} &                     0.18 &         \textbf{0.05} &          \textbf{0.01} \\
+\hline
+                        LMDD &                 375.11 &                      421.22 &                   2.86 &                       302.94 &                3872.57 &                        0.59 &                     9.47 &                  1.91 &                   0.33 \\
+\hline
+                        LOCI &            \textit{TO} &                 \textit{TO} &            \textit{TO} &                  \textit{TO} &            \textit{TO} &                       35.97 &              \textit{TO} &                154.49 &                   6.84 \\
+\hline
+                        LODA &          \textbf{0.07} &               \textbf{0.10} &          \textbf{0.04} &                \textbf{0.10} &                   0.73 &               \textbf{0.03} &            \textbf{0.05} &         \textbf{0.04} &          \textbf{0.03} \\
+\hline
+                        LOF &                   3.59 &                        5.49 &          \textbf{0.02} &                         1.50 &                   1.36 &               \textbf{0.00} &            \textbf{0.06} &         \textbf{0.01} &          \textbf{0.00} \\
+\hline
+                        MCD &                  84.74 &                        7.24 &                   0.69 &                         6.83 &                  13.78 &               \textbf{0.05} &                     0.81 &                  0.11 &          \textbf{0.05} \\
+\hline
+                        MOGAAL &                 267.93 &                      415.02 &                  40.89 &                       463.18 &            \textit{TO} &                       39.86 &                    80.35 &                 40.65 &                  38.10 \\
+\hline
+                        OCSVM &                   2.51 &                        3.71 &          \textbf{0.03} &                         3.14 &                 252.52 &               \textbf{0.00} &                     0.11 &         \textbf{0.01} &          \textbf{0.00} \\
+\hline
+                        SOD &                  56.94 &                      131.49 &                   2.48 &                       210.39 &            \textit{TO} &                        0.54 &                    13.92 &                  1.03 &                   0.19 \\
+\hline
+                        SOGAAL &                  29.55 &                       44.72 &                   5.20 &                        48.79 &                 592.27 &                        4.69 &                    10.38 &                  4.76 &                   4.01 \\
+\hline
+                        SOS &                   9.37 &                       26.09 &                   1.01 &                        34.96 &            \textit{TO} &                        0.21 &                     2.81 &                  0.36 &          \textbf{0.10} \\
+\hline
+                        VAE &                  30.38 &                       30.58 &                   5.67 &                        30.41 &                 176.84 &                        4.03 &                    10.46 &                  5.33 &                   4.62 \\
+\hline
 \end{tabular}
 \end{table*}
 
-
-\subsection{New CHAODA Results}
-\label{subsec:results:new-chaoda-results}
-
-\begin{table*}[!b]
-    \renewcommand{\arraystretch}{1.25}
-    \caption{New CHAODA Results. Set 1}
-    \label{table:results:new-chaoda-1}
-    \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
-        \hline
-        \textbf{voting} & \textbf{normed} & \textbf{\textbf{annthyroid}} & \textbf{\textbf{arrhythmia}} & \textbf{\textbf{breastw}} & \textbf{\textbf{cardio}} & \textbf{\textbf{cover}} & \textbf{\textbf{glass}} & \textbf{\textbf{http}} & \textbf{\textbf{ionosphere}} \\
-        \hline
-                   mean &            None &                \textbf{0.64} &                \textbf{0.77} &             \textbf{0.97} &            \textbf{0.81} &                    0.71 &                    0.70 &          \textbf{1.00} &                \textbf{0.88} \\
-        \hline
-                product &            None &                         0.62 &                \textbf{0.77} &                      0.92 &                     0.76 &                    0.71 &                    0.63 &          \textbf{1.00} &                         0.80 \\
-        \hline
-                 median &            None &                         0.51 &                         0.57 &                      0.95 &                     0.55 &                    0.49 &                    0.53 &          \textbf{1.00} &                         0.60 \\
-        \hline
-                    min &            None &                         0.61 &                         0.73 &             \textbf{0.98} &            \textbf{0.79} &                    0.71 &                    0.69 &          \textbf{1.00} &                \textbf{0.87} \\
-        \hline
-                    max &            None &                         0.62 &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.81} &                    0.73 &           \textbf{0.73} &          \textbf{1.00} &                \textbf{0.88} \\
-        \hline
-                    p25 &            None &                \textbf{0.65} &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.80} &                    0.45 &                    0.70 &          \textbf{1.00} &                \textbf{0.87} \\
-        \hline
-                    p75 &            None &                         0.51 &                         0.74 &             \textbf{0.98} &                     0.73 &           \textbf{0.77} &           \textbf{0.75} &          \textbf{1.00} &                         0.61 \\
-        \hline
-                   mean &          linear &                         0.58 &                \textbf{0.75} &             \textbf{0.98} &            \textbf{0.79} &                    0.74 &           \textbf{0.73} &          \textbf{1.00} &                         0.85 \\
-        \hline
-                product &          linear &                         0.61 &                         0.73 &             \textbf{0.98} &            \textbf{0.79} &                    0.71 &                    0.69 &          \textbf{1.00} &                \textbf{0.87} \\
-        \hline
-                 median &          linear &                         0.62 &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.81} &                    0.73 &           \textbf{0.73} &          \textbf{1.00} &                \textbf{0.88} \\
-        \hline
-                    min &          linear &                \textbf{0.65} &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.80} &                    0.45 &                    0.70 &          \textbf{1.00} &                \textbf{0.87} \\
-        \hline
-                    max &          linear &                         0.51 &                         0.74 &             \textbf{0.98} &                     0.73 &           \textbf{0.77} &           \textbf{0.75} &          \textbf{1.00} &                         0.61 \\
-        \hline
-                    p25 &          linear &                \textbf{0.64} &                \textbf{0.77} &             \textbf{0.97} &            \textbf{0.81} &                    0.71 &                    0.70 &          \textbf{1.00} &                \textbf{0.88} \\
-        \hline
-                    p75 &          linear &                         0.62 &                \textbf{0.77} &                      0.92 &                     0.76 &                    0.71 &                    0.63 &          \textbf{1.00} &                         0.80 \\
-        \hline
-                   mean &        gaussian &                         0.62 &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.81} &                    0.73 &           \textbf{0.73} &          \textbf{1.00} &                \textbf{0.88} \\
-        \hline
-                product &        gaussian &                \textbf{0.65} &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.80} &                    0.45 &                    0.70 &          \textbf{1.00} &                \textbf{0.87} \\
-        \hline
-                 median &        gaussian &                         0.51 &                         0.70 &             \textbf{0.98} &                     0.73 &           \textbf{0.77} &           \textbf{0.75} &          \textbf{1.00} &                         0.61 \\
-        \hline
-                    min &        gaussian &                \textbf{0.64} &                \textbf{0.77} &             \textbf{0.97} &            \textbf{0.81} &                    0.71 &                    0.70 &          \textbf{1.00} &                \textbf{0.88} \\
-        \hline
-                    max &        gaussian &                         0.62 &                \textbf{0.77} &                      0.92 &                     0.76 &                    0.71 &                    0.63 &          \textbf{1.00} &                         0.80 \\
-        \hline
-                    p25 &        gaussian &                         0.54 &                         0.64 &                      0.50 &                     0.73 &                    0.50 &                    0.56 &          \textbf{1.00} &                         0.70 \\
-        \hline
-                    p75 &        gaussian &                         0.61 &                         0.73 &             \textbf{0.98} &            \textbf{0.79} &                    0.71 &                    0.69 &          \textbf{1.00} &                \textbf{0.87} \\
-        \hline
-                   mean &         sigmoid &                         0.51 &                         0.74 &             \textbf{0.98} &                     0.73 &           \textbf{0.77} &           \textbf{0.75} &          \textbf{1.00} &                         0.61 \\
-        \hline
-                product &         sigmoid &                \textbf{0.64} &                \textbf{0.77} &             \textbf{0.97} &            \textbf{0.81} &                    0.71 &                    0.70 &          \textbf{1.00} &                \textbf{0.88} \\
-        \hline
-                 median &         sigmoid &                         0.62 &                \textbf{0.77} &                      0.92 &                     0.76 &                    0.71 &                    0.63 &          \textbf{1.00} &                         0.80 \\
-        \hline
-                    min &         sigmoid &                         0.54 &                         0.66 &                      0.50 &                     0.73 &                    0.50 &                    0.56 &          \textbf{1.00} &                         0.69 \\
-        \hline
-                    max &         sigmoid &                         0.61 &                         0.73 &             \textbf{0.98} &            \textbf{0.79} &                    0.71 &                    0.69 &          \textbf{1.00} &                \textbf{0.87} \\
-        \hline
-                    p25 &         sigmoid &                         0.62 &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.81} &                    0.73 &           \textbf{0.73} &          \textbf{1.00} &                \textbf{0.88} \\
-        \hline
-                    p75 &         sigmoid &                \textbf{0.65} &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.80} &                    0.45 &                    0.70 &          \textbf{1.00} &                \textbf{0.87} \\
-        \hline
-    \end{tabular}
-\end{table*}
+% TODO: Add table(s) against algorithms for which we did not find usable implementations
 
 
-\begin{table*}[!b]
-    \renewcommand{\arraystretch}{1.25}
-    \caption{New CHAODA Results. Set 2}
-    \label{table:results:new-chaoda-2}
-    \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
-        \hline
-        \textbf{voting} & \textbf{normed} & \textbf{\textbf{lympho}} & \textbf{\textbf{mammography}} & \textbf{\textbf{mnist}} & \textbf{\textbf{musk}} & \textbf{\textbf{optdigits}} & \textbf{\textbf{pendigits}} & \textbf{\textbf{pima}} & \textbf{\textbf{satellite}} \\
-        \hline
-                   mean &            None &            \textbf{0.98} &                 \textbf{0.85} &           \textbf{0.78} &          \textbf{1.00} &               \textbf{0.96} &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
-        \hline
-                product &            None &                     0.92 &                          0.80 &                    0.71 &          \textbf{1.00} &                        0.88 &                        0.88 &                   0.60 &                        0.76 \\
-        \hline
-                 median &            None &                     0.91 &                          0.52 &                    0.56 &          \textbf{1.00} &                        0.81 &                        0.69 &                   0.52 &                        0.67 \\
-        \hline
-                    min &            None &            \textbf{0.97} &                          0.83 &                    0.76 &          \textbf{1.00} &               \textbf{0.95} &               \textbf{0.95} &                   0.64 &               \textbf{0.79} \\
-        \hline
-                    max &            None &            \textbf{0.98} &                 \textbf{0.86} &                    0.75 &          \textbf{1.00} &                        0.88 &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
-        \hline
-                    p25 &            None &                     0.95 &                 \textbf{0.85} &                    0.66 &          \textbf{1.00} &                        0.91 &               \textbf{0.94} &                   0.62 &               \textbf{0.77} \\
-        \hline
-                    p75 &            None &                     0.94 &                          0.83 &                    0.71 &          \textbf{0.99} &                        0.82 &                        0.64 &                   0.60 &                        0.72 \\
-        \hline
-                   mean &          linear &            \textbf{0.98} &                 \textbf{0.85} &           \textbf{0.79} &          \textbf{1.00} &                        0.93 &                        0.77 &          \textbf{0.67} &               \textbf{0.79} \\
-        \hline
-                product &          linear &            \textbf{0.97} &                          0.83 &                    0.76 &          \textbf{1.00} &               \textbf{0.95} &               \textbf{0.95} &                   0.64 &               \textbf{0.79} \\
-        \hline
-                 median &          linear &            \textbf{0.98} &                 \textbf{0.86} &                    0.75 &          \textbf{1.00} &                        0.88 &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
-        \hline
-                    min &          linear &                     0.95 &                 \textbf{0.85} &                    0.66 &          \textbf{1.00} &                        0.91 &               \textbf{0.94} &                   0.62 &               \textbf{0.77} \\
-        \hline
-                    max &          linear &                     0.94 &                          0.83 &                    0.71 &          \textbf{0.99} &                        0.82 &                        0.64 &                   0.60 &                        0.72 \\
-        \hline
-                    p25 &          linear &            \textbf{0.98} &                 \textbf{0.85} &           \textbf{0.78} &          \textbf{1.00} &               \textbf{0.96} &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
-        \hline
-                    p75 &          linear &                     0.92 &                          0.80 &                    0.71 &          \textbf{1.00} &                        0.88 &                        0.88 &                   0.60 &                        0.76 \\
-        \hline
-                   mean &        gaussian &            \textbf{0.98} &                 \textbf{0.86} &                    0.75 &          \textbf{1.00} &                        0.88 &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
-        \hline
-                product &        gaussian &                     0.95 &                 \textbf{0.85} &                    0.66 &          \textbf{1.00} &                        0.91 &               \textbf{0.94} &                   0.62 &               \textbf{0.77} \\
-        \hline
-                 median &        gaussian &                     0.94 &                          0.83 &                    0.71 &          \textbf{0.99} &                        0.82 &                        0.65 &                   0.60 &                        0.72 \\
-        \hline
-                    min &        gaussian &            \textbf{0.98} &                 \textbf{0.85} &           \textbf{0.78} &          \textbf{1.00} &               \textbf{0.96} &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
-        \hline
-                    max &        gaussian &                     0.92 &                          0.80 &                    0.71 &          \textbf{1.00} &                        0.88 &                        0.88 &                   0.60 &                        0.76 \\
-        \hline
-                    p25 &        gaussian &            \textbf{0.98} &                          0.60 &                    0.69 &          \textbf{1.00} &                        0.50 &                        0.50 &                   0.57 &                        0.50 \\
-        \hline
-                    p75 &        gaussian &            \textbf{0.97} &                          0.83 &                    0.76 &          \textbf{1.00} &               \textbf{0.95} &               \textbf{0.95} &                   0.64 &               \textbf{0.79} \\
-        \hline
-                   mean &         sigmoid &                     0.94 &                          0.83 &                    0.71 &          \textbf{0.99} &                        0.82 &                        0.64 &                   0.60 &                        0.72 \\
-        \hline
-                product &         sigmoid &            \textbf{0.98} &                 \textbf{0.85} &           \textbf{0.78} &          \textbf{1.00} &               \textbf{0.96} &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
-        \hline
-                 median &         sigmoid &                     0.92 &                          0.80 &                    0.71 &          \textbf{1.00} &                        0.88 &                        0.88 &                   0.60 &                        0.76 \\
-        \hline
-                    min &         sigmoid &            \textbf{0.98} &                          0.60 &                    0.70 &          \textbf{1.00} &                        0.50 &                        0.50 &                   0.56 &                        0.50 \\
-        \hline
-                    max &         sigmoid &            \textbf{0.97} &                          0.83 &                    0.76 &          \textbf{1.00} &               \textbf{0.95} &               \textbf{0.95} &                   0.64 &               \textbf{0.79} \\
-        \hline
-                    p25 &         sigmoid &            \textbf{0.98} &                 \textbf{0.86} &                    0.75 &          \textbf{1.00} &                        0.88 &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
-        \hline
-                    p75 &         sigmoid &                     0.95 &                 \textbf{0.85} &                    0.66 &          \textbf{1.00} &                        0.91 &               \textbf{0.94} &                   0.62 &               \textbf{0.77} \\
-        \hline
-    \end{tabular}              
-\end{table*}
+% TODO: Add the following tables to the supplementary materials.
 
 
-\begin{table*}[!b]
-    \renewcommand{\arraystretch}{1.25}
-    \caption{New CHAODA Results. Set 3}
-    \label{table:results:new-chaoda-3}
-    \centering
-    \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
-        \hline
-        \textbf{voting} & \textbf{normed} & \textbf{\textbf{satimage-2}} & \textbf{\textbf{shuttle}} & \textbf{\textbf{smtp}} & \textbf{\textbf{thyroid}} & \textbf{\textbf{vertebral}} & \textbf{\textbf{vowels}} & \textbf{\textbf{wbc}} & \textbf{\textbf{wine}} \\
-        \hline
-                    mean &            None &                \textbf{1.00} &             \textbf{0.51} &                   0.92 &             \textbf{0.89} &                        0.29 &                     0.71 &         \textbf{0.97} &          \textbf{0.99} \\
-        \hline
-                product &            None &                         0.95 &             \textbf{0.51} &                   0.45 &                      0.75 &                        0.36 &                     0.59 &         \textbf{0.97} &          \textbf{0.98} \\
-        \hline
-                    median &            None &                         0.93 &             \textbf{0.50} &                   0.84 &                      0.56 &               \textbf{0.46} &                     0.52 &                  0.82 &          \textbf{0.99} \\
-        \hline
-                    min &            None &                \textbf{0.98} &             \textbf{0.51} &                   0.91 &                      0.83 &                        0.32 &                     0.67 &                  0.95 &          \textbf{0.98} \\
-        \hline
-                    max &            None &                \textbf{0.99} &             \textbf{0.51} &          \textbf{0.95} &             \textbf{0.90} &                        0.30 &                     0.70 &         \textbf{0.97} &          \textbf{1.00} \\
-        \hline
-                    p25 &            None &                \textbf{0.99} &             \textbf{0.51} &                   0.87 &             \textbf{0.90} &                        0.29 &                     0.69 &         \textbf{0.98} &          \textbf{1.00} \\
-        \hline
-                    p75 &            None &                         0.96 &             \textbf{0.51} &                   0.87 &                      0.62 &               \textbf{0.47} &                     0.72 &                  0.89 &          \textbf{0.99} \\
-        \hline
-                    mean &          linear &                \textbf{0.99} &             \textbf{0.51} &                   0.91 &             \textbf{0.88} &                        0.36 &            \textbf{0.79} &                  0.95 &          \textbf{0.99} \\
-        \hline
-                product &          linear &                \textbf{0.98} &             \textbf{0.51} &                   0.91 &                      0.83 &                        0.32 &                     0.67 &                  0.95 &          \textbf{0.98} \\
-        \hline
-                    median &          linear &                \textbf{0.99} &             \textbf{0.51} &          \textbf{0.95} &             \textbf{0.90} &                        0.30 &                     0.70 &         \textbf{0.97} &          \textbf{1.00} \\
-        \hline
-                    min &          linear &                \textbf{0.99} &             \textbf{0.51} &                   0.87 &             \textbf{0.90} &                        0.29 &                     0.69 &         \textbf{0.98} &          \textbf{1.00} \\
-        \hline
-                    max &          linear &                         0.96 &             \textbf{0.51} &                   0.87 &                      0.62 &               \textbf{0.47} &                     0.72 &                  0.89 &          \textbf{0.99} \\
-        \hline
-                    p25 &          linear &                \textbf{1.00} &             \textbf{0.51} &                   0.92 &             \textbf{0.89} &                        0.29 &                     0.71 &         \textbf{0.97} &          \textbf{0.99} \\
-        \hline
-                    p75 &          linear &                         0.95 &             \textbf{0.51} &                   0.45 &                      0.75 &                        0.36 &                     0.59 &         \textbf{0.97} &          \textbf{0.98} \\
-        \hline
-                    mean &        gaussian &                \textbf{0.99} &             \textbf{0.51} &          \textbf{0.95} &             \textbf{0.90} &                        0.30 &                     0.70 &         \textbf{0.97} &          \textbf{1.00} \\
-        \hline
-                product &        gaussian &                \textbf{0.99} &             \textbf{0.51} &                   0.87 &             \textbf{0.90} &                        0.29 &                     0.69 &         \textbf{0.98} &          \textbf{1.00} \\
-        \hline
-                    median &        gaussian &                         0.96 &             \textbf{0.51} &                   0.87 &                      0.62 &               \textbf{0.47} &                     0.72 &                  0.89 &          \textbf{0.99} \\
-        \hline
-                    min &        gaussian &                \textbf{1.00} &             \textbf{0.51} &                   0.92 &             \textbf{0.89} &                        0.29 &                     0.71 &         \textbf{0.97} &          \textbf{0.99} \\
-        \hline
-                    max &        gaussian &                         0.95 &             \textbf{0.51} &                   0.45 &                      0.75 &                        0.36 &                     0.59 &         \textbf{0.97} &          \textbf{0.98} \\
-        \hline
-                    p25 &        gaussian &                \textbf{0.98} &             \textbf{0.50} &                   0.50 &                      0.63 &               \textbf{0.46} &                     0.50 &                  0.91 &          \textbf{0.99} \\
-        \hline
-                    p75 &        gaussian &                \textbf{0.98} &             \textbf{0.51} &                   0.91 &                      0.83 &                        0.32 &                     0.67 &                  0.95 &          \textbf{0.98} \\
-        \hline
-                    mean &         sigmoid &                         0.96 &             \textbf{0.51} &                   0.87 &                      0.62 &               \textbf{0.47} &                     0.72 &                  0.89 &          \textbf{0.99} \\
-        \hline
-                product &         sigmoid &                \textbf{1.00} &             \textbf{0.51} &                   0.92 &             \textbf{0.89} &                        0.29 &                     0.71 &         \textbf{0.97} &          \textbf{0.99} \\
-        \hline
-                    median &         sigmoid &                         0.95 &             \textbf{0.51} &                   0.45 &                      0.75 &                        0.36 &                     0.59 &         \textbf{0.97} &          \textbf{0.98} \\
-        \hline
-                    min &         sigmoid &                \textbf{0.98} &             \textbf{0.50} &                   0.50 &                      0.62 &               \textbf{0.46} &                     0.50 &                  0.91 &          \textbf{0.99} \\
-        \hline
-                    max &         sigmoid &                \textbf{0.98} &             \textbf{0.51} &                   0.91 &                      0.83 &                        0.32 &                     0.67 &                  0.95 &          \textbf{0.98} \\
-        \hline
-                    p25 &         sigmoid &                \textbf{0.99} &             \textbf{0.51} &          \textbf{0.95} &             \textbf{0.90} &                        0.30 &                     0.70 &         \textbf{0.97} &          \textbf{1.00} \\
-        \hline
-                    p75 &         sigmoid &                \textbf{0.99} &             \textbf{0.51} &                   0.87 &             \textbf{0.90} &                        0.29 &                     0.69 &         \textbf{0.98} &          \textbf{1.00} \\
-        \hline
-    \end{tabular}   
-\end{table*}
+% \subsection{New CHAODA Results}
+% \label{subsec:results:new-chaoda-results}
+
+% \begin{table*}[!b]
+%     \renewcommand{\arraystretch}{1.25}
+%     \caption{New CHAODA Results. Set 1}
+%     \label{table:results:new-chaoda-1}
+%     \centering
+%     \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+%         \hline
+%         \textbf{voting} & \textbf{normed} & \textbf{\textbf{annthyroid}} & \textbf{\textbf{arrhythmia}} & \textbf{\textbf{breastw}} & \textbf{\textbf{cardio}} & \textbf{\textbf{cover}} & \textbf{\textbf{glass}} & \textbf{\textbf{http}} & \textbf{\textbf{ionosphere}} \\
+%         \hline
+%                    mean &            None &                \textbf{0.64} &                \textbf{0.77} &             \textbf{0.97} &            \textbf{0.81} &                    0.71 &                    0.70 &          \textbf{1.00} &                \textbf{0.88} \\
+%         \hline
+%                 product &            None &                         0.62 &                \textbf{0.77} &                      0.92 &                     0.76 &                    0.71 &                    0.63 &          \textbf{1.00} &                         0.80 \\
+%         \hline
+%                  median &            None &                         0.51 &                         0.57 &                      0.95 &                     0.55 &                    0.49 &                    0.53 &          \textbf{1.00} &                         0.60 \\
+%         \hline
+%                     min &            None &                         0.61 &                         0.73 &             \textbf{0.98} &            \textbf{0.79} &                    0.71 &                    0.69 &          \textbf{1.00} &                \textbf{0.87} \\
+%         \hline
+%                     max &            None &                         0.62 &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.81} &                    0.73 &           \textbf{0.73} &          \textbf{1.00} &                \textbf{0.88} \\
+%         \hline
+%                     p25 &            None &                \textbf{0.65} &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.80} &                    0.45 &                    0.70 &          \textbf{1.00} &                \textbf{0.87} \\
+%         \hline
+%                     p75 &            None &                         0.51 &                         0.74 &             \textbf{0.98} &                     0.73 &           \textbf{0.77} &           \textbf{0.75} &          \textbf{1.00} &                         0.61 \\
+%         \hline
+%                    mean &          linear &                         0.58 &                \textbf{0.75} &             \textbf{0.98} &            \textbf{0.79} &                    0.74 &           \textbf{0.73} &          \textbf{1.00} &                         0.85 \\
+%         \hline
+%                 product &          linear &                         0.61 &                         0.73 &             \textbf{0.98} &            \textbf{0.79} &                    0.71 &                    0.69 &          \textbf{1.00} &                \textbf{0.87} \\
+%         \hline
+%                  median &          linear &                         0.62 &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.81} &                    0.73 &           \textbf{0.73} &          \textbf{1.00} &                \textbf{0.88} \\
+%         \hline
+%                     min &          linear &                \textbf{0.65} &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.80} &                    0.45 &                    0.70 &          \textbf{1.00} &                \textbf{0.87} \\
+%         \hline
+%                     max &          linear &                         0.51 &                         0.74 &             \textbf{0.98} &                     0.73 &           \textbf{0.77} &           \textbf{0.75} &          \textbf{1.00} &                         0.61 \\
+%         \hline
+%                     p25 &          linear &                \textbf{0.64} &                \textbf{0.77} &             \textbf{0.97} &            \textbf{0.81} &                    0.71 &                    0.70 &          \textbf{1.00} &                \textbf{0.88} \\
+%         \hline
+%                     p75 &          linear &                         0.62 &                \textbf{0.77} &                      0.92 &                     0.76 &                    0.71 &                    0.63 &          \textbf{1.00} &                         0.80 \\
+%         \hline
+%                    mean &        gaussian &                         0.62 &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.81} &                    0.73 &           \textbf{0.73} &          \textbf{1.00} &                \textbf{0.88} \\
+%         \hline
+%                 product &        gaussian &                \textbf{0.65} &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.80} &                    0.45 &                    0.70 &          \textbf{1.00} &                \textbf{0.87} \\
+%         \hline
+%                  median &        gaussian &                         0.51 &                         0.70 &             \textbf{0.98} &                     0.73 &           \textbf{0.77} &           \textbf{0.75} &          \textbf{1.00} &                         0.61 \\
+%         \hline
+%                     min &        gaussian &                \textbf{0.64} &                \textbf{0.77} &             \textbf{0.97} &            \textbf{0.81} &                    0.71 &                    0.70 &          \textbf{1.00} &                \textbf{0.88} \\
+%         \hline
+%                     max &        gaussian &                         0.62 &                \textbf{0.77} &                      0.92 &                     0.76 &                    0.71 &                    0.63 &          \textbf{1.00} &                         0.80 \\
+%         \hline
+%                     p25 &        gaussian &                         0.54 &                         0.64 &                      0.50 &                     0.73 &                    0.50 &                    0.56 &          \textbf{1.00} &                         0.70 \\
+%         \hline
+%                     p75 &        gaussian &                         0.61 &                         0.73 &             \textbf{0.98} &            \textbf{0.79} &                    0.71 &                    0.69 &          \textbf{1.00} &                \textbf{0.87} \\
+%         \hline
+%                    mean &         sigmoid &                         0.51 &                         0.74 &             \textbf{0.98} &                     0.73 &           \textbf{0.77} &           \textbf{0.75} &          \textbf{1.00} &                         0.61 \\
+%         \hline
+%                 product &         sigmoid &                \textbf{0.64} &                \textbf{0.77} &             \textbf{0.97} &            \textbf{0.81} &                    0.71 &                    0.70 &          \textbf{1.00} &                \textbf{0.88} \\
+%         \hline
+%                  median &         sigmoid &                         0.62 &                \textbf{0.77} &                      0.92 &                     0.76 &                    0.71 &                    0.63 &          \textbf{1.00} &                         0.80 \\
+%         \hline
+%                     min &         sigmoid &                         0.54 &                         0.66 &                      0.50 &                     0.73 &                    0.50 &                    0.56 &          \textbf{1.00} &                         0.69 \\
+%         \hline
+%                     max &         sigmoid &                         0.61 &                         0.73 &             \textbf{0.98} &            \textbf{0.79} &                    0.71 &                    0.69 &          \textbf{1.00} &                \textbf{0.87} \\
+%         \hline
+%                     p25 &         sigmoid &                         0.62 &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.81} &                    0.73 &           \textbf{0.73} &          \textbf{1.00} &                \textbf{0.88} \\
+%         \hline
+%                     p75 &         sigmoid &                \textbf{0.65} &                \textbf{0.75} &             \textbf{0.96} &            \textbf{0.80} &                    0.45 &                    0.70 &          \textbf{1.00} &                \textbf{0.87} \\
+%         \hline
+%     \end{tabular}
+% \end{table*}
+
+
+% \begin{table*}[!b]
+%     \renewcommand{\arraystretch}{1.25}
+%     \caption{New CHAODA Results. Set 2}
+%     \label{table:results:new-chaoda-2}
+%     \centering
+%     \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+%         \hline
+%         \textbf{voting} & \textbf{normed} & \textbf{\textbf{lympho}} & \textbf{\textbf{mammography}} & \textbf{\textbf{mnist}} & \textbf{\textbf{musk}} & \textbf{\textbf{optdigits}} & \textbf{\textbf{pendigits}} & \textbf{\textbf{pima}} & \textbf{\textbf{satellite}} \\
+%         \hline
+%                    mean &            None &            \textbf{0.98} &                 \textbf{0.85} &           \textbf{0.78} &          \textbf{1.00} &               \textbf{0.96} &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
+%         \hline
+%                 product &            None &                     0.92 &                          0.80 &                    0.71 &          \textbf{1.00} &                        0.88 &                        0.88 &                   0.60 &                        0.76 \\
+%         \hline
+%                  median &            None &                     0.91 &                          0.52 &                    0.56 &          \textbf{1.00} &                        0.81 &                        0.69 &                   0.52 &                        0.67 \\
+%         \hline
+%                     min &            None &            \textbf{0.97} &                          0.83 &                    0.76 &          \textbf{1.00} &               \textbf{0.95} &               \textbf{0.95} &                   0.64 &               \textbf{0.79} \\
+%         \hline
+%                     max &            None &            \textbf{0.98} &                 \textbf{0.86} &                    0.75 &          \textbf{1.00} &                        0.88 &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
+%         \hline
+%                     p25 &            None &                     0.95 &                 \textbf{0.85} &                    0.66 &          \textbf{1.00} &                        0.91 &               \textbf{0.94} &                   0.62 &               \textbf{0.77} \\
+%         \hline
+%                     p75 &            None &                     0.94 &                          0.83 &                    0.71 &          \textbf{0.99} &                        0.82 &                        0.64 &                   0.60 &                        0.72 \\
+%         \hline
+%                    mean &          linear &            \textbf{0.98} &                 \textbf{0.85} &           \textbf{0.79} &          \textbf{1.00} &                        0.93 &                        0.77 &          \textbf{0.67} &               \textbf{0.79} \\
+%         \hline
+%                 product &          linear &            \textbf{0.97} &                          0.83 &                    0.76 &          \textbf{1.00} &               \textbf{0.95} &               \textbf{0.95} &                   0.64 &               \textbf{0.79} \\
+%         \hline
+%                  median &          linear &            \textbf{0.98} &                 \textbf{0.86} &                    0.75 &          \textbf{1.00} &                        0.88 &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
+%         \hline
+%                     min &          linear &                     0.95 &                 \textbf{0.85} &                    0.66 &          \textbf{1.00} &                        0.91 &               \textbf{0.94} &                   0.62 &               \textbf{0.77} \\
+%         \hline
+%                     max &          linear &                     0.94 &                          0.83 &                    0.71 &          \textbf{0.99} &                        0.82 &                        0.64 &                   0.60 &                        0.72 \\
+%         \hline
+%                     p25 &          linear &            \textbf{0.98} &                 \textbf{0.85} &           \textbf{0.78} &          \textbf{1.00} &               \textbf{0.96} &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
+%         \hline
+%                     p75 &          linear &                     0.92 &                          0.80 &                    0.71 &          \textbf{1.00} &                        0.88 &                        0.88 &                   0.60 &                        0.76 \\
+%         \hline
+%                    mean &        gaussian &            \textbf{0.98} &                 \textbf{0.86} &                    0.75 &          \textbf{1.00} &                        0.88 &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
+%         \hline
+%                 product &        gaussian &                     0.95 &                 \textbf{0.85} &                    0.66 &          \textbf{1.00} &                        0.91 &               \textbf{0.94} &                   0.62 &               \textbf{0.77} \\
+%         \hline
+%                  median &        gaussian &                     0.94 &                          0.83 &                    0.71 &          \textbf{0.99} &                        0.82 &                        0.65 &                   0.60 &                        0.72 \\
+%         \hline
+%                     min &        gaussian &            \textbf{0.98} &                 \textbf{0.85} &           \textbf{0.78} &          \textbf{1.00} &               \textbf{0.96} &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
+%         \hline
+%                     max &        gaussian &                     0.92 &                          0.80 &                    0.71 &          \textbf{1.00} &                        0.88 &                        0.88 &                   0.60 &                        0.76 \\
+%         \hline
+%                     p25 &        gaussian &            \textbf{0.98} &                          0.60 &                    0.69 &          \textbf{1.00} &                        0.50 &                        0.50 &                   0.57 &                        0.50 \\
+%         \hline
+%                     p75 &        gaussian &            \textbf{0.97} &                          0.83 &                    0.76 &          \textbf{1.00} &               \textbf{0.95} &               \textbf{0.95} &                   0.64 &               \textbf{0.79} \\
+%         \hline
+%                    mean &         sigmoid &                     0.94 &                          0.83 &                    0.71 &          \textbf{0.99} &                        0.82 &                        0.64 &                   0.60 &                        0.72 \\
+%         \hline
+%                 product &         sigmoid &            \textbf{0.98} &                 \textbf{0.85} &           \textbf{0.78} &          \textbf{1.00} &               \textbf{0.96} &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
+%         \hline
+%                  median &         sigmoid &                     0.92 &                          0.80 &                    0.71 &          \textbf{1.00} &                        0.88 &                        0.88 &                   0.60 &                        0.76 \\
+%         \hline
+%                     min &         sigmoid &            \textbf{0.98} &                          0.60 &                    0.70 &          \textbf{1.00} &                        0.50 &                        0.50 &                   0.56 &                        0.50 \\
+%         \hline
+%                     max &         sigmoid &            \textbf{0.97} &                          0.83 &                    0.76 &          \textbf{1.00} &               \textbf{0.95} &               \textbf{0.95} &                   0.64 &               \textbf{0.79} \\
+%         \hline
+%                     p25 &         sigmoid &            \textbf{0.98} &                 \textbf{0.86} &                    0.75 &          \textbf{1.00} &                        0.88 &               \textbf{0.94} &                   0.63 &               \textbf{0.79} \\
+%         \hline
+%                     p75 &         sigmoid &                     0.95 &                 \textbf{0.85} &                    0.66 &          \textbf{1.00} &                        0.91 &               \textbf{0.94} &                   0.62 &               \textbf{0.77} \\
+%         \hline
+%     \end{tabular}              
+% \end{table*}
+
+
+% \begin{table*}[!b]
+%     \renewcommand{\arraystretch}{1.25}
+%     \caption{New CHAODA Results. Set 3}
+%     \label{table:results:new-chaoda-3}
+%     \centering
+%     \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+%         \hline
+%         \textbf{voting} & \textbf{normed} & \textbf{\textbf{satimage-2}} & \textbf{\textbf{shuttle}} & \textbf{\textbf{smtp}} & \textbf{\textbf{thyroid}} & \textbf{\textbf{vertebral}} & \textbf{\textbf{vowels}} & \textbf{\textbf{wbc}} & \textbf{\textbf{wine}} \\
+%         \hline
+%                     mean &            None &                \textbf{1.00} &             \textbf{0.51} &                   0.92 &             \textbf{0.89} &                        0.29 &                     0.71 &         \textbf{0.97} &          \textbf{0.99} \\
+%         \hline
+%                 product &            None &                         0.95 &             \textbf{0.51} &                   0.45 &                      0.75 &                        0.36 &                     0.59 &         \textbf{0.97} &          \textbf{0.98} \\
+%         \hline
+%                     median &            None &                         0.93 &             \textbf{0.50} &                   0.84 &                      0.56 &               \textbf{0.46} &                     0.52 &                  0.82 &          \textbf{0.99} \\
+%         \hline
+%                     min &            None &                \textbf{0.98} &             \textbf{0.51} &                   0.91 &                      0.83 &                        0.32 &                     0.67 &                  0.95 &          \textbf{0.98} \\
+%         \hline
+%                     max &            None &                \textbf{0.99} &             \textbf{0.51} &          \textbf{0.95} &             \textbf{0.90} &                        0.30 &                     0.70 &         \textbf{0.97} &          \textbf{1.00} \\
+%         \hline
+%                     p25 &            None &                \textbf{0.99} &             \textbf{0.51} &                   0.87 &             \textbf{0.90} &                        0.29 &                     0.69 &         \textbf{0.98} &          \textbf{1.00} \\
+%         \hline
+%                     p75 &            None &                         0.96 &             \textbf{0.51} &                   0.87 &                      0.62 &               \textbf{0.47} &                     0.72 &                  0.89 &          \textbf{0.99} \\
+%         \hline
+%                     mean &          linear &                \textbf{0.99} &             \textbf{0.51} &                   0.91 &             \textbf{0.88} &                        0.36 &            \textbf{0.79} &                  0.95 &          \textbf{0.99} \\
+%         \hline
+%                 product &          linear &                \textbf{0.98} &             \textbf{0.51} &                   0.91 &                      0.83 &                        0.32 &                     0.67 &                  0.95 &          \textbf{0.98} \\
+%         \hline
+%                     median &          linear &                \textbf{0.99} &             \textbf{0.51} &          \textbf{0.95} &             \textbf{0.90} &                        0.30 &                     0.70 &         \textbf{0.97} &          \textbf{1.00} \\
+%         \hline
+%                     min &          linear &                \textbf{0.99} &             \textbf{0.51} &                   0.87 &             \textbf{0.90} &                        0.29 &                     0.69 &         \textbf{0.98} &          \textbf{1.00} \\
+%         \hline
+%                     max &          linear &                         0.96 &             \textbf{0.51} &                   0.87 &                      0.62 &               \textbf{0.47} &                     0.72 &                  0.89 &          \textbf{0.99} \\
+%         \hline
+%                     p25 &          linear &                \textbf{1.00} &             \textbf{0.51} &                   0.92 &             \textbf{0.89} &                        0.29 &                     0.71 &         \textbf{0.97} &          \textbf{0.99} \\
+%         \hline
+%                     p75 &          linear &                         0.95 &             \textbf{0.51} &                   0.45 &                      0.75 &                        0.36 &                     0.59 &         \textbf{0.97} &          \textbf{0.98} \\
+%         \hline
+%                     mean &        gaussian &                \textbf{0.99} &             \textbf{0.51} &          \textbf{0.95} &             \textbf{0.90} &                        0.30 &                     0.70 &         \textbf{0.97} &          \textbf{1.00} \\
+%         \hline
+%                 product &        gaussian &                \textbf{0.99} &             \textbf{0.51} &                   0.87 &             \textbf{0.90} &                        0.29 &                     0.69 &         \textbf{0.98} &          \textbf{1.00} \\
+%         \hline
+%                     median &        gaussian &                         0.96 &             \textbf{0.51} &                   0.87 &                      0.62 &               \textbf{0.47} &                     0.72 &                  0.89 &          \textbf{0.99} \\
+%         \hline
+%                     min &        gaussian &                \textbf{1.00} &             \textbf{0.51} &                   0.92 &             \textbf{0.89} &                        0.29 &                     0.71 &         \textbf{0.97} &          \textbf{0.99} \\
+%         \hline
+%                     max &        gaussian &                         0.95 &             \textbf{0.51} &                   0.45 &                      0.75 &                        0.36 &                     0.59 &         \textbf{0.97} &          \textbf{0.98} \\
+%         \hline
+%                     p25 &        gaussian &                \textbf{0.98} &             \textbf{0.50} &                   0.50 &                      0.63 &               \textbf{0.46} &                     0.50 &                  0.91 &          \textbf{0.99} \\
+%         \hline
+%                     p75 &        gaussian &                \textbf{0.98} &             \textbf{0.51} &                   0.91 &                      0.83 &                        0.32 &                     0.67 &                  0.95 &          \textbf{0.98} \\
+%         \hline
+%                     mean &         sigmoid &                         0.96 &             \textbf{0.51} &                   0.87 &                      0.62 &               \textbf{0.47} &                     0.72 &                  0.89 &          \textbf{0.99} \\
+%         \hline
+%                 product &         sigmoid &                \textbf{1.00} &             \textbf{0.51} &                   0.92 &             \textbf{0.89} &                        0.29 &                     0.71 &         \textbf{0.97} &          \textbf{0.99} \\
+%         \hline
+%                     median &         sigmoid &                         0.95 &             \textbf{0.51} &                   0.45 &                      0.75 &                        0.36 &                     0.59 &         \textbf{0.97} &          \textbf{0.98} \\
+%         \hline
+%                     min &         sigmoid &                \textbf{0.98} &             \textbf{0.50} &                   0.50 &                      0.62 &               \textbf{0.46} &                     0.50 &                  0.91 &          \textbf{0.99} \\
+%         \hline
+%                     max &         sigmoid &                \textbf{0.98} &             \textbf{0.51} &                   0.91 &                      0.83 &                        0.32 &                     0.67 &                  0.95 &          \textbf{0.98} \\
+%         \hline
+%                     p25 &         sigmoid &                \textbf{0.99} &             \textbf{0.51} &          \textbf{0.95} &             \textbf{0.90} &                        0.30 &                     0.70 &         \textbf{0.97} &          \textbf{1.00} \\
+%         \hline
+%                     p75 &         sigmoid &                \textbf{0.99} &             \textbf{0.51} &                   0.87 &             \textbf{0.90} &                        0.29 &                     0.69 &         \textbf{0.98} &          \textbf{1.00} \\
+%         \hline
+%     \end{tabular}   
+% \end{table*}
