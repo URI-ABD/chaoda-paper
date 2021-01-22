@@ -41,100 +41,101 @@ With the Rust implementation, we expect a two-orders-of-magnitude improvement in
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
-\textbf{\textbf{model}} & \textbf{\textbf{annthyroid}} & \textbf{\textbf{mnist}} & \textbf{\textbf{pendigits}} & \textbf{\textbf{satellite}} & \textbf{\textbf{shuttle}} & \textbf{\textbf{thyroid}} \\
+\textbf{model} & \textbf{annthyroid} & \textbf{mnist} & \textbf{pendigits} & \textbf{satellite} & \textbf{shuttle} & \textbf{thyroid} \\
 \hline
-                CHAODA-fast &                         0.64 &           \textbf{0.78} &               \textbf{0.94} &               \textbf{0.79} &                      0.51 &             \textbf{0.89} \\
+    CHAODA-fast &                0.64 &  \textbf{0.78} &      \textbf{0.94} &      \textbf{0.79} &             0.51 &    \textbf{0.89} \\
 \hline
-                        ABOD &                         0.50 &                    0.60 &                        0.53 &                        0.51 &                      0.54 &                      0.50 \\
+            ABOD &                0.50 &           0.60 &               0.53 &               0.51 &             0.54 &             0.50 \\
 \hline
-                AutoEncoder &                         0.69 &                    0.67 &                        0.58 &                        0.63 &                      0.94 &                      0.88 \\
+    AutoEncoder &                0.69 &           0.67 &               0.58 &               0.63 &             0.94 &             0.88 \\
 \hline
-                        CBLOF &                         0.59 &                    0.62 &                        0.59 &                        0.68 &             \textbf{0.99} &                      0.87 \\
+            CBLOF &                0.59 &           0.62 &               0.59 &               0.68 &    \textbf{0.99} &             0.87 \\
 \hline
-                        COF &                         0.59 &                    0.56 &                        0.53 &                        0.56 &                      0.52 &                      0.49 \\
+            COF &                0.59 &           0.56 &               0.53 &               0.56 &             0.52 &             0.49 \\
 \hline
-                        HBOS &                \textbf{0.84} &                    0.53 &                        0.52 &                        0.62 &                      0.74 &                      0.86 \\
+            HBOS &       \textbf{0.84} &           0.53 &               0.52 &               0.62 &             0.74 &             0.86 \\
 \hline
-                IFOREST &                         0.70 &                    0.61 &                        0.63 &                        0.70 &                      0.91 &             \textbf{0.91} \\
+        IFOREST &                0.70 &           0.61 &               0.63 &               0.70 &             0.91 &    \textbf{0.91} \\
 \hline
-                        KNN &                         0.65 &                    0.65 &                        0.51 &                        0.56 &                      0.53 &                      0.56 \\
+            KNN &                0.65 &           0.65 &               0.51 &               0.56 &             0.53 &             0.56 \\
 \hline
-                        LMDD &                         0.52 &                    0.59 &                        0.56 &                        0.42 &                      0.92 &                      0.70 \\
+            LMDD &                0.52 &           0.59 &               0.56 &               0.42 &             0.92 &             0.70 \\
 \hline
-                        LOCI &                  \textit{TO} &             \textit{TO} &                 \textit{TO} &                 \textit{TO} &               \textit{TO} &               \textit{TO} \\
+            LOCI &         \textit{TO} &    \textit{TO} &        \textit{TO} &        \textit{TO} &      \textit{TO} &      \textit{TO} \\
 \hline
-                        LODA &                         0.63 &                    0.66 &                        0.57 &                        0.65 &                      0.96 &             \textbf{0.90} \\
+            LODA &                0.63 &           0.66 &               0.57 &               0.65 &             0.96 &    \textbf{0.90} \\
 \hline
-                        LOF &                         0.60 &                    0.57 &                        0.52 &                        0.57 &                      0.53 &                      0.49 \\
+            LOF &                0.60 &           0.57 &               0.52 &               0.57 &             0.53 &             0.49 \\
 \hline
-                        MCD &                         0.72 &                    0.57 &                        0.53 &                        0.58 &                      0.96 &                      0.85 \\
+            MCD &                0.72 &           0.57 &               0.53 &               0.58 &             0.96 &             0.85 \\
 \hline
-                        MOGAAL &                         0.46 &             \textit{TO} &                        0.67 &                        0.59 &               \textit{TO} &                      0.49 \\
+        MOGAAL &                0.46 &    \textit{TO} &               0.67 &               0.59 &      \textit{TO} &             0.49 \\
 \hline
-                        OCSVM &                         0.62 &                    0.63 &                        0.59 &                        0.62 &             \textbf{0.97} &                      0.78 \\
+            OCSVM &                0.62 &           0.63 &               0.59 &               0.62 &    \textbf{0.97} &             0.78 \\
 \hline
-                        SOD &                         0.64 &                    0.55 &                        0.52 &                        0.52 &               \textit{TO} &                      0.53 \\
+            SOD &                0.64 &           0.55 &               0.52 &               0.52 &      \textit{TO} &             0.53 \\
 \hline
-                        SOGAAL &                         0.46 &                    0.57 &                        0.57 &                        0.60 &                      0.96 &                      0.49 \\
+        SOGAAL &                0.46 &           0.57 &               0.57 &               0.60 &             0.96 &             0.49 \\
 \hline
-                        SOS &                         0.50 &                    0.52 &                        0.52 &                        0.47 &               \textit{TO} &                      0.50 \\
+            SOS &                0.50 &           0.52 &               0.52 &               0.47 &      \textit{TO} &             0.50 \\
 \hline
-                        VAE &                         0.69 &                    0.67 &                        0.58 &                        0.63 &                      0.94 &                      0.88 \\
-\hline
-\end{tabular}
-\end{table*}
-
-\begin{table*}[!t]
-\renewcommand{\arraystretch}{1.25}
-\caption{Time taken, in seconds, on Train Datasets}
-\label{table:results:train-time}
-\centering
-\begin{tabular}{|c|c|c|c|c|c|c|}
-\hline
-\textbf{\textbf{model}} & \textbf{\textbf{annthyroid}} & \textbf{\textbf{mnist}} & \textbf{\textbf{pendigits}} & \textbf{\textbf{satellite}} & \textbf{\textbf{shuttle}} & \textbf{\textbf{thyroid}} \\
-\hline
-                CHAODA-fast &                       161.85 &                 6221.64 &                      617.93 &                      425.03 &                      5.48 &                    117.97 \\
-\hline
-                        ABOD &                         3.42 &                   16.39 &                        2.83 &                        3.53 &                     21.58 &                      1.25 \\
-\hline
-                AutoEncoder &                        22.80 &                   40.54 &                       23.87 &                       26.74 &                    158.72 &                     12.84 \\
-\hline
-                        CBLOF &                         1.01 &                    1.14 &                        0.23 &                        0.30 &                      0.71 &                      0.21 \\
-\hline
-                        COF &                       215.63 &                  277.91 &                      199.03 &                      176.35 &                  12106.63 &                     54.82 \\
-\hline
-                        HBOS &                         1.58 &           \textbf{0.06} &               \textbf{0.01} &               \textbf{0.02} &             \textbf{0.03} &             \textbf{0.00} \\
-\hline
-                IFOREST &                         0.73 &                    1.41 &                        0.80 &                        0.84 &                      3.24 &                      0.54 \\
-\hline
-                        KNN &                         0.84 &                   14.30 &                        1.25 &                        2.05 &                      9.13 &                      0.42 \\
-\hline
-                        LMDD &                       107.05 &                 1383.19 &                      197.48 &                      371.63 &                   6274.43 &                     32.69 \\
-\hline
-                        LOCI &                  \textit{TO} &             \textit{TO} &                 \textit{TO} &                 \textit{TO} &               \textit{TO} &               \textit{TO} \\
-\hline
-                        LODA &                         0.13 &                    0.13 &                        0.12 &                        0.11 &                      0.59 &             \textbf{0.08} \\
-\hline
-                        LOF &                         0.26 &                   14.79 &                        0.90 &                        1.71 &                      6.30 &             \textbf{0.09} \\
-\hline
-                        MCD &                         1.50 &                   20.56 &                        3.01 &                       10.39 &                     10.78 &                      1.03 \\
-\hline
-                        MOGAAL &                       594.69 &             \textit{TO} &                      561.40 &                      513.84 &               \textit{TO} &                    280.80 \\
-\hline
-                        OCSVM &                         2.70 &                   11.30 &                        3.04 &                        3.83 &                    162.18 &                      0.68 \\
-\hline
-                        SOD &                       262.80 &                  281.86 &                      195.81 &                      253.71 &               \textit{TO} &                     91.48 \\
-\hline
-                        SOGAAL &                        61.14 &                   68.03 &                       55.40 &                       50.07 &                    460.66 &                     31.43 \\
-\hline
-                        SOS &                       101.82 &                   54.22 &                       46.02 &                       42.62 &               \textit{TO} &                     42.10 \\
-\hline
-                        VAE &                        27.95 &                   50.16 &                       29.63 &                       33.51 &                    182.23 &                     16.18 \\
+            VAE &                0.69 &           0.67 &               0.58 &               0.63 &             0.94 &             0.88 \\
 \hline
 \end{tabular}
 \end{table*}
 
-% \newpage % I hate this but it might look much neater
+% TODO: Add to supplements
+
+% \begin{table*}[!t]
+% \renewcommand{\arraystretch}{1.25}
+% \caption{Time taken, in seconds, on Train Datasets}
+% \label{table:results:train-time}
+% \centering
+% \begin{tabular}{|c|c|c|c|c|c|c|}
+% \hline
+% \textbf{model} & \textbf{annthyroid} & \textbf{mnist} & \textbf{pendigits} & \textbf{satellite} & \textbf{shuttle} & \textbf{thyroid} \\
+% \hline
+%     CHAODA-fast &              161.85 &        6221.64 &             617.93 &             425.03 &             5.48 &           117.97 \\
+% \hline
+%             ABOD &                3.42 &          16.39 &               2.83 &               3.53 &            21.58 &             1.25 \\
+% \hline
+%     AutoEncoder &               22.80 &          40.54 &              23.87 &              26.74 &           158.72 &            12.84 \\
+% \hline
+%             CBLOF &                1.01 &           1.14 &               0.23 &               0.30 &             0.71 &             0.21 \\
+% \hline
+%             COF &              215.63 &         277.91 &             199.03 &             176.35 &         12106.63 &            54.82 \\
+% \hline
+%             HBOS &                1.58 &  \textbf{0.06} &      \textbf{0.01} &      \textbf{0.02} &    \textbf{0.03} &    \textbf{0.00} \\
+% \hline
+%         IFOREST &                0.73 &           1.41 &               0.80 &               0.84 &             3.24 &             0.54 \\
+% \hline
+%             KNN &                0.84 &          14.30 &               1.25 &               2.05 &             9.13 &             0.42 \\
+% \hline
+%             LMDD &              107.05 &        1383.19 &             197.48 &             371.63 &          6274.43 &            32.69 \\
+% \hline
+%             LOCI &         \textit{TO} &    \textit{TO} &        \textit{TO} &        \textit{TO} &      \textit{TO} &      \textit{TO} \\
+% \hline
+%             LODA &                0.13 &           0.13 &               0.12 &               0.11 &             0.59 &    \textbf{0.08} \\
+% \hline
+%             LOF &                0.26 &          14.79 &               0.90 &               1.71 &             6.30 &    \textbf{0.09} \\
+% \hline
+%             MCD &                1.50 &          20.56 &               3.01 &              10.39 &            10.78 &             1.03 \\
+% \hline
+%         MOGAAL &              594.69 &    \textit{TO} &             561.40 &             513.84 &      \textit{TO} &           280.80 \\
+% \hline
+%             OCSVM &                2.70 &          11.30 &               3.04 &               3.83 &           162.18 &             0.68 \\
+% \hline
+%             SOD &              262.80 &         281.86 &             195.81 &             253.71 &      \textit{TO} &            91.48 \\
+% \hline
+%         SOGAAL &               61.14 &          68.03 &              55.40 &              50.07 &           460.66 &            31.43 \\
+% \hline
+%             SOS &              101.82 &          54.22 &              46.02 &              42.62 &      \textit{TO} &            42.10 \\
+% \hline
+%             VAE &               27.95 &          50.16 &              29.63 &              33.51 &           182.23 &            16.18 \\
+% \hline
+% \end{tabular}
+% \end{table*}
+
 
 \begin{table*}[!t]
 \renewcommand{\arraystretch}{1.25}
@@ -143,98 +144,100 @@ With the Rust implementation, we expect a two-orders-of-magnitude improvement in
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{\textbf{model}} & \textbf{\textbf{arrhythmia}} & \textbf{\textbf{breastw}} & \textbf{\textbf{cardio}} & \textbf{\textbf{cover}} & \textbf{\textbf{glass}} & \textbf{\textbf{http}} & \textbf{\textbf{ionosphere}} & \textbf{\textbf{lympho}} & \textbf{\textbf{mammography}} \\
+\textbf{model} & \textbf{arrhythmia} & \textbf{breastw} & \textbf{cardio} & \textbf{cover} & \textbf{glass} & \textbf{http} & \textbf{ionosphere} & \textbf{lympho} & \textbf{mammo} \\
 \hline
-                CHAODA-fast &                \textbf{0.77} &             \textbf{0.97} &            \textbf{0.81} &           \textbf{0.71} &           \textbf{0.70} &          \textbf{1.00} &                         0.88 &            \textbf{0.98} &                 \textbf{0.85} \\
+    CHAODA-fast &       \textbf{0.77} &    \textbf{0.97} &   \textbf{0.81} &  \textbf{0.71} &  \textbf{0.70} & \textbf{1.00} &                0.88 &   \textbf{0.98} &  \textbf{0.85} \\
 \hline
-                        ABOD &                         0.62 &                      0.50 &                     0.49 &                    0.51 &                    0.53 &                   0.50 &                         0.85 &                     0.80 &                          0.50 \\
+            ABOD &                0.62 &             0.50 &            0.49 &           0.51 &           0.53 &          0.50 &                0.85 &            0.80 &           0.50 \\
 \hline
-                AutoEncoder &                         0.65 &                      0.91 &                     0.74 &                    0.52 &                    0.54 &                   0.51 &                         0.65 &                     0.83 &                          0.51 \\
+    AutoEncoder &                0.65 &             0.91 &            0.74 &           0.52 &           0.54 &          0.51 &                0.65 &            0.83 &           0.51 \\
 \hline
-                        CBLOF &                         0.70 &                      0.83 &                     0.57 &             \textit{EX} &                    0.54 &            \textit{EX} &                         0.86 &                     0.83 &                          0.50 \\
+            CBLOF &                0.70 &             0.83 &            0.57 &    \textit{EX} &           0.54 &   \textit{EX} &                0.86 &            0.83 &           0.50 \\
 \hline
-                        COF &                         0.65 &                      0.26 &                     0.50 &                    0.50 &                    0.59 &                   0.51 &                         0.81 &                     0.83 &                          0.51 \\
+            COF &                0.65 &             0.26 &            0.50 &           0.50 &           0.59 &          0.51 &                0.81 &            0.83 &           0.51 \\
 \hline
-                        HBOS &                         0.65 &                      0.93 &                     0.58 &                    0.49 &                    0.48 &                   0.51 &                         0.36 &                     0.91 &                          0.50 \\
+            HBOS &                0.65 &             0.93 &            0.58 &           0.49 &           0.48 &          0.51 &                0.36 &            0.91 &           0.50 \\
 \hline
-                IFOREST &                         0.72 &                      0.91 &                     0.69 &                    0.50 &                    0.54 &                   0.53 &                         0.77 &                     0.83 &                          0.59 \\
+        IFOREST &                0.72 &             0.91 &            0.69 &           0.50 &           0.54 &          0.53 &                0.77 &            0.83 &           0.59 \\
 \hline
-                        KNN &                         0.68 &                      0.84 &                     0.51 &                    0.51 &                    0.54 &                   0.51 &                \textbf{0.90} &                     0.83 &                          0.51 \\
+            KNN &                0.68 &             0.84 &            0.51 &           0.51 &           0.54 &          0.51 &       \textbf{0.90} &            0.83 &           0.51 \\
 \hline
-                        LMDD &                         0.68 &                      0.64 &                     0.60 &                    0.49 &                    0.54 &                   0.51 &                         0.67 &                     0.65 &                          0.56 \\
+            LMDD &                0.68 &             0.64 &            0.60 &           0.49 &           0.54 &          0.51 &                0.67 &            0.65 &           0.56 \\
 \hline
-                        LOCI &                         0.62 &               \textit{TO} &              \textit{TO} &             \textit{TO} &                    0.58 &            \textit{TO} &                         0.58 &                     0.90 &                   \textit{TO} \\
+            LOCI &                0.62 &      \textit{TO} &     \textit{TO} &    \textit{TO} &           0.58 &   \textit{TO} &                0.58 &            0.90 &    \textit{TO} \\
 \hline
-                        LODA &                         0.65 &                      0.93 &                     0.60 &                    0.52 &                    0.48 &                   0.51 &                         0.63 &                     0.48 &                          0.52 \\
+            LODA &                0.65 &             0.93 &            0.60 &           0.52 &           0.48 &          0.51 &                0.63 &            0.48 &           0.52 \\
 \hline
-                        LOF &                         0.67 &                      0.30 &                     0.49 &                    0.50 &                    0.54 &                   0.51 &                         0.79 &                     0.83 &                          0.53 \\
+            LOF &                0.67 &             0.30 &            0.49 &           0.50 &           0.54 &          0.51 &                0.79 &            0.83 &           0.53 \\
 \hline
-                        MCD &                         0.65 &                      0.94 &                     0.55 &                    0.50 &                    0.48 &                   0.50 &                \textbf{0.90} &                     0.83 &                          0.51 \\
+            MCD &                0.65 &             0.94 &            0.55 &           0.50 &           0.48 &          0.50 &       \textbf{0.90} &            0.83 &           0.51 \\
 \hline
-                        MOGAAL &                         0.42 &                      0.40 &                     0.45 &             \textit{TO} &                    0.59 &            \textit{TO} &                         0.36 &                     0.48 &                   \textit{TO} \\
+        MOGAAL &                0.42 &             0.40 &            0.45 &    \textit{TO} &           0.59 &   \textit{TO} &                0.36 &            0.48 &    \textit{TO} \\
 \hline
-                        OCSVM &                         0.70 &                      0.77 &                     0.70 &                    0.56 &                    0.54 &                   0.50 &                         0.68 &                     0.83 &                          0.60 \\
+            OCSVM &                0.70 &             0.77 &            0.70 &           0.56 &           0.54 &          0.50 &                0.68 &            0.83 &           0.60 \\
 \hline
-                        SOD &                         0.59 &                      0.77 &                     0.48 &             \textit{TO} &                    0.54 &            \textit{TO} &                         0.84 &                     0.65 &                          0.51 \\
+            SOD &                0.59 &             0.77 &            0.48 &    \textit{TO} &           0.54 &   \textit{TO} &                0.84 &            0.65 &           0.51 \\
 \hline
-                        SOGAAL &                         0.48 &                      0.30 &                     0.45 &                    0.61 &                    0.59 &                   0.51 &                         0.36 &                     0.48 &                          0.50 \\
+        SOGAAL &                0.48 &             0.30 &            0.45 &           0.61 &           0.59 &          0.51 &                0.36 &            0.48 &           0.50 \\
 \hline
-                        SOS &                         0.51 &                      0.50 &                     0.50 &             \textit{TO} &                    0.48 &            \textit{TO} &                         0.72 &                     0.48 &                   \textit{TO} \\
+            SOS &                0.51 &             0.50 &            0.50 &    \textit{TO} &           0.48 &   \textit{TO} &                0.72 &            0.48 &    \textit{TO} \\
 \hline
-                        VAE &                         0.65 &             \textbf{0.95} &                     0.74 &                    0.52 &                    0.48 &                   0.51 &                         0.65 &                     0.83 &                          0.56 \\
+            VAE &                0.65 &    \textbf{0.95} &            0.74 &           0.52 &           0.48 &          0.51 &                0.65 &            0.83 &           0.56 \\
 \hline
-\end{tabular}
+\end{tabular}    
 \end{table*}
 
-\begin{table*}[!t]
-\renewcommand{\arraystretch}{1.25}
-\caption{Time taken, in seconds, on the first half of the Test Datasets}
-\label{table:results:test-time-1}
-\centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
-\hline
-\textbf{\textbf{model}} & \textbf{\textbf{arrhythmia}} & \textbf{\textbf{breastw}} & \textbf{\textbf{cardio}} & \textbf{\textbf{cover}} & \textbf{\textbf{glass}} & \textbf{\textbf{http}} & \textbf{\textbf{ionosphere}} & \textbf{\textbf{lympho}} & \textbf{\textbf{mammography}} \\
-\hline
-                CHAODA-fast &                         6.70 &                      4.71 &                   135.17 &                 1485.24 &                    1.06 &                 119.14 &                         2.64 &                     1.08 &                         46.42 \\
-\hline
-                        ABOD &                         0.34 &                      0.20 &                     0.72 &                   24.02 &           \textbf{0.07} &                  19.08 &                         0.13 &            \textbf{0.05} &                          3.82 \\
-\hline
-                AutoEncoder &                         8.00 &                      6.18 &                     9.05 &                  183.70 &                    3.99 &                 154.20 &                         4.99 &                     3.79 &                         35.26 \\
-\hline
-                        CBLOF &                         0.16 &                      0.13 &                     0.17 &             \textit{EX} &           \textbf{0.06} &            \textit{EX} &                \textbf{0.07} &            \textbf{0.05} &                          0.20 \\
-\hline
-                        COF &                         1.24 &                      1.84 &                    12.63 &                21681.15 &                    0.24 &               21228.44 &                         0.60 &                     0.14 &                        513.46 \\
-\hline
-                        HBOS &                \textbf{0.08} &             \textbf{0.00} &            \textbf{0.01} &                    1.13 &           \textbf{0.00} &          \textbf{0.01} &                \textbf{0.01} &            \textbf{0.01} &                 \textbf{0.01} \\
-\hline
-                IFOREST &                         0.43 &                      0.34 &                     0.43 &                    4.61 &                    0.30 &                   3.95 &                         0.33 &                     0.30 &                          0.95 \\
-\hline
-                        KNN &                         0.19 &             \textbf{0.07} &                     0.30 &                   11.46 &           \textbf{0.02} &                   7.47 &                \textbf{0.05} &            \textbf{0.02} &                          1.58 \\
-\hline
-                        LMDD &                        14.85 &                      2.62 &                    22.12 &                11579.93 &                    0.57 &                3873.99 &                         1.73 &                     0.42 &                        243.01 \\
-\hline
-                        LOCI &                       307.04 &               \textit{TO} &              \textit{TO} &             \textit{TO} &                   25.68 &            \textit{TO} &                       120.92 &                     9.78 &                   \textit{TO} \\
-\hline
-                        LODA &                \textbf{0.04} &             \textbf{0.03} &            \textbf{0.05} &                    0.81 &           \textbf{0.03} &                   0.66 &                \textbf{0.03} &            \textbf{0.03} &                          0.17 \\
-\hline
-                        LOF &                         0.16 &             \textbf{0.01} &                     0.18 &                   10.24 &           \textbf{0.00} &                   1.93 &                \textbf{0.01} &            \textbf{0.00} &                          0.59 \\
-\hline
-                        MCD &                         5.08 &                      0.64 &                     0.89 &                   28.65 &           \textbf{0.05} &                   8.21 &                         0.15 &            \textbf{0.05} &                          2.11 \\
-\hline
-                        MOGAAL &                        46.46 &                     42.09 &                   116.73 &             \textit{TO} &                   40.67 &            \textit{TO} &                        40.86 &                    37.84 &                   \textit{TO} \\
-\hline
-                        OCSVM &                \textbf{0.10} &             \textbf{0.02} &                     0.23 &                  257.95 &           \textbf{0.00} &                 257.28 &                \textbf{0.01} &            \textbf{0.00} &                          6.37 \\
-\hline
-                        SOD &                         1.19 &                      1.89 &                    13.39 &             \textit{TO} &                    0.31 &            \textit{TO} &                         0.76 &                     0.20 &                        521.25 \\
-\hline
-                        SOGAAL &                         6.70 &                      5.03 &                    14.43 &                  591.14 &                    3.95 &                 597.17 &                         4.71 &                     3.96 &                         92.27 \\
-\hline
-                        SOS &                         0.69 &                     47.40 &                     4.11 &             \textit{TO} &                    0.18 &            \textit{TO} &                         0.33 &                     0.11 &                   \textit{TO} \\
-\hline
-                        VAE &                        10.00 &                      7.75 &                    10.89 &                  223.09 &                    5.27 &                 175.59 &                         6.66 &                     5.21 &                         40.87 \\
-\hline
-\end{tabular}
-\end{table*}
+% TODO: Add to supplements
+
+% \begin{table*}[!t]
+% \renewcommand{\arraystretch}{1.25}
+% \caption{Time taken, in seconds, on the first half of the Test Datasets}
+% \label{table:results:test-time-1}
+% \centering
+% \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+% \hline
+% \textbf{model} & \textbf{arrhythmia} & \textbf{breastw} & \textbf{cardio} & \textbf{cover} & \textbf{glass} & \textbf{http} & \textbf{ionosphere} & \textbf{lympho} & \textbf{mammo} \\
+% \hline
+%     CHAODA-fast &                6.70 &             4.71 &          135.17 &        1485.24 &           1.06 &        119.14 &                2.64 &            1.08 &          46.42 \\
+% \hline
+%             ABOD &                0.34 &             0.20 &            0.72 &          24.02 &  \textbf{0.07} &         19.08 &                0.13 &   \textbf{0.05} &           3.82 \\
+% \hline
+%     AutoEncoder &                8.00 &             6.18 &            9.05 &         183.70 &           3.99 &        154.20 &                4.99 &            3.79 &          35.26 \\
+% \hline
+%             CBLOF &                0.16 &             0.13 &            0.17 &    \textit{EX} &  \textbf{0.06} &   \textit{EX} &       \textbf{0.07} &   \textbf{0.05} &           0.20 \\
+% \hline
+%             COF &                1.24 &             1.84 &           12.63 &       21681.15 &           0.24 &      21228.44 &                0.60 &            0.14 &         513.46 \\
+% \hline
+%             HBOS &       \textbf{0.08} &    \textbf{0.00} &   \textbf{0.01} &           1.13 &  \textbf{0.00} & \textbf{0.01} &       \textbf{0.01} &   \textbf{0.01} &  \textbf{0.01} \\
+% \hline
+%         IFOREST &                0.43 &             0.34 &            0.43 &           4.61 &           0.30 &          3.95 &                0.33 &            0.30 &           0.95 \\
+% \hline
+%             KNN &                0.19 &    \textbf{0.07} &            0.30 &          11.46 &  \textbf{0.02} &          7.47 &       \textbf{0.05} &   \textbf{0.02} &           1.58 \\
+% \hline
+%             LMDD &               14.85 &             2.62 &           22.12 &       11579.93 &           0.57 &       3873.99 &                1.73 &            0.42 &         243.01 \\
+% \hline
+%             LOCI &              307.04 &      \textit{TO} &     \textit{TO} &    \textit{TO} &          25.68 &   \textit{TO} &              120.92 &            9.78 &    \textit{TO} \\
+% \hline
+%             LODA &       \textbf{0.04} &    \textbf{0.03} &   \textbf{0.05} &           0.81 &  \textbf{0.03} &          0.66 &       \textbf{0.03} &   \textbf{0.03} &           0.17 \\
+% \hline
+%             LOF &                0.16 &    \textbf{0.01} &            0.18 &          10.24 &  \textbf{0.00} &          1.93 &       \textbf{0.01} &   \textbf{0.00} &           0.59 \\
+% \hline
+%             MCD &                5.08 &             0.64 &            0.89 &          28.65 &  \textbf{0.05} &          8.21 &                0.15 &   \textbf{0.05} &           2.11 \\
+% \hline
+%         MOGAAL &               46.46 &            42.09 &          116.73 &    \textit{TO} &          40.67 &   \textit{TO} &               40.86 &           37.84 &    \textit{TO} \\
+% \hline
+%             OCSVM &       \textbf{0.10} &    \textbf{0.02} &            0.23 &         257.95 &  \textbf{0.00} &        257.28 &       \textbf{0.01} &   \textbf{0.00} &           6.37 \\
+% \hline
+%             SOD &                1.19 &             1.89 &           13.39 &    \textit{TO} &           0.31 &   \textit{TO} &                0.76 &            0.20 &         521.25 \\
+% \hline
+%         SOGAAL &                6.70 &             5.03 &           14.43 &         591.14 &           3.95 &        597.17 &                4.71 &            3.96 &          92.27 \\
+% \hline
+%             SOS &                0.69 &            47.40 &            4.11 &    \textit{TO} &           0.18 &   \textit{TO} &                0.33 &            0.11 &    \textit{TO} \\
+% \hline
+%             VAE &               10.00 &             7.75 &           10.89 &         223.09 &           5.27 &        175.59 &                6.66 &            5.21 &          40.87 \\
+% \hline
+% \end{tabular}
+% \end{table*}
 
 
 \begin{table*}[!b]
@@ -244,95 +247,120 @@ With the Rust implementation, we expect a two-orders-of-magnitude improvement in
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{\textbf{model}} & \textbf{\textbf{musk}} & \textbf{\textbf{optdigits}} & \textbf{\textbf{pima}} & \textbf{\textbf{satimage-2}} & \textbf{\textbf{smtp}} & \textbf{\textbf{vertebral}} & \textbf{\textbf{vowels}} & \textbf{\textbf{wbc}} & \textbf{\textbf{wine}} \\
+\textbf{model} & \textbf{musk} & \textbf{optdigits} & \textbf{pima} & \textbf{satimage-2} & \textbf{smtp} & \textbf{vertebral} & \textbf{vowels} &  \textbf{wbc} & \textbf{wine} \\
 \hline
-                CHAODA-fast &          \textbf{1.00} &               \textbf{0.96} &                   0.63 &                \textbf{1.00} &          \textbf{0.92} &                        0.29 &                     0.71 &         \textbf{0.97} &          \textbf{0.99} \\
+    CHAODA-fast & \textbf{1.00} &      \textbf{0.96} &          0.63 &       \textbf{1.00} & \textbf{0.92} &               0.29 &            0.71 & \textbf{0.97} & \textbf{0.99} \\
 \hline
-                        ABOD &                   0.47 &                        0.54 &                   0.60 &                         0.53 &                   0.50 &                        0.49 &            \textbf{0.75} &                  0.50 &                   0.43 \\
+            ABOD &          0.47 &               0.54 &          0.60 &                0.53 &          0.50 &               0.49 &   \textbf{0.75} &          0.50 &          0.43 \\
 \hline
-                AutoEncoder &                   0.63 &                        0.48 &                   0.57 &                         0.71 &                   0.50 &                        0.49 &                     0.51 &                  0.77 &                   0.51 \\
+    AutoEncoder &          0.63 &               0.48 &          0.57 &                0.71 &          0.50 &               0.49 &            0.51 &          0.77 &          0.51 \\
 \hline
-                        CBLOF &          \textbf{1.00} &                        0.52 &                   0.64 &                         0.90 &                   0.50 &                        0.49 &                     0.52 &                  0.82 &                   0.46 \\
+            CBLOF & \textbf{1.00} &               0.52 &          0.64 &                0.90 &          0.50 &               0.49 &            0.52 &          0.82 &          0.46 \\
 \hline
-                        COF &                   0.53 &                        0.52 &                   0.54 &                         0.56 &                   0.50 &                        0.51 &                     0.71 &                  0.47 &                   0.46 \\
+            COF &          0.53 &               0.52 &          0.54 &                0.56 &          0.50 &               0.51 &            0.71 &          0.47 &          0.46 \\
 \hline
-                        HBOS &          \textbf{1.00} &                        0.60 &                   0.55 &                         0.49 &                   0.68 &                        0.47 &                     0.56 &                  0.77 &                   0.57 \\
+            HBOS & \textbf{1.00} &               0.60 &          0.55 &                0.49 &          0.68 &               0.47 &            0.56 &          0.77 &          0.57 \\
 \hline
-                IFOREST &                   0.97 &                        0.50 &          \textbf{0.65} &                         0.94 &                   0.50 &                        0.45 &                     0.63 &                  0.72 &                   0.51 \\
+        IFOREST &          0.97 &               0.50 & \textbf{0.65} &                0.94 &          0.50 &               0.45 &            0.63 &          0.72 &          0.51 \\
 \hline
-                        KNN &                   0.51 &                        0.51 &                   0.60 &                         0.61 &                   0.53 &                        0.47 &                     0.72 &                  0.51 &                   0.47 \\
+            KNN &          0.51 &               0.51 &          0.60 &                0.61 &          0.53 &               0.47 &            0.72 &          0.51 &          0.47 \\
 \hline
-                        LMDD &                   0.48 &                        0.49 &                   0.37 &                         0.49 &                   0.65 &                        0.43 &                     0.49 &                  0.80 &                   0.62 \\
+            LMDD &          0.48 &               0.49 &          0.37 &                0.49 &          0.65 &               0.43 &            0.49 &          0.80 &          0.62 \\
 \hline
-                        LOCI &            \textit{TO} &                 \textit{TO} &            \textit{TO} &                  \textit{TO} &            \textit{TO} &                        0.49 &              \textit{TO} &                  0.72 &                   0.46 \\
+            LOCI &   \textit{TO} &        \textit{TO} &   \textit{TO} &         \textit{TO} &   \textit{TO} &               0.49 &     \textit{TO} &          0.72 &          0.46 \\
 \hline
-                        LODA &                   0.54 &                        0.51 &                   0.62 &                         0.69 &                   0.57 &                        0.43 &                     0.51 &                  0.82 &                   0.57 \\
+            LODA &          0.54 &               0.51 &          0.62 &                0.69 &          0.57 &               0.43 &            0.51 &          0.82 &          0.57 \\
 \hline
-                        LOF &                   0.50 &                        0.53 &                   0.55 &                         0.55 &                   0.50 &                        0.49 &                     0.69 &                  0.50 &                   0.46 \\
+            LOF &          0.50 &               0.53 &          0.55 &                0.55 &          0.50 &               0.49 &            0.69 &          0.50 &          0.46 \\
 \hline
-                        MCD &                   0.97 &                        0.48 &          \textbf{0.66} &                         0.61 &                   0.50 &                        0.45 &                     0.63 &                  0.60 &                   0.46 \\
+            MCD &          0.97 &               0.48 & \textbf{0.66} &                0.61 &          0.50 &               0.45 &            0.63 &          0.60 &          0.46 \\
 \hline
-                        MOGAAL &                   0.48 &                        0.48 &                   0.61 &                         0.49 &            \textit{TO} &                        0.51 &                     0.48 &                  0.60 &                   0.46 \\
+        MOGAAL &          0.48 &               0.48 &          0.61 &                0.49 &   \textit{TO} &               0.51 &            0.48 &          0.60 &          0.46 \\
 \hline
-                        OCSVM &                   0.48 &                        0.49 &                   0.56 &                         0.84 &                   0.50 &                        0.49 &                     0.50 &                  0.82 &                   0.46 \\
+            OCSVM &          0.48 &               0.49 &          0.56 &                0.84 &          0.50 &               0.49 &            0.50 &          0.82 &          0.46 \\
 \hline
-                        SOD &                   0.51 &                        0.51 &                   0.56 &                         0.58 &            \textit{TO} &                        0.45 &                     0.66 &                  0.60 &                   0.46 \\
+            SOD &          0.51 &               0.51 &          0.56 &                0.58 &   \textit{TO} &               0.45 &            0.66 &          0.60 &          0.46 \\
 \hline
-                        SOGAAL &                   0.48 &                        0.52 &                   0.48 &                         0.49 &                   0.62 &               \textbf{0.54} &                     0.48 &                  0.47 &                   0.46 \\
+        SOGAAL &          0.48 &               0.52 &          0.48 &                0.49 &          0.62 &      \textbf{0.54} &            0.48 &          0.47 &          0.46 \\
 \hline
-                        SOS &                   0.52 &                        0.52 &                   0.51 &                         0.52 &            \textit{TO} &                        0.49 &                     0.59 &                  0.52 &                   0.46 \\
+            SOS &          0.52 &               0.52 &          0.51 &                0.52 &   \textit{TO} &               0.49 &            0.59 &          0.52 &          0.46 \\
 \hline
-                        VAE &                   0.63 &                        0.48 &                   0.61 &                         0.71 &                   0.50 &                        0.45 &                     0.51 &                  0.77 &                   0.67 \\
+            VAE &          0.63 &               0.48 &          0.61 &                0.71 &          0.50 &               0.45 &            0.51 &          0.77 &          0.67 \\
 \hline
 \end{tabular}
 \end{table*}
 
+% TODO: Add to supplements
+
+% \begin{table*}[!b]
+% \renewcommand{\arraystretch}{1.25}
+% \caption{Time taken, in seconds, on the second half of the Test Datasets}
+% \label{table:results:test-time-2}
+% \centering
+% \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+% \hline
+% \textbf{model} & \textbf{musk} & \textbf{optdigits} & \textbf{pima} & \textbf{satimage-2} & \textbf{smtp} & \textbf{vertebral} & \textbf{vowels} &  \textbf{wbc} & \textbf{wine} \\
+% \hline
+%     CHAODA-fast &        858.15 &            3279.67 &         12.36 &              358.49 &        272.61 &               1.88 &          123.34 &          5.26 &          0.39 \\
+% \hline
+%             ABOD &          4.39 &               6.81 &          0.26 &                3.20 &         18.00 &      \textbf{0.08} &            0.51 &          0.14 & \textbf{0.04} \\
+% \hline
+%     AutoEncoder &         23.40 &              24.29 &          4.65 &               23.73 &        195.61 &               2.85 &            6.98 &          4.70 &          3.31 \\
+% \hline
+%             CBLOF &          0.27 &               0.44 & \textbf{0.08} &                0.31 &          0.65 &      \textbf{0.06} &   \textbf{0.10} & \textbf{0.08} & \textbf{0.05} \\
+% \hline
+%             COF &         45.60 &             119.57 &          2.40 &              141.84 &      21283.99 &               0.28 &            8.06 &          0.68 &          0.11 \\
+% \hline
+%             HBOS & \textbf{0.07} &      \textbf{0.04} & \textbf{0.00} &       \textbf{0.02} & \textbf{0.01} &      \textbf{0.00} &   \textbf{0.01} & \textbf{0.01} & \textbf{0.00} \\
+% \hline
+%         IFOREST &          0.93 &               0.92 &          0.35 &                0.79 &          3.90 &               0.30 &            0.40 &          0.33 &          0.29 \\
+% \hline
+%             KNN &          3.50 &               5.53 & \textbf{0.09} &                1.84 &          6.83 &      \textbf{0.03} &            0.18 & \textbf{0.05} & \textbf{0.01} \\
+% \hline
+%             LMDD &        375.11 &             421.22 &          2.86 &              302.94 &       3872.57 &               0.59 &            9.47 &          1.91 &          0.33 \\
+% \hline
+%             LOCI &   \textit{TO} &        \textit{TO} &   \textit{TO} &         \textit{TO} &   \textit{TO} &              35.97 &     \textit{TO} &        154.49 &          6.84 \\
+% \hline
+%             LODA & \textbf{0.07} &      \textbf{0.10} & \textbf{0.04} &       \textbf{0.10} &          0.73 &      \textbf{0.03} &   \textbf{0.05} & \textbf{0.04} & \textbf{0.03} \\
+% \hline
+%             LOF &          3.59 &               5.49 & \textbf{0.02} &                1.50 &          1.36 &      \textbf{0.00} &   \textbf{0.06} & \textbf{0.01} & \textbf{0.00} \\
+% \hline
+%             MCD &         84.74 &               7.24 &          0.69 &                6.83 &         13.78 &      \textbf{0.05} &            0.81 &          0.11 & \textbf{0.05} \\
+% \hline
+%         MOGAAL &        267.93 &             415.02 &         40.89 &              463.18 &   \textit{TO} &              39.86 &           80.35 &         40.65 &         38.10 \\
+% \hline
+%             OCSVM &          2.51 &               3.71 & \textbf{0.03} &                3.14 &        252.52 &      \textbf{0.00} &            0.11 & \textbf{0.01} & \textbf{0.00} \\
+% \hline
+%             SOD &         56.94 &             131.49 &          2.48 &              210.39 &   \textit{TO} &               0.54 &           13.92 &          1.03 &          0.19 \\
+% \hline
+%         SOGAAL &         29.55 &              44.72 &          5.20 &               48.79 &        592.27 &               4.69 &           10.38 &          4.76 &          4.01 \\
+% \hline
+%             SOS &          9.37 &              26.09 &          1.01 &               34.96 &   \textit{TO} &               0.21 &            2.81 &          0.36 & \textbf{0.10} \\
+% \hline
+%             VAE &         30.38 &              30.58 &          5.67 &               30.41 &        176.84 &               4.03 &           10.46 &          5.33 &          4.62 \\
+% \hline
+% \end{tabular}
+% \end{table*}
+
+
+For the following table(s), we include comparisons against methods for which we could find a usable implementation.
+For these algorithms, we compare the performance of CHAODA against that reported by the respective authors.
+
+% TODO: Fill this in
+
 \begin{table*}[!b]
 \renewcommand{\arraystretch}{1.25}
-\caption{Time taken, in seconds, on the second half of the Test Datasets}
-\label{table:results:test-time-2}
-\centering
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+\caption{Performance against misc. algorithms}
+\label{table:results:misc-comparisons}
+\begin{tabular}{|c|c|c|c|}
 \hline
-\textbf{\textbf{model}} & \textbf{\textbf{musk}} & \textbf{\textbf{optdigits}} & \textbf{\textbf{pima}} & \textbf{\textbf{satimage-2}} & \textbf{\textbf{smtp}} & \textbf{\textbf{vertebral}} & \textbf{\textbf{vowels}} & \textbf{\textbf{wbc}} & \textbf{\textbf{wine}} \\
+\textbf{model} & \textbf{dataset-1} & \textbf{dataset-2} & \textbf{dataset-3} \\
 \hline
-                CHAODA-fast &                 858.15 &                     3279.67 &                  12.36 &                       358.49 &                 272.61 &                        1.88 &                   123.34 &                  5.26 &                   0.39 \\
+Misc-1 & 0.00 & 0.00 & 0.00 \\
 \hline
-                        ABOD &                   4.39 &                        6.81 &                   0.26 &                         3.20 &                  18.00 &               \textbf{0.08} &                     0.51 &                  0.14 &          \textbf{0.04} \\
+Misc-2 & 0.00 & 0.00 & 0.00 \\
 \hline
-                AutoEncoder &                  23.40 &                       24.29 &                   4.65 &                        23.73 &                 195.61 &                        2.85 &                     6.98 &                  4.70 &                   3.31 \\
-\hline
-                        CBLOF &                   0.27 &                        0.44 &          \textbf{0.08} &                         0.31 &                   0.65 &               \textbf{0.06} &            \textbf{0.10} &         \textbf{0.08} &          \textbf{0.05} \\
-\hline
-                        COF &                  45.60 &                      119.57 &                   2.40 &                       141.84 &               21283.99 &                        0.28 &                     8.06 &                  0.68 &                   0.11 \\
-\hline
-                        HBOS &          \textbf{0.07} &               \textbf{0.04} &          \textbf{0.00} &                \textbf{0.02} &          \textbf{0.01} &               \textbf{0.00} &            \textbf{0.01} &         \textbf{0.01} &          \textbf{0.00} \\
-\hline
-                IFOREST &                   0.93 &                        0.92 &                   0.35 &                         0.79 &                   3.90 &                        0.30 &                     0.40 &                  0.33 &                   0.29 \\
-\hline
-                        KNN &                   3.50 &                        5.53 &          \textbf{0.09} &                         1.84 &                   6.83 &               \textbf{0.03} &                     0.18 &         \textbf{0.05} &          \textbf{0.01} \\
-\hline
-                        LMDD &                 375.11 &                      421.22 &                   2.86 &                       302.94 &                3872.57 &                        0.59 &                     9.47 &                  1.91 &                   0.33 \\
-\hline
-                        LOCI &            \textit{TO} &                 \textit{TO} &            \textit{TO} &                  \textit{TO} &            \textit{TO} &                       35.97 &              \textit{TO} &                154.49 &                   6.84 \\
-\hline
-                        LODA &          \textbf{0.07} &               \textbf{0.10} &          \textbf{0.04} &                \textbf{0.10} &                   0.73 &               \textbf{0.03} &            \textbf{0.05} &         \textbf{0.04} &          \textbf{0.03} \\
-\hline
-                        LOF &                   3.59 &                        5.49 &          \textbf{0.02} &                         1.50 &                   1.36 &               \textbf{0.00} &            \textbf{0.06} &         \textbf{0.01} &          \textbf{0.00} \\
-\hline
-                        MCD &                  84.74 &                        7.24 &                   0.69 &                         6.83 &                  13.78 &               \textbf{0.05} &                     0.81 &                  0.11 &          \textbf{0.05} \\
-\hline
-                        MOGAAL &                 267.93 &                      415.02 &                  40.89 &                       463.18 &            \textit{TO} &                       39.86 &                    80.35 &                 40.65 &                  38.10 \\
-\hline
-                        OCSVM &                   2.51 &                        3.71 &          \textbf{0.03} &                         3.14 &                 252.52 &               \textbf{0.00} &                     0.11 &         \textbf{0.01} &          \textbf{0.00} \\
-\hline
-                        SOD &                  56.94 &                      131.49 &                   2.48 &                       210.39 &            \textit{TO} &                        0.54 &                    13.92 &                  1.03 &                   0.19 \\
-\hline
-                        SOGAAL &                  29.55 &                       44.72 &                   5.20 &                        48.79 &                 592.27 &                        4.69 &                    10.38 &                  4.76 &                   4.01 \\
-\hline
-                        SOS &                   9.37 &                       26.09 &                   1.01 &                        34.96 &            \textit{TO} &                        0.21 &                     2.81 &                  0.36 &          \textbf{0.10} \\
-\hline
-                        VAE &                  30.38 &                       30.58 &                   5.67 &                        30.41 &                 176.84 &                        4.03 &                    10.46 &                  5.33 &                   4.62 \\
+Misc-3 & 0.00 & 0.00 & 0.00 \\
 \hline
 \end{tabular}
 \end{table*}
