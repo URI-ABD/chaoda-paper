@@ -32,7 +32,7 @@ The procedure is detailed in~\cite{ishaq2019clustered}.
 Several properties of clusters are interesting and important to consider, including \textit{cardinality}, the number of points in a cluster; \textit{center}, the geometric median of points contained in a cluster; \textit{radius}, the distance to the farthest point from a center; and \textit{local fractal dimension}, as described in~\cite{ishaq2019clustered}.
 We can also consider individual \textit{parent-child ratios} of cardinality, radius, and local fractal dimension, as well as \textit{exponential moving averages} of the parent-child ratios along a branch of the tree.
 In particular, we use the parent-child ratios and the exponential moving averages of those ratios to help generalize our anomaly detection method from a small set of datasets to a large, distinct set of datasets.
-
+/
 \subsubsection{Graphs:}
 % TODO: describe Graph and graph invariant.
 Clusters that are near each other in the embedding space sometimes have overlapping volumes, i.e.\ the distance between their centers is less than or equal to the sum of their radii.
@@ -62,8 +62,8 @@ We describe some algorithms in Section~\ref{subsec:methods:individual-algorithms
 While these algorithms are themselves fairly simple, the real challenge is in selecting the right clusters for the graphs for the algorithms operate on.
 We will demonstrate CLAM to be such a powerful technique in Manifold-Mapping that even these simple algorithms, more often than not, outperform state-of-the-art anomaly detection algorithms.
 
-\subsection{Graph Building}
-\label{subsec:methods:graph-building}
+\subsection{Induced Graphs:}
+\label{subsec:methods:induced-graphs}
 The heart of the problem with our methods of anomaly detection is building the right graph to represent the underlying manifold.
 One could try using every possible combination of clusters to form a graph but this quickly leads to combinatorial explosion.
 Instead, we must intelligently select those clusters that, when used to build the graph, perform best for anomaly detection.
@@ -96,9 +96,70 @@ The result is a separate regression model for each algorithm of CHAODA.
 Here we describe several simple methods for anomaly detection.
 Each of these methods uses a graph of clusters from CLAM to calculate an anomalousness score for each point in the dataset.
 
+For each algorithm:
+\begin{itemize}
+    \item $scores$ is a dictionary of clusters and their outlier scores,
+    \item $V$ is the set of clusters in a graph,
+    \item $E$ is the set of edges in a graph, And
+    \item the cardinality of a cluster $c$ is denoted by $|c|$, represneting the number of points in a cluster.
+\end{itemize}
+
 \subsubsection{Relative Cluster Cardinality:}
 We measure the anomalousness of a point by the cardinality of the cluster that point belongs to relative to the cardinalities of the other clusters in the graph.
 Points in the same cluster are considered equally anomalous and points in clusters with relatively low cardinalities are considered more anomalous than points in clusters with relatively high cardinalities.
+
+The algorithm is as follows:
+
+\begin{itemize}
+    \item for each cluster $c$ in graph $g$:
+    \begin{itemize}
+        \item $scores[c] \leftarrow -|c|$.
+    \end{itemize}
+\end{itemize}
+
+The time complexity of this algorithm is $O(|V|)$.
+
+\subsubsection{Relative Component Cardianlity}
+We define components of a graph by the property that no two clusters from different components have an edge between them, and every pair of clusters in the same component has a path between them.
+Consider the relative cardinalities of each component in much the same we we considered the relative cardinalities of clusters in the Relative Cluster Cardinality method.
+Points in clusters in relatively small components are considered more anomalous than points in clusters in relatively large components, and points in clusters in the same component are considered equally anomalous.
+
+The algorithm is as follows:
+
+\begin{itemize}
+    \item for each component $C$ in graph $g$:
+    \begin{itemize}
+        \item for each cluster $c$ in $C$:
+        \begin{itemize}
+            \item $scores[c] \leftarrow -|C|$.
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+This algorithm first finds the components of the graph, so its time complexity is $O(|E| + |V|)$.
+
+\subsubsection{Graph Neighborhood Size:}
+Given the graph with clusters and edges, consider the number of clusters reachable from a starting cluster within a given graph distance $k$.
+We call this number the \textit{graph-neighborhood} of the starting cluster.
+With $k$ relatively small compared to the diameter of the graph, we can consider the relative sizes of \textit{graph-neighborhood} of the clusters in the graph.
+Points in clusters with small graph-neighborhoods are considered more anomalous than points in clusters with large graph-neighborhoods.
+
+The algorithm is as follows:
+
+\begin{itemize}
+    \item let $f$ be a real number in the $(0, 1]$ range ($0.25$) works well.
+    \item for each cluster $c$ in graph $g$:
+    \begin{itemize}
+        \item let $e_c$ be the eccentricity of $c$.
+        \item let $s$ be $e_c * f$.
+        \item perform a breadth-first traversal from $c$ with $s$ steps.
+        \item let $size$ be the number of unique clusters visited by the breadth-first traversal.
+        \item $scores[c] \leftarrow -size$.
+    \end{itemize}
+\end{itemize}
+
+This algorithm is dominated by the computation of the eccentricity of each cluster.
+Its time complexity is $O(|E| \cdot |V|)$.
 
 \subsubsection{Child-Parent Cardinality Ratio:}
 As described in CHESS~\cite{ishaq2019clustered}, a cluster is partitioned by using its two maximally distant points as poles.
@@ -108,28 +169,92 @@ If a child cluster only contains a small fraction of the points that its parent 
 These child-parent cardinality ratios are accumulated for each point down its branch in the tree, terminating when the child cluster is a node in the graph.
 Points with a low value of these accumulated ratios are considered more anomalous than points with a high value of these accumulated ratios.
 
-\subsubsection{Graph Neighborhood Size:}
-Given the graph with clusters and edges, consider the number of clusters reachable from a starting cluster within a given graph distance $k$.
-We call this number the \textit{graph-neighborhood} of the starting cluster.
-When $k$ is relatively small compared to the diameter of the graph, we can consider the relative \textit{graph-neighborhoods} of every cluster in the graph.
-Points in clusters with small graph-neighborhoods are considered more anomalous than points in clusters with large graph-neighborhoods.
+The algorithm is as follows:
 
-\subsubsection{Relative Subgraph Cardinality}
-We define disconnected components of a graph by the property that no two clusters from different disconnected components have an edge between them.
-Consider the relative cardinalities of each component in much the same we we considered the relative cardinalities of clusters in the Cluster Cardinality method.
-Points in clusters in the same component are considered equally anomalous and points in clusters in relatively small components are considered more anomalous than points in clusters in relatively large components.
+\begin{itemize}
+    \item for each cluster $c$ in graph $g$:
+    \begin{itemize}
+        \item let $p$ be the parent cluster of $c$.
+        \item $scores[c] \leftarrow \frac{|p|}{|c|}$.
+    \end{itemize}
+\end{itemize}
 
-% TODO: Consider a bit on Normalization of scores.
+The time complexity of this algorithm is $O(|V|)$.
 
 
+\subsubsection{Random Walks:}
+We perform long random-walks on each component of a graph, and we count the number of times each cluster was visited.
+We consider the relative visitation counts among the clsuters to be inversely related to their anomalousness.
+The least visited clsuters are anomalous, and the most visited clusters are not.
+
+The algorithm is as follows:
+
+\begin{itemize}
+    \item let $visits$ be a dictionary of clusters and their visitation counts, initialized to $0$.
+    \item let $s$ be a large number of steps for the random walk.
+    \item for each cluster $c$ in graph $g$:
+    \begin{itemize}
+        \item perform a random walk from $c$ with $s$ steps and increment the value of the visited cluster in $visits$ with each step.
+    \end{itemize}
+    \item for each cluster $c$ in graph $g$:
+    \begin{itemize}
+        \item $scores[c] \leftarrow -visits[c]$.
+    \end{itemize}
+\end{itemize}
+
+This algorithm is dominated by the computation of the transition matrix for the graph.
+Its worst-case time complexity is $O(|V|^2)$, but is often better because the transition matrix is computed separately for each component in the graph.
+
+\subsubsection{Stationary Probabilities:}
+We compute the transition probability matrix of each component of a graph that contains at least two clusters.
+We then compute successive powers of this matrix.
+This process will eventually converge (add citation here), and we find this convergent matrix.
+The sum of the values along a row is inversely related to the anomalousness of the respective clsuter.
+
+The algorithm is as follows:
+
+\begin{itemize}
+    \item for each component $C$ in graph $g$:
+    \begin{itemize}
+        \item let $M$ be the transition matrix for $C$.
+        \item keep squaring $M$ until the matrix converges.
+        \item let $S$ be this converged matrix.
+        \item for each cluster $c$ in $C$:
+        \begin{itemize}
+            \item let $s$ be the respective row from $S$.
+            \item $scores[c] \leftarrow -sum(s)$
+        \end{itemize}
+    \end{itemize}
+\end{itemize}
+
+This algorithm is dominated by the computation of the transition matrix for each component in the graph.
+Its time worst-case time complexity is $O(|V|^2)$, but is often better in practice.
+
+
+\subsection{Normalization}\label{subsec:methods:normalization}
+The individual methods produce outlier scores for each cluster, rather than for each point.
+We remedy this by having each point simply inherit the outlier score of the clsuter it belongs to.
+Since our graphs guarantee that each point is in exactly one cluster, and that every point from the dataset is accounted for, this inheritance assigns an outlier score to each point in a dataset.
+
+Howeverm, the individual methods still produce outlier scores in a wide range of values.
+The only common feature among these scores is that low scores correspond to inliers and high scores correspond to outliers.
+Thesefore, scores from differnt methods or graphs cannot be directly compared to each other.
+We need some method for normalizing these scores to the same range.
+The standard range is $[0, 1]$, with high scores assigned to outliers.
+
+We use gaussian normalization by default, though we include sigmoid normalization and min-max normalization as options in our implementation. (add possible citation for paper on normalizing such scores)
+
+% TODO: Add equations and/or citations for normalization methods.
+
+Once the scores are in a uniform range, we are ready for the ensemble.
 
 
 \subsection{Ensemble}\label{subsec:methods:ensemble}
-Given the set of regression models learned from the training datasets described in Section~\ref{subsec:methods:graph-building}, we can use it to build graphs for any other dataset, even if those datasets differ significantly in dimensionality and size; essentially, this is a form of transfer learning.
+Given the set of regression models learned from the training datasets described in Section~\ref{subsec:methods:induced-graphs}, we can use it to build graphs for any other dataset, even if those datasets differ significantly in dimensionality and size; essentially, this is a form of transfer learning.
 We use the cluster ratios and the associated regression constants to rank every cluster in a CLAM tree.
 These rankings are normalized by the cardinality of each cluster.
 The highest ranked clusters are then used to build a graph.
-This graph is then used with the corresponding individual algorithm to calculate anomaly scores for all points in the dataset.{}
+This graph is then used with the corresponding individual algorithm to calculate anomaly scores for all points in the dataset.
 The scores from each individual algorithm are then combined into an ensemble.
 We present the AUC scores from this ensemble in Section~\ref{sec:results}
 
@@ -139,127 +264,190 @@ We present the AUC scores from this ensemble in Section~\ref{sec:results}
 We sourced 24 datasets, all from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}, for training CHAODA and testing its performance.
 All of these datasets are adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and have been standardized, by ODDS, for anomaly and outlier detection benchmarks.
 
-% TODO: This feels like it could be better summarized with a table. Dataset name; n-instances; n-anomalies; dims used; what it's derived from.
-% Then, this section only needs to contain the frilly details, like what made it into the outlier bin. Najib: yeah that's definitely in the cards. For now, we are not limited on space so let's leave this as a low priority.
-The \textbf{annthyroid} dataset is derived from the ``Thyroid Disease'' dataset from the UCIMLR\@.
-The original data has 7200 instances with 15 categorical attributes and 6 real-valued attributes.
-The class labels are ``normal'', ``hypothyroid'', and ``subnormal''.
-For anomaly detection, the ``hypothyroid'' and ``subnormal'' classes are combined into 534 outlier instances, and only the 6 real-valued attributes are used.
+We provide a summary of the datasets in table~\ref{table:methods:benchmarks}.
+For more details on each dataset, please refer to the supplementary materials.
 
-The \textbf{arrhythmia} dataset is derived from ``Arrhythmia`` dataset from the UCIMLR\@.
-The original dataset contains 452 instances with 279 attributes.
-There are five categorical attributes which are discarded, leaving this as a 274-dimensional dataset.
-The instances are divided into 16 classes.
-The eight smallest classes collectively contain 66 instances and are combined into the outlier class.
+\begin{table*}[!t]
+\renewcommand{\arraystretch}{1.25}
+\caption{Datasets used for Benchmarks}
+\label{table:methods:benchmarks}
+\centering
+\begin{tabular}{|c|c|c|c|}
+\hline
+\textbf{Dataset} & \textbf{Cardinality} & \textbf{Dimensionality} & \textbf{\# Outliers} \\
+\hline
+annthyroid & 7,200 & 6 & 534 \\
+\hline
+arrhythmia & 452 & 274 & 66 \\
+\hline
+breastw & 683 & 9 & 239 \\
+\hline
+cardio & 1,831 & 21 & 176 \\
+\hline
+cover & 286,048 & 10 & 2,747 \\
+\hline
+glass & 214 & 9 & 9 \\
+\hline
+http & 567,479 & 4 & 2,211 \\
+\hline
+ionosphere & 351 & 33 & ?? \\
+\hline
+lympho & 148 & 18 & 6 \\
+\hline
+mammography & 11,183 & 6 & 260 \\
+\hline
+mnist & ?? & 100 & 700 \\
+\hline
+musk & 3,062 & 166 & ?? \\
+\hline
+optdigits & 5,216 & 64 & 150 \\
+\hline
+pendigits & 6,870 & ?? & 156 \\
+\hline
+pima & ?? & ?? & ?? \\
+\hline
+satellite & 6,435 & 36 & ?? \\
+\hline
+satimage-2 & 5,803 & 36 & 71 \\
+\hline
+shuttle & 59,097 & 9 & 3,511 \\
+\hline
+smtp & 95,156 & 3 & 30 \\
+\hline
+thyroid & 3,772 & 6 & 93 \\
+\hline
+vertebral & 240 & 6 & 30 \\
+\hline
+vowels & 1,456 & 12 & 50 \\
+\hline
+wbc & 278 & 30 & 21 \\
+\hline
+wine & 129 & 13 & 10 \\
+\hline
+\end{tabular}
+\end{table*}
 
-The \textbf{breastw} dataset is also derived from the ``Breast Cancer Wisconsin (Original)`` dataset.
-This is a 9-dimensional dataset containing 683 instances of which 239 represent malignant tumors and are treated as the outlier class.
+% TODO: Add the following text to supplements:
 
-The \textbf{cardio} dataset is derived from the ``Cardiotocography'' dataset.
-The dataset is composed of measurements of fetal heart rate and uterine contraction features on cardiotocograms.
-The are each labelled ``normal'', ``suspect'', and ``pathologic'' by expert obstetricians.
-For anomaly detection, the ``normal'' class forms the inliers, the ``suspect'' class is discarded, and the ``pathologic'' class is downsampled to 176 instances forming the outliers.
-This leaves us with 1831 instances with 21 attributes in the dataset.
+% The \textbf{annthyroid} dataset is derived from the ``Thyroid Disease'' dataset from the UCIMLR\@.
+% The original data has 7200 instances with 15 categorical attributes and 6 real-valued attributes.
+% The class labels are ``normal'', ``hypothyroid'', and ``subnormal''.
+% For anomaly detection, the ``hypothyroid'' and ``subnormal'' classes are combined into 534 outlier instances, and only the 6 real-valued attributes are used.
 
-The \textbf{cover} dataset is derived from the ``Covertype'' dataset.
-The original dataset contains 581,012 instances with 54 attributes.
-The dataset is used to predict the type of forest cover solely from cartographic variables.
-The instances are labelled into seven different classes.
-For outlier detection, we use only the 10 quantitative attributes, type 2 (lodgepole pine) as the inliers, and type 4 (conttonwood/willow) as the outliers.
-The remaining classes are discarded.
-This leaves us with a 10-dimensional dataset with 286,048 instances of which 2,747 are outliers.
+% The \textbf{arrhythmia} dataset is derived from ``Arrhythmia`` dataset from the UCIMLR\@.
+% The original dataset contains 452 instances with 279 attributes.
+% There are five categorical attributes which are discarded, leaving this as a 274-dimensional dataset.
+% The instances are divided into 16 classes.
+% The eight smallest classes collectively contain 66 instances and are combined into the outlier class.
 
-The \textbf{glass} dataset is derived from the ``Glass Identification'' dataset.
-The study of classification of types of glass was motivated by criminological investigations where glass fragments left at crime scenes were used as evidence.
-This dataset contains 214 instances with nine attributes.
-While there are several different types of glass in this dataset, class 6 is a clear minority with only nine instances and, as such, points in class 6 are treated as the outliers while all other classes are treated as inliers.
+% The \textbf{breastw} dataset is also derived from the ``Breast Cancer Wisconsin (Original)`` dataset.
+% This is a 9-dimensional dataset containing 683 instances of which 239 represent malignant tumors and are treated as the outlier class.
 
-The \textbf{http} dataset is derived from the original ``KDD Cup 1999'' dataset.
-It contains 41 attributes (34 continuous and 7 categorical) which are reduced to 4 attributes (service, duration, src\_bytes, dst\_bytes).
-Only the ``service'' attribute is categorical, dividing the data into {http, smtp, ftp, ftp\_data, others} subsets.
-Here, only the ``http'' data is used.
-The values of the continuous attributes are centered around 0, so they have been log-transformed far away from 0.
-The original data contains 3,925,651 attacks in 4,898,431 records.
-This smaller dataset is created with only 2,211 attacks in 567,479 records.
+% The \textbf{cardio} dataset is derived from the ``Cardiotocography'' dataset.
+% The dataset is composed of measurements of fetal heart rate and uterine contraction features on cardiotocograms.
+% The are each labelled ``normal'', ``suspect'', and ``pathologic'' by expert obstetricians.
+% For anomaly detection, the ``normal'' class forms the inliers, the ``suspect'' class is discarded, and the ``pathologic'' class is downsampled to 176 instances forming the outliers.
+% This leaves us with 1831 instances with 21 attributes in the dataset.
 
-The \textbf{ionosphere} dataset is derived from the ``Ionosphere'' dataset.
-It consists 351 instances with 34 attributes.
-One of the attributes is always 0 and, so, is discarded, leaving us with a 33-dimensional dataset.
-The data comes from radar measurements of the ionosphere from a system located in Goose Bay, Labrador.
-The data are classified into ``good'' if the radar returns evidence some type of structure in the ionosphere, and ``bad'' if not.
-The ``good'' class serves as the inliers and the ``bad'' class serves as the outliers.
+% The \textbf{cover} dataset is derived from the ``Covertype'' dataset.
+% The original dataset contains 581,012 instances with 54 attributes.
+% The dataset is used to predict the type of forest cover solely from cartographic variables.
+% The instances are labelled into seven different classes.
+% For outlier detection, we use only the 10 quantitative attributes, type 2 (lodgepole pine) as the inliers, and type 4 (conttonwood/willow) as the outliers.
+% The remaining classes are discarded.
+% This leaves us with a 10-dimensional dataset with 286,048 instances of which 2,747 are outliers.
 
-The \textbf{lympho} dataset is derived from the ``Lymphography'' dataset.
-The data contain 148 instances with 18 attributes.
-The instances are labelled ``normal find'', ``metastases'', ``malign lymph'', and ``fibrosis''.
-The two minority classes only contain a total of six instances, and are combined to form the outliers.
-The remaining 142 instances form the inliers.
+% The \textbf{glass} dataset is derived from the ``Glass Identification'' dataset.
+% The study of classification of types of glass was motivated by criminological investigations where glass fragments left at crime scenes were used as evidence.
+% This dataset contains 214 instances with nine attributes.
+% While there are several different types of glass in this dataset, class 6 is a clear minority with only nine instances and, as such, points in class 6 are treated as the outliers while all other classes are treated as inliers.
 
-The \textbf{mammography} dataset is derived from the original ``Mammography'' dataset provided by Aleksandar Lazarevic.
-Its goal is to use x-ray images of human breasts to find calcified tissue as an early sign of breast cancer.
-As such, the ``calcification'' class is considered as the outlier class while the ``non-clacification'' class is the inliers.
-We have 11,183 instances with 6 attributes, of which 260 are ``calcifications.''
+% The \textbf{http} dataset is derived from the original ``KDD Cup 1999'' dataset.
+% It contains 41 attributes (34 continuous and 7 categorical) which are reduced to 4 attributes (service, duration, src\_bytes, dst\_bytes).
+% Only the ``service'' attribute is categorical, dividing the data into {http, smtp, ftp, ftp\_data, others} subsets.
+% Here, only the ``http'' data is used.
+% The values of the continuous attributes are centered around 0, so they have been log-transformed far away from 0.
+% The original data contains 3,925,651 attacks in 4,898,431 records.
+% This smaller dataset is created with only 2,211 attacks in 567,479 records.
 
-The \textbf{mnist} dataset is derived from the classic ``MNIST'' dataset of handwritten digits.
-Digit-zero is considered the inlier class while 700 images of digit-six are the outliers.
-Furthermore, 100 pixels are randomly selected as features from the original 784 pixels.
+% The \textbf{ionosphere} dataset is derived from the ``Ionosphere'' dataset.
+% It consists 351 instances with 34 attributes.
+% One of the attributes is always 0 and, so, is discarded, leaving us with a 33-dimensional dataset.
+% The data comes from radar measurements of the ionosphere from a system located in Goose Bay, Labrador.
+% The data are classified into ``good'' if the radar returns evidence some type of structure in the ionosphere, and ``bad'' if not.
+% The ``good'' class serves as the inliers and the ``bad'' class serves as the outliers.
 
-The \textbf{musk} dataset is derived from its namesake in the UCIMLR\@.
-It is created from molecules that have been classified by experts as ``musk'' or ``non-musk''.
-The data are downsampled to 3,062 instances with 166 attributes.
-The ``musk'' class forms the outliers while the ``non-musk'' class forms the inliers.
+% The \textbf{lympho} dataset is derived from the ``Lymphography'' dataset.
+% The data contain 148 instances with 18 attributes.
+% The instances are labelled ``normal find'', ``metastases'', ``malign lymph'', and ``fibrosis''.
+% The two minority classes only contain a total of six instances, and are combined to form the outliers.
+% The remaining 142 instances form the inliers.
 
-The \textbf{optdigits} dataset is derived from the ``Optical Recognition of Handwritten Digits'' dataset.
-Digits 1--9 form the inliers while 150 samples of digit-zero form the outliers.
-This gives us a dataset of 5,216 instances with 64 attributes.
+% The \textbf{mammography} dataset is derived from the original ``Mammography'' dataset provided by Aleksandar Lazarevic.
+% Its goal is to use x-ray images of human breasts to find calcified tissue as an early sign of breast cancer.
+% As such, the ``calcification'' class is considered as the outlier class while the ``non-clacification'' class is the inliers.
+% We have 11,183 instances with 6 attributes, of which 260 are ``calcifications.''
 
-The \textbf{pendigits} dataset is derived from the ``Pen-Based Recognition of Handwritten Digits'' dataset from the UCI Machine Learning Repository.
-The original collection of handwritten samples is reduced to 6,870 points, of which 156 are outliers.
+% The \textbf{mnist} dataset is derived from the classic ``MNIST'' dataset of handwritten digits.
+% Digit-zero is considered the inlier class while 700 images of digit-six are the outliers.
+% Furthermore, 100 pixels are randomly selected as features from the original 784 pixels.
 
-The \textbf{pima} dataset is derived from the ``Pima Indians Diabetes'' dataset.
-The original dataset presents a binary classification problem to detect diabetes.
-This subset was restricted to female patients at least 21 years old of Pima Indian heritage.
+% The \textbf{musk} dataset is derived from its namesake in the UCIMLR\@.
+% It is created from molecules that have been classified by experts as ``musk'' or ``non-musk''.
+% The data are downsampled to 3,062 instances with 166 attributes.
+% The ``musk'' class forms the outliers while the ``non-musk'' class forms the inliers.
 
-The \textbf{satellite} dataset is derived from the ``Statlog (Landsat Satellite)'' dataset.
-The smallest three classes (2, 4, and 5) are combined to form the outlier class while the other classes are combined to form the inlier class.
-The train and test subsets are combined to produce a of 6,435 instances with 36 attributes.
+% The \textbf{optdigits} dataset is derived from the ``Optical Recognition of Handwritten Digits'' dataset.
+% Digits 1--9 form the inliers while 150 samples of digit-zero form the outliers.
+% This gives us a dataset of 5,216 instances with 64 attributes.
 
-The \textbf{satimage-2} dataset is also derived from the ``Satlog (Landsat Satellite)'' dataset.
-Class 2 is downsampled to 71 instances that are treated as outliers, while all other classes are combined to form an inlier class.
-This gives us 5,803 instances with 36 attributes.
+% The \textbf{pendigits} dataset is derived from the ``Pen-Based Recognition of Handwritten Digits'' dataset from the UCI Machine Learning Repository.
+% The original collection of handwritten samples is reduced to 6,870 points, of which 156 are outliers.
 
-The \textbf{shuttle} dataset is derived from the ``Statlog (Shuttle)'' dataset.
-This are seven classes in the original dataset.
-Here, class 4 is discarded, class 1 is treated as the inliers and the remaining classes, which are comparatively small, form an outlier class.
-This gives us 49,097 instances with 9 attributes, of which 3,511 are outliers.
+% The \textbf{pima} dataset is derived from the ``Pima Indians Diabetes'' dataset.
+% The original dataset presents a binary classification problem to detect diabetes.
+% This subset was restricted to female patients at least 21 years old of Pima Indian heritage.
 
-The \textbf{smtp} is also derived from the ``KDD Cup 1999'' dataset.
-It is preprocessed in the same way as the \textbf{http} dataset, except that the ``smtp'' service subset is used.
-This version of the dataset only contains 95,156 instances with 3 attributes, of which 30 instances are outliers.
+% The \textbf{satellite} dataset is derived from the ``Statlog (Landsat Satellite)'' dataset.
+% The smallest three classes (2, 4, and 5) are combined to form the outlier class while the other classes are combined to form the inlier class.
+% The train and test subsets are combined to produce a of 6,435 instances with 36 attributes.
 
-The \textbf{thyroid} dataset is also derived from the ``Thyroid Disease'' dataset.
-The attribute selection is the same as for the \textbf{annthyroid} dataset but only the 3,772 training instances are used in this version.
-The ``hyperfunction'' class, containing 93 instances, is treated as the outlier class, while the other two classes are combined to form an inlier class.
+% The \textbf{satimage-2} dataset is also derived from the ``Satlog (Landsat Satellite)'' dataset.
+% Class 2 is downsampled to 71 instances that are treated as outliers, while all other classes are combined to form an inlier class.
+% This gives us 5,803 instances with 36 attributes.
 
-The \textbf{vertebral} dataset is derived from the ``Vertebral Column'' dataset.
-6 attributes are derived to represent the shape and orientation of the pelvis and lumbar spine.
-Each instance comes from a different patient.
-The ``Abnormal (AB)'' class of 210 instances are used as inliers while the ``Normal (NO)'' class is downsampled to 30 instances to be used as outliers.
+% The \textbf{shuttle} dataset is derived from the ``Statlog (Shuttle)'' dataset.
+% This are seven classes in the original dataset.
+% Here, class 4 is discarded, class 1 is treated as the inliers and the remaining classes, which are comparatively small, form an outlier class.
+% This gives us 49,097 instances with 9 attributes, of which 3,511 are outliers.
 
-The \textbf{vowels} dataset is derived from the ``Japanese Vowels'' dataset.
-THE UCIMLR presents this data as a multivariate time series of nine speakers uttering two Japanese vowels.
-For outlier detection, each frame of each time-series is treated as a separate point.
-There are 12 features associated with each time series, and these translate as the attributes for each point.
-Data from speaker 1, downsampled to 50 points, form the outlier class/
-Speakers 6, 7, and 8 form the outlier class.
-The rest of the points are discarded.
-This leaves is with 1456 points un 12 dimensions, of which 50 are outliers.
+% The \textbf{smtp} is also derived from the ``KDD Cup 1999'' dataset.
+% It is preprocessed in the same way as the \textbf{http} dataset, except that the ``smtp'' service subset is used.
+% This version of the dataset only contains 95,156 instances with 3 attributes, of which 30 instances are outliers.
 
-The \textbf{wbc} dataset is derived from the ``Wisconsin-Breast Cancer (Diagnostics)'' dataset.
-The dataset records measurements for breast cancer cases.
-The benign class is treated as the inlier class, while the malignant class is downsampled to 21 points and serves as the outlier class.
-This leaves us with 278 points in 30 dimensions.
+% The \textbf{thyroid} dataset is also derived from the ``Thyroid Disease'' dataset.
+% The attribute selection is the same as for the \textbf{annthyroid} dataset but only the 3,772 training instances are used in this version.
+% The ``hyperfunction'' class, containing 93 instances, is treated as the outlier class, while the other two classes are combined to form an inlier class.
 
-The \textbf{wine} dataset is a collection of results of a chemical analysis of several wines from a region in Italy.
-The data contain 129 samples having 13 attributes, and divided into 3 classes.
-Classes 2 and 3 form the inliers while class 1, downsampled to 10 instances, is the outlier class.
+% The \textbf{vertebral} dataset is derived from the ``Vertebral Column'' dataset.
+% 6 attributes are derived to represent the shape and orientation of the pelvis and lumbar spine.
+% Each instance comes from a different patient.
+% The ``Abnormal (AB)'' class of 210 instances are used as inliers while the ``Normal (NO)'' class is downsampled to 30 instances to be used as outliers.
+
+% The \textbf{vowels} dataset is derived from the ``Japanese Vowels'' dataset.
+% THE UCIMLR presents this data as a multivariate time series of nine speakers uttering two Japanese vowels.
+% For outlier detection, each frame of each time-series is treated as a separate point.
+% There are 12 features associated with each time series, and these translate as the attributes for each point.
+% Data from speaker 1, downsampled to 50 points, form the outlier class/
+% Speakers 6, 7, and 8 form the outlier class.
+% The rest of the points are discarded.
+% This leaves is with 1,456 points in 12 dimensions, of which 50 are outliers.
+
+% The \textbf{wbc} dataset is derived from the ``Wisconsin-Breast Cancer (Diagnostics)'' dataset.
+% The dataset records measurements for breast cancer cases.
+% The benign class is treated as the inlier class, while the malignant class is downsampled to 21 points and serves as the outlier class.
+% This leaves us with 278 points in 30 dimensions.
+
+% The \textbf{wine} dataset is a collection of results of a chemical analysis of several wines from a region in Italy.
+% The data contain 129 samples having 13 attributes, and divided into 3 classes.
+% Classes 2 and 3 form the inliers while class 1, downsampled to 10 instances, is the outlier class.
