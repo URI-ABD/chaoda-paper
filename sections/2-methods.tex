@@ -184,8 +184,8 @@ The time complexity of this algorithm is $O(|V|)$.
 
 \subsubsection{Random Walks:}
 We perform long random-walks on each component of a graph, and we count the number of times each cluster was visited.
-We consider the relative visitation counts among the clsuters to be inversely related to their anomalousness.
-The least visited clsuters are anomalous, and the most visited clusters are not.
+We consider the relative visitation counts among the clusters to be inversely related to their anomalousness.
+The least visited clusters are anomalous, and the most visited clusters are not.
 
 The algorithm is as follows:
 
@@ -209,7 +209,7 @@ Its worst-case time complexity is $O(|V|^2)$, but is often better because the tr
 We compute the transition probability matrix of each component of a graph that contains at least two clusters.
 We then compute successive powers of this matrix.
 This process will eventually converge (add citation here), and we find this convergent matrix.
-The sum of the values along a row is inversely related to the anomalousness of the respective clsuter.
+The sum of the values along a row is inversely related to the anomalousness of the respective cluster.
 
 The algorithm is as follows:
 
@@ -233,10 +233,10 @@ Its time worst-case time complexity is $O(|V|^2)$, but is often better in practi
 
 \subsection{Normalization}\label{subsec:methods:normalization}
 The individual methods produce outlier scores for each cluster, rather than for each point.
-We remedy this by having each point simply inherit the outlier score of the clsuter it belongs to.
+We remedy this by having each point simply inherit the outlier score of the cluster it belongs to.
 Since our graphs guarantee that each point is in exactly one cluster, and that every point from the dataset is accounted for, this inheritance assigns an outlier score to each point in a dataset.
 
-Howeverm, the individual methods still produce outlier scores in a wide range of values.
+However, the individual methods still produce outlier scores in a wide range of values.
 The only common feature among these scores is that low scores correspond to inliers and high scores correspond to outliers.
 Thesefore, scores from differnt methods or graphs cannot be directly compared to each other.
 We need some method for normalizing these scores to the same range.
