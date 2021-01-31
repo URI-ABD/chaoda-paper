@@ -18,7 +18,7 @@
 \documentclass{article}
 
 
-\usepackage{arxiv}
+% \usepackage{arxiv} # uncomment for preprint
 
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
@@ -30,34 +30,90 @@
 \usepackage{microtype}      % microtypography
 \usepackage{lipsum}
 \usepackage{graphicx}
+\usepackage{subfigure}
 \usepackage{amsmath}
 
+% Use the following line for the initial blind version submitted for review:
+\usepackage{icml2021}
 
-\title{Clustered Hierarchical Anomaly and Outlier Detection Algorithms}
 
 
-\author{
-    Najib Ishaq \\
-    Department of Computer Science and Statistics\\
-    University of Rhode Island\\
-    Kingston, RI\\
-    \texttt{najib\_ishaq@uri.edu} \\
-    \And
-    Thomas J. Howard III \\
-    Department of Computer Science and Statistics\\
-    University of Rhode Island\\
-    Kingston, RI\\
-    \texttt{thoward27@uri.edu} \\
-    \AND
-    Noah M. Daniels \\
-    Department of Computer Science and Statistics\\
-    University of Rhode Island\\
-    Kingston, RI\\
-    \texttt{noah\_daniels@uri.edu} \\
-}
+% \title{Clustered Hierarchical Anomaly and Outlier Detection Algorithms}
+
+
+
+% \author{
+%     Najib Ishaq \\
+%     Department of Computer Science and Statistics\\
+%     University of Rhode Island\\
+%     Kingston, RI\\
+%     \texttt{najib\_ishaq@uri.edu} \\
+%     \And
+%     Thomas J. Howard III \\
+%     Department of Computer Science and Statistics\\
+%     University of Rhode Island\\
+%     Kingston, RI\\
+%     \texttt{thoward27@uri.edu} \\
+%     \AND
+%     Noah M. Daniels \\
+%     Department of Computer Science and Statistics\\
+%     University of Rhode Island\\
+%     Kingston, RI\\
+%     \texttt{noah\_daniels@uri.edu} \\
+% }
 
 \begin{document}
-    \maketitle
+    % \maketitle
+
+% If accepted, instead use the following line for the camera-ready submission:
+%\usepackage[accepted]{icml2021}
+\twocolumn[
+\icmltitle{Clustered Hierarchical Anomaly and Outlier Detection Algorithms}    
+
+% It is OKAY to include author information, even for blind
+% submissions: the style file will automatically remove it for you
+% unless you've provided the [accepted] option to the icml2021
+% package.
+
+% List of affiliations: The first argument should be a (short)
+% identifier you will use later to specify author affiliations
+% Academic affiliations should list Department, University, City, Region, Country
+% Industry affiliations should list Company, City, Region, Country
+
+% You can specify symbols, otherwise they are numbered in order.
+% Ideally, you should not use this facility. Affiliations will be numbered
+% in order of appearance and this is the preferred way.
+\icmlsetsymbol{equal}{*}
+
+\begin{icmlauthorlist}
+\icmlauthor{Najib Ishaq}{equal,uri}
+\icmlauthor{Thomas J. Howard III}{equal,uri}
+\icmlauthor{Noah M. Daniels}{uri}
+\end{icmlauthorlist}
+
+\icmlaffiliation{uri}{Department of Computer Science \& Statistics, University of Rhode Island, Kingston, Rhode Island, USA}
+
+\icmlcorrespondingauthor{Noah M. Daniels}{noah\_daniels@uri.edu}
+
+% You may provide any keywords that you
+% find helpful for describing your paper; these are used to populate
+% the "keywords" metadata in the PDF but will not be shown in the document
+\icmlkeywords{Anomaly Detection, Outlier Detection, Manifold Learning}
+
+\vskip 0.3in
+]
+
+% this must go after the closing bracket ] following \twocolumn[ ...
+
+% This command actually creates the footnote in the first column
+% listing the affiliations and the copyright notice.
+% The command takes one argument, which is text to display at the start of the footnote.
+% The \icmlEqualContribution command is standard text for equal contribution.
+% Remove it (just {}) if you do not need this facility.
+
+%\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
+\printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
+
 
     \begin{abstract}
         Anomaly and outlier detection in datasets is a long-standing problem in machine learning.
@@ -78,6 +134,6 @@
     \input{sections/5-acknowledgements.tex}
 
     % \afterpage{\clearpage}
-    \bibliographystyle{IEEEtran}
+    \bibliographystyle{icml2021}
     \bibliography{references}
 \end{document}
