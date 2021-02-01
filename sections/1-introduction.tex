@@ -123,13 +123,13 @@ As the term \emph{manifold learning} has largely become synonymous with dimensio
 Once the manifold has been mapped, it can be used as input for a myriad of anomaly- or outlier-detection algorithms.
 We introduce an ensemble of six such algorithms implemented on CLAM: CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms).
 
-The manifold learning component builds on a hierarchical clustering approach, CHESS~\cite{ishaq2019clustered}, which was designed to accelerate approximate search on large high-dimensional datasets.
+The manifold mapping component is motivated by a hierarchical clustering approach, CHESS~\cite{ishaq2019clustered}, which was designed to accelerate approximate search on large high-dimensional datasets.
 While CHESS clustered to a specific depth solely for purposes of accelerating search, CLAM
 divisively clusters the data until each cluster contains only one datum, thus ``shattering'' the dataset.
 At any given depth of this tree, CLAM can induce a graph by mapping each cluster to a vertex of the graph, and drawing an edge between any two vertices whose corresponding cluster volumes overlap (that is, the sum of their radii is greater than the distances separating their centers).
 Clusters can be selected by a fixed depth, at heterogeneous depths based on geometric properties, such as local fractal dimension, cardinality, or cluster radius.
 Graphs can be constrained to a uniform-depth layer from the tree, and we call these \textit{layer graphs}.
-We call draphs that are not constrained to a certain layer \textit{optimal graphs}.
+We call graphs that are not constrained to a certain layer \textit{optimal graphs}.
 
 Inducing an optimal graph, across a variety of depths, effectively builds a manifold with a variety of ``resolutions'', given by the depth of the cluster in the tree. The intuition is that some regions of the manifold may be denser (or sparser) than others, and thus graphs induced from deeper (or shallower) clusters in those regions may be more informative.
 We can also consider clusters higher in the tree to be in some sense ``lower resolution'' than those at greater depth.
@@ -158,7 +158,7 @@ We consider several different approaches to identifying outliers and anomalies:
 \textbf{graph-based}, examining several graph-theoretic methods for anomaly detection, using the graphs constructed from clusters.
 
 Historically, clustering approaches have suffered from several problems.
-The most common deficiencies are: the effective treatment of high dimensionality, the ability to interpret results, and the ability to scale to exponentially-growing datasets~\cite{agrawal1998automatic}.
+The most common deficiencies are: ineffective treatment of high dimensionality, the inability to interpret results, and the inability to scale to exponentially-growing datasets~\cite{agrawal1998automatic}.
 CLAM, as we will demonstrate, largely resolves these issues.
 
 Na\"ively, distance-based approaches either require linear time in the cardinality of the data set for each query,
