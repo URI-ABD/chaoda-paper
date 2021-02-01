@@ -33,9 +33,9 @@ There have been few advancements in clustering techniques over the past decade~\
 This may be explained by the poor performance of clustering in high-dimensional space~\cite{zhang2013advancements} thus far.
 The major clustering approaches are as follows.
 
-\subsubsection{Distance-based Clustering}
-\label{subsubsec:introduction:clustering-based-approaches:distance-based-clustering}
-relies on some distance measure to partition data into some number of clusters.
+% \subsubsection{Distance-based Clustering}
+% \label{subsubsec:introduction:clustering-based-approaches:distance-based-clustering}
+Distance-based clustering relies on some distance measure to partition data into some number of clusters.
 Within this approach, the numbers and/or sizes of clusters are often predetermined: either user-specified, or chosen at random~\cite{wang2019progress}.
 Some examples of distance-based clustering are
 K-Means~\cite{macqueen1967some},
@@ -43,9 +43,9 @@ PAM~\cite{kaufman2009finding},
 CLARANS~\cite{ng1994efficient} and
 CLARA~\cite{kaufman2009finding}.
 
-\subsubsection{Hierarchical Clustering}
-\label{subsubsec:introduction:clustering-based-approaches:hierarchical-clustering}
-methods utilize a tree-like structure, where points are allocated into leaf nodes~\cite{wang2019progress}.
+% \subsubsection{Hierarchical Clustering}
+% \label{subsubsec:introduction:clustering-based-approaches:hierarchical-clustering}
+Hierarchical clustering methods utilize a tree-like structure, where points are allocated into leaf nodes~\cite{wang2019progress}.
 These tree-like structures can be created bottom-up (agglomerative clustering) or top-down (divisive clustering)~\cite{agrawal1998automatic}.
 A major drawback of these methods is the high cost of pairwise distance computations required to build each level of the tree.
 Examples of hierarchical clustering include
@@ -53,20 +53,16 @@ MST~\cite{charles_zahn_graph_1971},
 CURE~\cite{guha1998cure} and
 CHAMELEON~\cite{karypis1999hierarchical}.
 
-\subsubsection{Grid-based Clustering}
-\label{subsubsec:introduction:clustering-based-approaches:grid-based-clustering}
-works via segmenting the entire space into a discrete number of cells, and then scanning those cells to find regions of high density.
+% \subsubsection{Grid-based Clustering}
+% \label{subsubsec:introduction:clustering-based-approaches:grid-based-clustering}
+Grid-based clustering works via segmenting the entire space into a discrete number of cells, and then scanning those cells to find regions of high density.
 Utilizing a grid structure for clustering means that these algorithms typically scale well to larger datasets.
 Some examples of grid-based clustering include
 STING~\cite{wang1997sting},
 Wavecluster~\cite{sheikholeslami2000wavecluster}, and
-CLIQUE~\cite{agrawal1998automatic}.
+CLIQUE~\cite{agrawal1998automatic}. In this paper, we compare against two clustering-based approaches: Clustering Based Local Outlier Factor (CBLOF)~\cite{he2003cblof}, and
+Local Correlation Integral (LOCI)~\cite{papadimitriou2003loci}.
 
-In this paper, we compare against the following clustering-based approaches:
-\begin{itemize}
-    \item Clustering Based Local Outlier Factor (CBLOF)~\cite{he2003cblof},
-    \item Local Correlation Integral (LOCI)~\cite{papadimitriou2003loci},
-\end{itemize}
 
 
 \subsection{Density-based Approaches}
@@ -77,22 +73,15 @@ These algorithms generally do not work well when data are sparse or uniformly di
 Some examples of density-based clustering algorithms are
 DBSCAN~\cite{ester1996density} and
 DENCLUE~\cite{hinneburg1998efficient}.
+In this paper, we compare against Local Outlier Factor (LOF)~\cite{breunig2000lof}.
 
-In this paper, we compare against the following density-based approaches:
-\begin{itemize}
-    \item Local Outlier Factor (LOF)~\cite{breunig2000lof},
-\end{itemize}
 
 
 \subsection{Graph-based Approaches}
 \label{subsec:introduction:graph-based-approaches}
 
-Graph-based methods build graph representations of the data by treating points, or collections of points, as nodes in a graph and drawing edges between them based of various rules.
+Graph-based methods build graph representations of the data by treating points, or collections of points, as nodes in a graph and drawing edges between them based of various rules. In this paper, we compare against the following Connectivity-based Outlier Factor (COF)~\cite{tang2002cof}.
 
-In this paper, we compare against the following graph-based approaches:
-\begin{itemize}
-    \item Connectivity-based Outlier Factor (COF)~\cite{tang2002cof},
-\end{itemize}
 
 
 \subsection{Distanced-based Approaches}
@@ -100,18 +89,12 @@ In this paper, we compare against the following graph-based approaches:
 
 Distance-based methods find anomalous points via distance comparisons.
 These methods largely employ k-Nearest Neighbors as their substrate~\cite{wang2019progress}.
-Distance-based approaches tend to use the following intuitions:
-\begin{itemize}
-    \item points with fewer than $p$ other points within some distance $d$ are outliers;
-    \item the $n$ points with the greatest distances to their $k^{th}-$nearest neighbor are outliers;
-    \item the $n$ points with the greatest average distance to their $k$ nearest neighbors are outliers.
-\end{itemize}
+Distance-based approaches tend to use the following intuitions. First, points with fewer than $p$ other points within some distance $d$ are outliers; second, the $n$ points with the greatest distances to their $k^{th}-$nearest neighbor are outliers;
+and finally, the $n$ points with the greatest average distance to their $k$ nearest neighbors are outliers.
 
-In this paper, we compare against the following distance-based approaches:
-\begin{itemize}
-    \item k-Nearest Neighbors (kNN)~\cite{ramaswamy2000efficient, sridhar2000knn, fabrizio2002knn},
-    \item Subspace Outlier Detection (SOD)~\cite{kriegel2009sod},
-\end{itemize}
+In this paper, we compare against
+k-Nearest Neighbors (kNN)~\cite{ramaswamy2000efficient, sridhar2000knn, fabrizio2002knn},
+and Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 
 
 \subsection{Other Approaches}
@@ -120,16 +103,14 @@ In this paper, we compare against the following distance-based approaches:
 There are several approaches to anomaly detection that do not fall neatly into any of the aforementioned categories.
 These methods often rely on Support-Vector Machines, Random Forests, or Histograms to detect outliers.
 
-In this paper, we compare against the following miscellaneous approaches:
-\begin{itemize}
-    \item Histogram-Based Outlier Detection (HBOS)\cite{goldstein2012hbos},
-    \item Isolation-Forest Outlier Detector (IFOREST)~\cite{tony2008iforest,tony2012iforest},
-    \item One-class Support Vector Machine (OCSVM)~\cite{sholkopf2001ocsvm},
-    \item Linear Model Deviation-base outlier Detection(LMDD)~\cite{arning1996lmdd},
-    \item Lightweight Online Detector of Anomalies (LODA)~\cite{pevny2016loda},
-    \item Minimum Covariance Determinant (MCD)~\cite{rousseeuw1999mcd,hardin2004mcd},
-    \item Subspace Outlier Detection (SOD)~\cite{kriegel2009sod},
-\end{itemize}
+In this paper, we compare against a number of miscellaneous approaches:
+Histogram-Based Outlier Detection (HBOS)\cite{goldstein2012hbos},
+Isolation-Forest Outlier Detector (IFOREST)~\cite{tony2008iforest,tony2012iforest},
+One-class Support Vector Machine (OCSVM)~\cite{sholkopf2001ocsvm},
+Linear Model Deviation-base outlier Detection(LMDD)~\cite{arning1996lmdd},
+Lightweight Online Detector of Anomalies (LODA)~\cite{pevny2016loda},
+Minimum Covariance Determinant (MCD)~\cite{rousseeuw1999mcd,hardin2004mcd},
+and Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 
 
 \subsection{CHAODA}
