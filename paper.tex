@@ -8,7 +8,6 @@
 % \usepackage{nicefrac}       % compact symbols for 1/2, etc.
 % \usepackage{microtype}      % microtypography
 % \usepackage{mathtools}
-% \usepackage{afterpage}
 % \usepackage{parselines}
 % \usepackage{verbatim}
 % \usepackage[ruled]{algorithm2e}
@@ -32,6 +31,7 @@
 \usepackage{graphicx}
 \usepackage{subfigure}
 \usepackage{amsmath}
+\usepackage{placeins}
 
 % Use the following line for the initial blind version submitted for review:
 \usepackage{icml2021}
@@ -136,6 +136,7 @@
     % \input{sections/5-acknowledgements.tex}
 
     % \afterpage{\clearpage}
+    \FloatBarrier
     \bibliographystyle{icml2021}
     \bibliography{references}
 \end{document}
