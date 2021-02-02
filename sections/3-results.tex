@@ -2,7 +2,8 @@
 \label{sec:results}
 
 Performance on the 6 training datasets is shown in the Supplement.
-The performance on the test set of datasets is split among Tables~\ref{table:results:test-performance-1} and~\ref{table:results:test-performance-2}.
+% The performance on the test set of datasets is split among Tables~\ref{table:results:test-performance-1} and~\ref{table:results:test-performance-2}.
+The performance on the test set of datasets is split among Tables~\ref{table:results:test-performance}.
 Each column shows the AUC ROC scores of CHAODA and every competitor.
 The best, i.e.\ highest, score, and every score with 0.02 of that best score, are presented in bold.
 If a method took longer than 10 hours on a dataset, we terminated that run and marked the corresponding cell with ``\textit{TO}''.
@@ -28,8 +29,10 @@ With the Rust implementation, preliminary results support a two-orders-of-magnit
 
 \begin{table*}[!t]
 \renewcommand{\arraystretch}{1.25}
-\caption{Performance on the first half of the Test Datasets}
-\label{table:results:test-performance-1}
+% \caption{Performance on the first half of the Test Datasets}
+\caption{Performance on the Test Datasets}
+% \label{table:results:test-performance-1}
+\label{table:results:test-performance}
 \vskip 0.15in
 \begin{center}
 \begin{small}
@@ -78,24 +81,24 @@ With the Rust implementation, preliminary results support a two-orders-of-magnit
 \hline
                 VAE &                0.65 &    \textbf{0.95} &            0.74 &           0.52 &           0.48 &          0.51 &                0.65 &            0.83 &           0.56 \\
 \hline
-\end{tabular}
-\end{sc}
-\end{small}
-\end{center}
-\vskip -0.1in
-\end{table*}
+% \end{tabular}
+% \end{sc}
+% \end{small}
+% \end{center}
+% \vskip -0.1in
+% \end{table*}
 
 
 
-\begin{table*}[!b]
-\renewcommand{\arraystretch}{1.25}
-\caption{Performance on the second half of the Test Datasets}
-\label{table:results:test-performance-2}
-\vskip 0.15in
-\begin{center}
-\begin{small}
-\begin{sc}
-\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
+% \begin{table*}[!b]
+% \renewcommand{\arraystretch}{1.25}
+% \caption{Performance on the second half of the Test Datasets}
+% \label{table:results:test-performance-2}
+% \vskip 0.15in
+% \begin{center}
+% \begin{small}
+% \begin{sc}
+% \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \hline
 \textbf{model} & \textbf{musk} & \textbf{optdigits} & \textbf{pima} & \textbf{satimage-2} & \textbf{smtp} & \textbf{vertebral} & \textbf{vowels} &  \textbf{wbc} & \textbf{wine} \\
 \hline
