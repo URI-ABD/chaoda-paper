@@ -2,10 +2,11 @@
 \label{sec:discussion}
 
 We have presented CHAODA, an ensemble of four algorithms that use the map of the underlying manifold produced by CLAM\@.
-The four individual algorithms are simple to implement on top of CLAM and, when combined into an ensemble, often outperform the state-of-the-art in anomaly detection.
+The six individual algorithms are simple to implement on top of CLAM and, when combined into an ensemble, often outperform the state-of-the-art in anomaly detection.
 
 CLAM uses the geometric and topological properties of fractal dimension and metric entropy of the data to build a map of the low-dimensional manifold that the data occupy.
-CLAM builds on the clustering algorithm from CHESS~\cite{ishaq2019clustered}, adding a novel graph-induction approach and a notion of optimal depths, learned via a form of ``meta-machine-learning'' and transfer learning.
+CLAM is inspired by the clustering algorithm from CHESS~\cite{ishaq2019clustered}, but differs by the introduction a novel graph-induction approach and a notion of optimal depths, learned via a form of ``meta-machine-learning'' and transfer learning.
+CLAM's selection of ``poles'' during clustering is also more efficient than CHESS.
 CHAODA builds on this manifold-mapping framework for anomaly and outlier detection.
 Intuitively, we expect CHAODA to perform particularly well when the data lie on an ``interesting'' manifold, and to perform merely average when the data derive from an easily-described distribution (or ``boring'' manifold).
 Just as CHESS demonstrated an acceleration of search when the data exhibited \emph{low fractal dimension} and \emph{low metric entropy}, with CHAODA, we see that AUC scores are vastly improved when the data exhibit these properties and are often competitive when the data do not exhibit these properties.

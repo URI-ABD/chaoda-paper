@@ -30,23 +30,23 @@ The CLAM clustering algorithm is defined in Algorithm~\ref{alg:clam}.
 \caption{Cluster} % give the algorithm a caption
 \label{alg:clam} % and a label for \ref{} commands later in the document
 \begin{algorithmic}[1] % enter the algorithmic environment
-\Require $minsize \gets 1$
-\Require $data$, a dataset.
-\State $d \gets 0$
-\State $clusters = \{\}$
-\State $n = |data|$
-\While{true}
-    \State $seeds \gets \sqrt{n}$ random points from $data$
-    \State $l, r \gets \{l, r | l,r \in seeds \land l,r = \argmax d(x,y) | x,y \in seeds\}$
-    \State $clusters[l] \gets \{x | x \in data \land d(l,x) \le d(r,x)\}$
-    \State $clusters[r] \gets \{x | x \in data \land d(r,x) < d(l,x)\}$
-    \If{$|clusters[l]| > minsize$}
-        \State Cluster(clusters[l])
-    \Endif
-    \If{$|clusters[r]| > minsize$}
-        \State Cluster(clusters[r])
-    \Endif
-\Endwhile
+\STATE $minsize \leftarrow 1$
+\STATE $data$, a dataset.
+\STATE $d \gets 0$
+\STATE $clusters = \{\}$
+\STATE $n = |data|$
+\WHILE{true}
+    \STATE $seeds \leftarrow \sqrt{n}$ random points from $data$
+    \STATE $l, r \gets \{l, r | l,r \in seeds \land l,r = \argmax d(x,y) | x,y \in seeds\}$
+    \STATE $clusters[l] \gets \{x | x \in data \land d(l,x) \le d(r,x)\}$
+    \STATE $clusters[r] \gets \{x | x \in data \land d(r,x) < d(l,x)\}$
+    \IF{$|clusters[l]| > minsize$}
+        \STATE Cluster(clusters[l])
+    \ENDIF
+    \IF{$|clusters[r]| > minsize$}
+        \STATE Cluster(clusters[r])
+    \ENDIF
+\ENDWHILE
 \end{algorithmic}
 \end{algorithm}
 
@@ -139,10 +139,10 @@ Points in the same cluster are considered equally anomalous and points in cluste
     \caption{Relative Cluster Cardinality}
     \label{alg:rclc}
 \begin{algorithmic}[1]
-    \Require $G$, a graph
-    \For {cluster $c \in G$}
-    \State $scores[c] \gets -|c|$
-    \EndFor
+    \REQUIRE $G$, a graph
+    \FOR {cluster $c \in G$}
+    \STATE $scores[c] \gets -|c|$
+    \ENDFOR
 \end{algorithmic}
 \end{algorithm}
 
@@ -155,10 +155,10 @@ Points in clusters in relatively small components are considered more anomalous 
     \caption{Relative Component Cardinality}
     \label{alg:rcc}
 \begin{algorithmic}[1]
-    \Require $G$, a graph
-    \For {component $C \in G$}
-        \State $scores[C] \gets -|C|$
-    \EndFor
+    \REQUIRE $G$, a graph
+    \FOR {component $C \in G$}
+        \STATE $scores[C] \gets -|C|$
+    \ENDFOR
 \end{algorithmic}
 \end{algorithm}
 
@@ -175,15 +175,15 @@ Its time complexity is $O(|E| \cdot |V|)$.
     \caption{Graph Neighborhood Size}
     \label{alg:gns}
 \begin{algorithmic}[1]
-    \Require $G$, a graph
-    \Require $f \in \mathbb{R}$ in the range $(0,1]$ ($0.25$ by default).
-    \For {cluster $c \in G$}
-        \State $e_c \gets$ the eccentricity of $c$
-        \State $s \gets e_c \times f$
-        \State perform a breadth-first traversal from $c$ with $s$ steps
-        \State $v \gets$ the number of unique clusters visited by the traversal
-        \State $scores[c] \gets -v$
-    \EndFor
+    \REQUIRE $G$, a graph
+    \REQUIRE $f \in \mathbb{R}$ in the range $(0,1]$ ($0.25$ by default).
+    \FOR {cluster $c \in G$}
+        \STATE $e_c \gets$ the eccentricity of $c$
+        \STATE $s \gets e_c \times f$
+        \STATE perform a breadth-first traversal from $c$ with $s$ steps
+        \STATE $v \gets$ the number of unique clusters visited by the traversal
+        \STATE $scores[c] \gets -v$
+    \ENDFOR
 \end{algorithmic}
 \end{algorithm}
 
@@ -202,11 +202,11 @@ Points with a low value of these accumulated ratios are considered more anomalou
     \caption{Child-Parent Cardinality Ratio}
     \label{alg:cpcr}
 \begin{algorithmic}[1]
-    \Require $G$, a graph
-    \For {cluster $c \in G$}
-        \State $p \gets$ the parent cluster of $c$
-        \State $scores[c] \gets \frac{|p|}{|c|}$
-    \EndFor
+    \REQUIRE $G$, a graph
+    \FOR {cluster $c \in G$}
+        \STATE $p \gets$ the parent cluster of $c$
+        \STATE $scores[c] \gets \frac{|p|}{|c|}$
+    \ENDFOR
 \end{algorithmic}
 \end{algorithm}
 
@@ -224,19 +224,19 @@ The algorithm is as follows:
     \caption{Random Walks}
     \label{alg:rw}
 \begin{algorithmic}[1]
-    \Require $G = (V,E)$, a graph
-    \State Initialize $v[c] \gets 0 \forall c \in G$
-    \State Initialize $s$ to be $10 \times |V|$
-    \For {cluster $c \in G$}
-        \State $c' \gets c$
-        \For{$i=1$ {\bfseries to} $s$}
-            \State $c' \gets n(d),$ a random neighbor of $d$
-            \State increment $v[c']$
-        \EndFor
-    \EndFor
-    \For {cluster $c \in G$}
-        \State $scores[c] \gets \frac{|p|}{|c|}$
-    \EndFor
+    \REQUIRE $G = (V,E)$, a graph
+    \STATE Initialize $v[c] \gets 0 \forall c \in G$
+    \STATE Initialize $s$ to be $10 \times |V|$
+    \FOR {cluster $c \in G$}
+        \STATE $c' \gets c$
+        \FOR{$i=1$ {\bfseries to} $s$}
+            \STATE $c' \gets n(d),$ a random neighbor of $d$
+            \STATE increment $v[c']$
+        \ENDFOR
+    \ENDFOR
+    \FOR {cluster $c \in G$}
+        \STATE $scores[c] \gets \frac{|p|}{|c|}$
+    \ENDFOR
 \end{algorithmic}
 \end{algorithm}
 
@@ -253,17 +253,17 @@ Its time worst-case time complexity is $O(|V|^2)$, but is often better in practi
     \caption{Stationary Probabilities}
     \label{alg:sp}
 \begin{algorithmic}[1]
-    \Require $G$, a graph
-    \For {component $C \in G$}
-        \State $M \gets$ the transition matrix for $C$
-        \Repeat
-            \State $M \gets M^2$
-        \Until $M$ converges
-        \For {cluster $c \in C$}
-            \State $s \gets $ the row from $M$ corresponding to $c$
-            \State $scores[c] \gets -\Sigma(s)$ 
-        \EndFor
-    \EndFor
+    \REQUIRE $G$, a graph
+    \FOR {component $C \in G$}
+        \STATE $M \gets$ the transition matrix for $C$
+        \REPEAT
+            \STATE $M \gets M^2$
+        \UNTIL $M$ converges
+        \FOR {cluster $c \in C$}
+            \STATE $s \gets $ the row from $M$ corresponding to $c$
+            \STATE $scores[c] \gets -\Sigma(s)$ 
+        \ENDFOR
+    \ENDFOR
 \end{algorithmic}
 \end{algorithm}
 
@@ -297,6 +297,7 @@ This graph is then used with the corresponding individual algorithm to calculate
 The scores from each individual algorithm are then combined into an ensemble.
 We present the AUC scores from this ensemble in Section~\ref{sec:results}.
 
+% TODO fully explain ensemble methods
 % TODO: Add a note on speed and the settings between CHAODA-fast and CHAODA
 
 
@@ -305,8 +306,17 @@ We present the AUC scores from this ensemble in Section~\ref{sec:results}.
 We sourced 24 datasets, all from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}, for training CHAODA and testing its performance.
 All of these datasets are adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and have been standardized, by ODDS, for anomaly and outlier detection benchmarks.
 
-We provide a summary of the datasets in the supplementary materials.
-For more details on each dataset, please refer to the supplementary materials.
 
 
+% TODO: Did we repeat this experiment with a different six? Was it actually at random? Najib: I'm planning on upping this to 8 datasets, and then doing 4-fold cross-validation. This selection was completely random. np.random.seed(42)
+Of these 24 datasets, we selected a random sample of 6 datasets, shown in Table~\ref{table:results:train-performance}, to use for training CHAODA\@.
+The remaining datasets were used to measure the performance of CHAODA\@.
+The test set of datasets is split among Tables~\ref{table:results:test-performance-1} and~\ref{table:results:test-performance-2}.
+
+We provide more details on the datasets, including their size, dimensionality, and fraction of outliers, in the supplementary materials.
+
+Note that CHAODA is an unsupervised algorithm for outlier detection.
+As such, we compare only against other unsupervised algorithms.
+We compared against $n$ unsupervised algorithms implemented in pyOD~\cite{zhao2019pyod}, as well as (list others here). % TODO fill this in
+A supervised version of CHAODA will be possible future work.
 

@@ -1,30 +1,18 @@
 \section{Results}
 \label{sec:results}
 
-We have sourced 24 datasets from ODDS~\cite{rayana2016odds}.
-These datasets had already been preprocessed to standardize them for outlier detection benchmarks.
-
-% TODO: Did we repeat this experiment with a different six? Was it actually at random? Najib: I'm planning on upping this to 8 datasets, and then doing 4-fold cross-validation. This selection was completely random. np.random.seed(42)
-Of these 24 datasets, we selected a random sample of 6 datasets, shown in Table~\ref{table:results:train-performance}, to use for training CHAODA\@.
-The remaining datasets were used to measure the performance of CHAODA\@.
+Performance on the 6 training datasets is shown in Table~\ref{table:results:train-performance}.
 The performance on the test set of datasets is split among Tables~\ref{table:results:test-performance-1} and~\ref{table:results:test-performance-2}.
 Each column shows the AUC ROC scores of CHAODA and every competitor.
 The best, i.e.\ highest, score, and every score with 0.02 of that best score, are presented in bold.
-% TODO: We should definitely let these all run for more than 10 minutes, no?
-% Najib: Yes. Later. I'll give each method several hours.
 If a method took longer than 10 hours on a dataset, we terminated that run and marked the corresponding cell with ``\textit{time}''.
 
-Note that CHAODA is an unsupervised algorithm for outlier detection.
-As such, we compare only against other unsupervised algorithms.
-A supervised version of the algorithm is on its way.
-Once implemented, we will add comparisons against supervised algorithms.
-
 Also note that we implemented CLAM and CHAODA entirely in Python.
-While we use the provided wrappers for each method we compare against, those methods are often implemented in C and C++, with heavy usage of header-only libraries and template-meta-programming (Noah, HAALP!).
+While we use the provided wrappers for each method we compare against, those methods are often implemented in C and C++.
 Several other algorithms utilize deep learning frameworks like tensorflow and leverage the GPU.
 Therefore, the comparison on wall-clock time performance is not truly fair to CHAODA.
-We are reimplementing CLAM and CHAODA in Rust.
-With the Rust implementation, we expect a two-orders-of-magnitude improvement in wall-clock times.
+We are currently reimplementing CLAM and CHAODA in Rust.
+With the Rust implementation, preliminary results support a two-orders-of-magnitude improvement in wall-clock times.
 
 % TODO summarize results in text here, but I don't want to rewrite this twice, so let's finalize everything first.
 
