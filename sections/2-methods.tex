@@ -299,7 +299,7 @@ Once the scores are in a uniform range, we are ready for the ensemble.
 
 Given a dataset and a list of distance functions for the dataset, we start by building a CLAM tree for each distance function on the dataset.
 we extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
-Given the set of models learned from the training datasets described in Section~\ref{subsec:methods:induced-graphs}, we use each model rack every cluster.
+Given the set of models learned from the training datasets described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster.
 These rankings are normalized by the cardinality of each cluster.
 The highest ranked clusters from each tree are then used to build a graph.
 This gives us one graph for each combination of individual algorithm, meta-ML model, and distance function used.
@@ -312,7 +312,7 @@ We present the AUC scores from this ensemble in Section~\ref{sec:results}.
 
 \subsubsection{A Note on Speed}
 
-During testing, we noticed that even though we oftes see $|V| \ll n $, where $n$ is the number of points in the dataset and $V$ is the set of vertices in a graph, the more expensive methods from~\ref{subsec:methods:individual-algorithms} took too long to run.
+During testing, we noticed that even though we often see $|V| \ll n $, where $n$ is the number of points in the dataset and $V$ is the set of vertices in a graph, the more expensive methods from~\ref{subsec:methods:individual-algorithms} took too long to run.
 We remedy this by only running the expensive algorithms, i.e.\ Graph Neighborhood Size, Random Walks, and Stationary Probabilities, when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
 We compared the effect on AUC of using this threshold and present the results in Table~\ref{table:results:test-performance} under the CHAODA-fast rows as compared to not using the threshold under the CHAODA rows.
 Any difference in performance, when it exists, is negligble.
