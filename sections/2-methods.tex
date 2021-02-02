@@ -57,7 +57,7 @@ Each of these properties is computed during the process of clustering, and store
 In particular, we use the parent-child ratios and the exponential moving averages of those ratios to generalize our method from a small set of datasets to a large, distinct set of datasets.
 
 \subsubsection{Graphs}
-Clusters that are near each other in the embedding space sometimes have overlapping volumes, i.e.\ the distance between their centers is less than or equal to the sum of their radii.
+Clusters that are close in the embedding space sometimes have overlapping volumes, i.e.\ the distance between their centers is less than or equal to the sum of their radii.
 We define a graph $G=(V,E)$ with the selected clusters in one-to-one correspondence to vertices, and with an edge between two vertices if and only if their corresponding clusters overlap.
 Note that any given datapoint will be a member of only one cluster at a given depth in the tree, even though it might exist inside another clusters' radii.
 Thus, the clusters are not necessarily hyperspheres, but rather polytopes akin to a high-dimensional version of a Voronoi diagram~\cite{voronoi1908nouvelles}.
@@ -72,7 +72,7 @@ In this work we consider the cardinality of a graph to be \textit{vertex cardina
 \subsubsection{The Manifold}
 % describe Manifold as containing the tree and all the graphs.
 According to the ``manifold hypothesis''~\cite{fefferman2016testing},
-datasets that come from constrained generating processes and are embedded in a high-dimensional space typically only occupy a low-dimensional manifold in that embedding space.
+datasets that come from constrained generating processes are typically embedded in a high-dimensional space typically only occupy a low-dimensional manifold in that space.
 
 The graphs discussed so far map this low dimensional manifold in the original embedding space.
 Different graphs do this at different levels of local and/or global resolution.
