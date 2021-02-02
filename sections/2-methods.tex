@@ -5,12 +5,9 @@
 \label{subsec:methods:clam}
 
 We present a manifold-mapping algorithm called CLAM (Clustered Learning of Approximate Manifolds).
-% This is an extension of earlier work presented in~\cite{ishaq2019clustered}.
-
-To start, we need a dataset and a distance function on the points in that dataset.
+As input, we need a dataset and a distance function on the points in that dataset.
 A dataset is a collection of $n$-points in a $D$-dimensional embedding space, $\textbf{X} = \{x_1 \dots x_n\}, x_i \in \mathbb{R}^D$.
-A Distance Function takes two points in the dataset and deterministically produces a non-negative real number, $f : (\mathbb{R}^D, \mathbb{R}^D) \mapsto \mathbb{R}^+$
-
+A Distance Function takes two points in the dataset and deterministically produces a non-negative real number, $f : (\mathbb{R}^D, \mathbb{R}^D) \mapsto \mathbb{R}^+$.
 The distance must be such that $f(x, x) = 0$ and $f(x, y) = f(y, x)$ $\forall x, y \in X$.
 The distance function may or may not obey the triangle-inequality.
 In this paper we used $L1$ and $L2$ norms, which are metrics.
@@ -57,7 +54,7 @@ These include the \textit{cardinality}, the number of points in a cluster;
 and \textit{local fractal dimension}, as described in~\cite{ishaq2019clustered}.
 We can also consider individual \textit{parent-child ratios} of cardinality, radius, and local fractal dimension, as well as \textit{exponential moving averages} of those parent-child ratios along a branch of the tree.
 Each of these properties is computed during the process of clustering, and stored as metadata for each cluster.
-In particular, we use the parent-child ratios and the exponential moving averages of those ratios to help generalize our anomaly detection method from a small set of datasets to a large, distinct set of datasets.
+In particular, we use the parent-child ratios and the exponential moving averages of those ratios to generalize our method from a small set of datasets to a large, distinct set of datasets.
 
 \subsubsection{Graphs}
 Clusters that are near each other in the embedding space sometimes have overlapping volumes, i.e.\ the distance between their centers is less than or equal to the sum of their radii.

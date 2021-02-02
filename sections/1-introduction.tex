@@ -124,7 +124,7 @@ We introduce an ensemble of six such algorithms implemented on CLAM: CHAODA (Clu
 
 The manifold mapping component is motivated by a hierarchical clustering approach, CHESS~\cite{ishaq2019clustered}, which was designed to accelerate approximate search on large high-dimensional datasets.
 While CHESS clustered to a specific depth solely for purposes of accelerating search, CLAM
-divisively clusters the data until each cluster contains only one datum, thus ``shattering'' the dataset.
+divisively clusters the data until each cluster contains only one datum.
 At any given depth of this tree, CLAM can induce a graph by mapping each cluster to a vertex of the graph, and drawing an edge between any two vertices whose corresponding cluster volumes overlap (that is, the sum of their radii is greater than the distances separating their centers).
 Clusters can be selected by a fixed depth, or at heterogeneous depths based on geometric properties, such as local fractal dimension, cardinality, or cluster radius.
 Graphs can be constrained to a uniform-depth layer from the tree, and we call these \textit{layer graphs}.
@@ -147,6 +147,6 @@ Historically, clustering approaches have suffered from several problems.
 The most common deficiencies are: ineffective treatment of high dimensionality, the inability to interpret results, and the inability to scale to exponentially-growing datasets~\cite{agrawal1998automatic}.
 CLAM, as we will demonstrate, largely resolves these issues.
 
-Na\"ively, distance-based approaches either require linear time in the cardinality of the data set for each query,
+Na\"ively, distance-based approaches require either linear time in the size of the data set for each query,
 or quadratic time to build an index before any queries can be made.
-CLAM builds an index in expected log-linear time and all CHAODA methods are sublinear in the cardinality of the dataset.
+CLAM builds an index in expected $\mathcal{O}(n \lg n)$ time, and all CHAODA methods are sublinear in the size of the dataset.
