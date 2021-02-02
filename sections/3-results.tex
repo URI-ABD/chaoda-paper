@@ -1,7 +1,7 @@
 \section{Results}
 \label{sec:results}
 
-Performance on the 6 training datasets is shown in Table~\ref{table:results:train-performance}.
+Performance on the 6 training datasets is shown in the Supplement.
 The performance on the test set of datasets is split among Tables~\ref{table:results:test-performance-1} and~\ref{table:results:test-performance-2}.
 Each column shows the AUC ROC scores of CHAODA and every competitor.
 The best, i.e.\ highest, score, and every score with 0.02 of that best score, are presented in bold.
@@ -22,65 +22,6 @@ With the Rust implementation, preliminary results support a two-orders-of-magnit
 % However, on the test set, CHAODA outperformed all competitors on 10 of the 18 datasets.
 
 
-\begin{table*}[!t]
-\renewcommand{\arraystretch}{1.25}
-\caption{Performance on Train Datasets}
-\label{table:results:train-performance}
-% \centering
-\vskip 0.15in
-\begin{center}
-\begin{small}
-\begin{sc}
-\begin{tabular}{|c|c|c|c|c|c|c|}
-\hline
-\textbf{model} & \textbf{annthyroid} & \textbf{mnist} & \textbf{pendigits} & \textbf{satellite} & \textbf{shuttle} & \textbf{thyroid} \\
-\hline
-        CHAODA-fast &                0.64 &  \textbf{0.78} &      \textbf{0.94} &      \textbf{0.79} &             0.51 &    \textbf{0.89} \\
-\hline
-        CHAODA &                0.65 &           0.73 &      \textbf{0.95} &               0.73 &             0.85 &    \textbf{0.89} \\
-\hline
-                ABOD &                0.50 &           0.60 &               0.53 &               0.51 &             0.54 &             0.50 \\
-\hline
-        AutoEncoder &                0.69 &           0.67 &               0.58 &               0.63 &             0.94 &             0.88 \\
-\hline
-                CBLOF &                0.59 &           0.62 &               0.59 &               0.68 &    \textbf{0.99} &             0.87 \\
-\hline
-                COF &                0.59 &           0.56 &               0.53 &               0.56 &             0.52 &             0.49 \\
-\hline
-                HBOS &       \textbf{0.84} &           0.53 &               0.52 &               0.62 &             0.74 &             0.86 \\
-\hline
-        IFOREST &                0.70 &           0.61 &               0.63 &               0.70 &             0.91 &    \textbf{0.91} \\
-\hline
-                KNN &                0.65 &           0.65 &               0.51 &               0.56 &             0.53 &             0.56 \\
-\hline
-                LMDD &                0.52 &           0.59 &               0.56 &               0.42 &             0.92 &             0.70 \\
-\hline
-                LOCI &         \textit{TO} &    \textit{TO} &        \textit{TO} &        \textit{TO} &      \textit{TO} &      \textit{TO} \\
-\hline
-                LODA &                0.63 &           0.66 &               0.57 &               0.65 &             0.96 &    \textbf{0.90} \\
-\hline
-                LOF &                0.60 &           0.57 &               0.52 &               0.57 &             0.53 &             0.49 \\
-\hline
-                MCD &                0.72 &           0.57 &               0.53 &               0.58 &             0.96 &             0.85 \\
-\hline
-        MOGAAL &                0.46 &    \textit{TO} &               0.67 &               0.59 &      \textit{TO} &             0.49 \\
-\hline
-                OCSVM &                0.62 &           0.63 &               0.59 &               0.62 &    \textbf{0.97} &             0.78 \\
-\hline
-                SOD &                0.64 &           0.55 &               0.52 &               0.52 &      \textit{TO} &             0.53 \\
-\hline
-        SOGAAL &                0.46 &           0.57 &               0.57 &               0.60 &             0.96 &             0.49 \\
-\hline
-                SOS &                0.50 &           0.52 &               0.52 &               0.47 &      \textit{TO} &             0.50 \\
-\hline
-                VAE &                0.69 &           0.67 &               0.58 &               0.63 &             0.94 &             0.88 \\
-\hline
-\end{tabular}
-\end{sc}
-\end{small}
-\end{center}
-\vskip -0.1in
-\end{table*}
 
 
 
@@ -210,6 +151,8 @@ With the Rust implementation, preliminary results support a two-orders-of-magnit
 
 For the following table(s), we include comparisons against methods for which we could find a usable implementation.
 For these algorithms, we compare the performance of CHAODA against that reported by the respective authors.
+
+% TODO probably no space for this table, so just mention the few results in the text.
 
 % TODO: Fill this in
 

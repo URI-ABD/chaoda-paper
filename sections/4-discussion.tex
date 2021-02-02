@@ -13,15 +13,15 @@ Just as CHESS demonstrated an acceleration of search when the data exhibited \em
 
 % TODO choose two different datasets, not to illustrate performance but to illustrate this point!
 
-A simple visualization in Figure~\ref{fig:conclusions:umap-embeddings} using UMAP~\cite{mcinnes2018umap} illustrates two different examples; the anomalies in one dataset, where CHAODA outperforms other methods, appear to be at the edges of a complex manifold (though, clearly, the UMAP projection has distorted the manifold) while in another dataset, where most methods perform fairly comparably, the distribution is less interesting and many anomalies are distributed apparently randomly across it.
+% A simple visualization in Figure~\ref{fig:conclusions:umap-embeddings} using UMAP~\cite{mcinnes2018umap} illustrates two different examples; the anomalies in one dataset, where CHAODA outperforms other methods, appear to be at the edges of a complex manifold (though, clearly, the UMAP projection has distorted the manifold) while in another dataset, where most methods perform fairly comparably, the distribution is less interesting and many anomalies are distributed apparently randomly across it.
 
-\begin{figure*}
-   \centering
-   \includegraphics[width=2in]{images/umaps/mnist-euclidean-umap2d.png}
-   \includegraphics[width=2in]{images/umaps/ionosphere-euclidean-umap2d.png}
-   \caption{UMAP projection of MNIST (left) and Ionosphere (right). Anomalies are in gray. Note that for MNIST, the UMAP projection does not find much structure, though most of the anomalies congregate to one side. For Ionosphere, there is a single main component to the manifold, with two more distant clusters, and anomalies tend to be at the edges of a manifold. Most algorithms perform comparably on MNIST, while CHAODA outperforms others on Ionosphere.}
-   \label{fig:conclusions:umap-embeddings}
-\end{figure*}
+% \begin{figure*}
+%    \centering
+%    \includegraphics[width=2in]{images/umaps/mnist-euclidean-umap2d.png}
+%    \includegraphics[width=2in]{images/umaps/ionosphere-euclidean-umap2d.png}
+%    \caption{UMAP projection of MNIST (left) and Ionosphere (right). Anomalies are in gray. Note that for MNIST, the UMAP projection does not find much structure, though most of the anomalies congregate to one side. For Ionosphere, there is a single main component to the manifold, with two more distant clusters, and anomalies tend to be at the edges of a manifold. Most algorithms perform comparably on MNIST, while CHAODA outperforms others on Ionosphere.}
+%    \label{fig:conclusions:umap-embeddings}
+% \end{figure*}
 
 % \subsection{Future Directions}
 % \label{subsec:discussion:duture-directions}
