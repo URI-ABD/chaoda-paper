@@ -22,10 +22,34 @@ The distance function may or may not obey the triangle-inequality, but in this p
 % describe creation of Cluster Tree
 We start by building a divisive-hierarchical clustering of the data based on a random sampling of $\sqrt(k)$ datapoints, for $k$ points at a given level of the tree, which achieves clustering in expected $\mathcal{O}(n \lg n)$ time.
 This gives us a tree of clusters, with the root containing every point in the dataset, and each leaf containing a single point from the dataset.
+The CLAM clustering algorithm is defined in Algorithm~\ref{alg:clam}.
 % The procedure is detailed in~\cite{ishaq2019clustered}.
 % We can't cite our work as "us" during the review process
 
-% TODO add description of algorithm
+\begin{algorithm} % enter the algorithm environment
+\caption{Cluster} % give the algorithm a caption
+\label{alg:clam} % and a label for \ref{} commands later in the document
+\begin{algorithmic}[1] % enter the algorithmic environment
+\REQUIRE $minsize \gets 1$
+\Require $data$, a dataset.
+\STATE $d \gets 0$
+\STATE $clusters = \{\}$
+\STATE $n = |data|$
+\WHILE{true}
+    \STATE $numseeds \gets \sqrt{n}$
+    \STATE $seeds \gets numseeds$ chosen randomly from $data$
+    \STATE $l, r \gets \{l, r | l,r \in seeds \land l,r = \argmax d(x,y) | x,y \in seeds\}$
+    \STATE $clusters[l] \gets \{x | x \in data \land d(l,x) \le d(r,x)\}$
+    \STATE $clusters[r] \gets \{x | x \in data \land d(r,x) < d(l,x)\}$
+    \IF{$|clusters[l]| > minsize$}
+        \STATE Cluster(clusters[l])
+    \ENDIF
+    \IF{$|clusters[r]| > minsize$}
+        \STATE Cluster(clusters[r])
+    \ENDIF
+\ENDWHILE
+\end{algorithmic}
+\end{algorithm}
 
 Several properties of clusters are interesting and important to consider, including \textit{cardinality}, the number of points in a cluster; \textit{center}, the geometric median of points contained in a cluster; \textit{radius}, the distance to the farthest point from a center; and \textit{local fractal dimension}, as described in~\cite{ishaq2019clustered}.
 We can also consider individual \textit{parent-child ratios} of cardinality, radius, and local fractal dimension, as well as \textit{exponential moving averages} of the parent-child ratios along a branch of the tree.
