@@ -117,7 +117,7 @@ Points in the same cluster are considered equally anomalous and points in cluste
     \label{alg:rclc}
 \begin{algorithmic}[1]
     \Require $G$, a graph
-    \ForEach {cluster $c \in G$}
+    \For {cluster $c \in G$}
     \State $scores[c] \gets -|c|$
     \EndFor
 \end{algorithmic}
@@ -133,8 +133,8 @@ Points in clusters in relatively small components are considered more anomalous 
     \label{alg:rcc}
 \begin{algorithmic}[1]
     \Require $G$, a graph
-    \ForEach {component $C \in G$}
-    \State $scores[C] \gets -|C|$
+    \For {component $C \in G$}
+        \State $scores[C] \gets -|C|$
     \EndFor
 \end{algorithmic}
 \end{algorithm}
@@ -154,12 +154,12 @@ Its time complexity is $O(|E| \cdot |V|)$.
 \begin{algorithmic}[1]
     \Require $G$, a graph
     \Require $f \in \mathbb{R}$ in the range $(0,1]$ ($0.25$ by default).
-    \ForEach {cluster $c \in G$}
-    \State $e_c \gets$ the eccentricity of $c$
-    \State $s \gets e_c \times f$
-    \State perform a breadth-first traversal from $c$ with $s$ steps
-    \State $v \gets$ the number of unique clusters visited by the traversal
-    \State $scores[c] \gets -v$
+    \For {cluster $c \in G$}
+        \State $e_c \gets$ the eccentricity of $c$
+        \State $s \gets e_c \times f$
+        \State perform a breadth-first traversal from $c$ with $s$ steps
+        \State $v \gets$ the number of unique clusters visited by the traversal
+        \State $scores[c] \gets -v$
     \EndFor
 \end{algorithmic}
 \end{algorithm}
@@ -180,9 +180,9 @@ Points with a low value of these accumulated ratios are considered more anomalou
     \label{alg:cpcr}
 \begin{algorithmic}[1]
     \Require $G$, a graph
-    \ForEach {cluster $c \in G$}
-    \State $p \gets$ the parent cluster of $c$
-    \State $scores[c] \gets \frac{|p|}{|c|}$
+    \For {cluster $c \in G$}
+        \State $p \gets$ the parent cluster of $c$
+        \State $scores[c] \gets \frac{|p|}{|c|}$
     \EndFor
 \end{algorithmic}
 \end{algorithm}
@@ -204,14 +204,14 @@ The algorithm is as follows:
     \Require $G$, a graph
     \State Initialize $v[c] \gets 0 \forall c \in G$
     \State Initialize $s$ to be a large number of steps. % how many?
-    \ForEach {cluster $c \in G$}
+    \For {cluster $c \in G$}
         \State $c' \gets c$
-        \FOR{$i=1$ {\bfseries to} $s$}
-            \State $\c'$ \gets a random neighbor of $d$
+        \For{$i=1$ {\bfseries to} $s$}
+            \State $c' \gets n(d),$ a random neighbor of $d$
             \State increment $v[c']$
         \EndFor
     \EndFor
-    \ForEach {cluster $c \in G$}
+    \For {cluster $c \in G$}
         \State $scores[c] \gets \frac{|p|}{|c|}$
     \EndFor
 \end{algorithmic}
@@ -231,12 +231,12 @@ Its time worst-case time complexity is $O(|V|^2)$, but is often better in practi
     \label{alg:sp}
 \begin{algorithmic}[1]
     \Require $G$, a graph
-    \ForEach {component $C \in G$}
+    \For {component $C \in G$}
         \State $M \gets$ the transition matrix for $C$
         \Repeat
             \State $M \gets M^2$
         \Until $M$ converges
-        \Foreach {cluster $c \in C$}
+        \For {cluster $c \in C$}
             \State $s \gets $ the row from $M$ corresponding to $c$
             \State $scores[c] \gets -\Sigma(s)$ 
         \EndFor
