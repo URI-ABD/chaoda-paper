@@ -159,11 +159,11 @@ REPEN & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN}
 
 
 We considered several recently published algorithms for anomaly detection to compare against.
-Algorithms for which we found working implementations are included in Table\ref{table:results:test-performance}.
+Algorithms for which we found working implementations are included in Table~\ref{table:results:test-performance}.
 In the cases were we were unable to find a working implementation, we include here the performance claimed by the respective authors.
 
-RS-Hash~\cite{sathe2016subspace} scored $0.92$ on Cardio, $1.00$ on Lympho, $0.99$ on Musk, and $0.76$ on OptDigits.
-This beats CHAODA on Cardio, ties on Lympho and Musk, and loses on OptDigits.
+RS-Hash~\cite{sathe2016subspace} reported AUCs of $0.92$ on Cardio, $1.00$ on Lympho, $0.99$ on Musk, and $0.76$ on OptDigits.
+This beats CHAODA on Cardio, ties on Lympho and Musk, and is outperformed by CHAODA on OptDigits.
 
 We considered Clustering with Outlier Removal~\cite{liu2019clustering} but the authors did not report AUC scores, and instead used F-measure as the performance metric.
 We could find a working implementation of COR to run ourselves.
