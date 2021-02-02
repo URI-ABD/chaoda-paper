@@ -42,10 +42,10 @@ Of the $18$ datasets we tested, CHAODA outperforms the competing algorithms on $
 \vskip 0.15in
 \begin{center}
 \begin{small}
-% \begin{sc}  Najib: Why this? It makes the tables wider. Is it required?
+\begin{sc}
 \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{Model} & \textbf{Arrhy} & \textbf{Breastw} & \textbf{Cardio} & \textbf{Cover} & \textbf{Glass} & \textbf{HTTP} & \textbf{Iono.} & \textbf{Lympho} & \textbf{Mammo} \\
+\textbf{Model} & \textbf{Arrh} & \textbf{BreastW} & \textbf{Cardio} & \textbf{Cover} & \textbf{Glass} & \textbf{Http} & \textbf{Iono.} & \textbf{Lympho} & \textbf{Mammo} \\
 \hline
         CHAODA-fast &       \textbf{0.77} &    \textbf{0.97} &   \textbf{0.81} &           0.71 &  \textbf{0.70} & \textbf{1.00} &                \textbf{0.88} &   \textbf{0.98} &  \textbf{0.85} \\
 \hline
@@ -106,7 +106,7 @@ REPEN & \textbf{0.78} & \textbf{0.98} & 0.78 & 0.57 & \textit{EX} & \textbf{1.00
 % \begin{sc}
 % \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{Model} & \textbf{Musk} & \textbf{OptDigits} & \textbf{Pima} & \textbf{SatImage-2} & \textbf{SMTP} & \textbf{Vertebral} & \textbf{Vowels} &  \textbf{WBC} & \textbf{Wine} \\
+\textbf{Model} & \textbf{Musk} & \textbf{OptDigits} & \textbf{Pima} & \textbf{SatImg-2} & \textbf{Smtp} & \textbf{Vert} & \textbf{Vowels} &  \textbf{WBC} & \textbf{Wine} \\
 \hline
         CHAODA-fast & \textbf{1.00} &      \textbf{0.96} &          0.63 &       \textbf{1.00} &          0.92 &               0.29 &            0.71 & \textbf{0.97} & \textbf{0.99} \\
 \hline
@@ -151,7 +151,7 @@ REPEN & \textbf{0.78} & \textbf{0.98} & 0.78 & 0.57 & \textit{EX} & \textbf{1.00
 REPEN & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} \\
 \hline
 \end{tabular}
-% \end{sc}
+\end{sc}
 \end{small}
 \end{center}
 \vskip -0.1in
@@ -167,9 +167,3 @@ This beats CHAODA on Cardio, ties on Lympho and Musk, and is outperformed by CHA
 
 We considered Clustering with Outlier Removal~\cite{liu2019clustering} but the authors did not report AUC scores, and instead used F-measure as the performance metric.
 We could find a working implementation of COR to run ourselves.
-
-
-% TODO: Add table(s) against algorithms for which we did not find usable implementations
-
-
-
