@@ -30,24 +30,23 @@ The CLAM clustering algorithm is defined in Algorithm~\ref{alg:clam}.
 \caption{Cluster} % give the algorithm a caption
 \label{alg:clam} % and a label for \ref{} commands later in the document
 \begin{algorithmic}[1] % enter the algorithmic environment
-\REQUIRE $minsize \gets 1$
+\Require $minsize \gets 1$
 \Require $data$, a dataset.
-\STATE $d \gets 0$
-\STATE $clusters = \{\}$
-\STATE $n = |data|$
-\WHILE{true}
-    \STATE $numseeds \gets \sqrt{n}$
-    \STATE $seeds \gets numseeds$ chosen randomly from $data$
-    \STATE $l, r \gets \{l, r | l,r \in seeds \land l,r = \argmax d(x,y) | x,y \in seeds\}$
-    \STATE $clusters[l] \gets \{x | x \in data \land d(l,x) \le d(r,x)\}$
-    \STATE $clusters[r] \gets \{x | x \in data \land d(r,x) < d(l,x)\}$
-    \IF{$|clusters[l]| > minsize$}
-        \STATE Cluster(clusters[l])
-    \ENDIF
-    \IF{$|clusters[r]| > minsize$}
-        \STATE Cluster(clusters[r])
-    \ENDIF
-\ENDWHILE
+\State $d \gets 0$
+\State $clusters = \{\}$
+\State $n = |data|$
+\While{true}
+    \State $seeds \gets \sqrt{n}$ random points from $data$
+    \State $l, r \gets \{l, r | l,r \in seeds \land l,r = \argmax d(x,y) | x,y \in seeds\}$
+    \State $clusters[l] \gets \{x | x \in data \land d(l,x) \le d(r,x)\}$
+    \State $clusters[r] \gets \{x | x \in data \land d(r,x) < d(l,x)\}$
+    \If{$|clusters[l]| > minsize$}
+        \State Cluster(clusters[l])
+    \Endif
+    \If{$|clusters[r]| > minsize$}
+        \State Cluster(clusters[r])
+    \Endif
+\Endwhile
 \end{algorithmic}
 \end{algorithm}
 
