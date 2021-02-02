@@ -225,9 +225,9 @@ The algorithm is as follows:
     \caption{Random Walks}
     \label{alg:rw}
 \begin{algorithmic}[1]
-    \Require $G$, a graph
+    \Require $G = (V,E)$, a graph
     \State Initialize $v[c] \gets 0 \forall c \in G$
-    \State Initialize $s$ to be a large number of steps. % how many?
+    \State Initialize $s$ to be $10 \times |V|$
     \For {cluster $c \in G$}
         \State $c' \gets c$
         \For{$i=1$ {\bfseries to} $s$}
