@@ -72,13 +72,13 @@ In this work we consider the cardinality of a graph to be \textit{vertex cardina
 \subsubsection{The Manifold}
 % describe Manifold as containing the tree and all the graphs.
 According to the ``manifold hypothesis''~\cite{fefferman2016testing},
-datasets that come from constrained generating processes are typically embedded in a high-dimensional space typically only occupy a low-dimensional manifold in that space.
+datasets from constrained generating processes that are embedded in a high-dimensional space typically only occupy a low-dimensional manifold in that space.
 
-The graphs discussed so far map this low dimensional manifold in the original embedding space.
-Different graphs do this at different levels of local and/or global resolution.
-Our aim is to properly build such a graph, where different levels of resolution may be necessary for different regions of the manifold.
+The graphs discussed so far map this low-dimensional manifold in the original embedding space.
+Different graphs do this at different levels of local or global resolution.
+Our aim is to properly build such a graph, where different resolutions may be necessary for different regions of the manifold.
 We can then apply several anomaly detection algorithms to these graphs.
-These algorithms will often also incorporate information from the tree, such as parent-child cardinality ratios.
+These algorithms will often also incorporate information from the tree, such as parent-child relationships.
 
 We describe some algorithms in Section~\ref{subsec:methods:individual-algorithms}.
 While these algorithms are themselves fairly simple, the real challenge is in selecting the right clusters for the graphs for the algorithms to operate on.
