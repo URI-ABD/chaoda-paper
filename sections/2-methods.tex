@@ -18,19 +18,21 @@ We require any distance function to have the following properties:
 \end{align*}
 The distance function may or may not obey the triangle-inequality, but in this paper we used $L1$ and $L2$ norms, which are metrics.
 
-\subsubsection{Clustering:}\label{subsubsec:methods:clam:clustering}
+\subsubsection{Clustering}\label{subsubsec:methods:clam:clustering}
 % describe creation of Cluster Tree
 We start by building a divisive-hierarchical clustering of the data based on a random sampling of $\sqrt(k)$ datapoints, for $k$ points at a given level of the tree, which achieves clustering in expected $\mathcal{O}(n \lg n)$ time.
 This gives us a tree of clusters, with the root containing every point in the dataset, and each leaf containing a single point from the dataset.
 % The procedure is detailed in~\cite{ishaq2019clustered}.
 % We can't cite our work as "us" during the review process
 
+% TODO add description of algorithm
+
 Several properties of clusters are interesting and important to consider, including \textit{cardinality}, the number of points in a cluster; \textit{center}, the geometric median of points contained in a cluster; \textit{radius}, the distance to the farthest point from a center; and \textit{local fractal dimension}, as described in~\cite{ishaq2019clustered}.
 We can also consider individual \textit{parent-child ratios} of cardinality, radius, and local fractal dimension, as well as \textit{exponential moving averages} of the parent-child ratios along a branch of the tree.
 Each of these properties is computed during the process of clustering, and stored as metadata for each cluster.
 In particular, we use the parent-child ratios and the exponential moving averages of those ratios to help generalize our anomaly detection method from a small set of datasets to a large, distinct set of datasets.
 
-\subsubsection{Graphs:}
+\subsubsection{Graphs}
 % TODO: describe Graph and graph invariant.
 Clusters that are near each other in the embedding space sometimes have overlapping volumes, i.e.\ the distance between their centers is less than or equal to the sum of their radii.
 We define a graph $G=(V,E)$ with the selected clusters in one-to-one correspondence to vertices, and with an edge between two vertices if and only if their corresponding clusters overlap.
@@ -46,7 +48,7 @@ A corollary to this invariant is that the graph will never contain two vertices 
 A Graph can be built from clusters at a fixed depth in the cluster-tree (a layer-graph), or from clusters from multiple different depths in the tree (an optimal-graph).
 In this work we consider the cardinality of a graph to be \textit{vertex cardinality}, i.e.\ the number of vertices (clusters) in the graph.
 
-\subsubsection{The Manifold:}
+\subsubsection{The Manifold}
 % describe Manifold as containing the tree and all the graphs.
 According to the ``manifold hypothesis''~\cite{fefferman2016testing},
 datasets that come from constrained generating processes and are embedded in a high-dimensional space typically only occupy a low-dimensional manifold in that embedding space.
@@ -100,142 +102,149 @@ the cardinality of a cluster $c$ is denoted by $|c|$, represneting the number of
 
 \subsubsection{Relative Cluster Cardinality}
 We measure the anomalousness of a point by the cardinality of the cluster that point belongs to relative to the cardinalities of the other clusters in the graph.
-Points in the same cluster are considered equally anomalous and points in clusters with relatively low cardinalities are considered more anomalous than points in clusters with relatively high cardinalities.
+Points in the same cluster are considered equally anomalous and points in clusters with relatively low cardinalities are considered more anomalous than points in clusters with relatively high cardinalities. The algorithm is defined in Algorithm~\ref{alg:rclc}. The time complexity of this algorithm is $O(|V|)$.
 
-The algorithm is as follows:
 
-\algnewcommand\algorithmicforeach{\textbf{for each}}
-\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+% \begin{itemize}
+%     \item for each cluster $c$ in graph $g$:
+%     \begin{itemize}
+%         \item $scores[c] \leftarrow -|c|$.
+%     \end{itemize}
+% \end{itemize}
 
-\begin{itemize}
-    \item for each cluster $c$ in graph $g$:
-    \begin{itemize}
-        \item $scores[c] \leftarrow -|c|$.
-    \end{itemize}
-\end{itemize}
-
-\begin{algorithm}[tb]
-   \caption{Relative Cluster Cardinality}
-   \label{alg:rcc}
-\begin{algorithmic}
-   \ForEach{cluster $c \in G$}
-   \STATE $scores[c] \leftarrow -|c|$
-   \EndFor
+\begin{algorithm}[h]
+    \caption{Relative Cluster Cardinality}
+    \label{alg:rclc}
+\begin{algorithmic}[1]
+    \Require $G$, a graph
+    \ForEach {cluster $c \in G$}
+    \State $scores[c] \gets -|c|$
+    \EndFor
 \end{algorithmic}
 \end{algorithm}
-
-The time complexity of this algorithm is $O(|V|)$.
 
 \subsubsection{Relative Component Cardinality}
 We define components of a graph by the property that no two clusters from different components have an edge between them, and every pair of clusters in the same component has a path between them.
 Consider the relative cardinalities of each component in much the same we we considered the relative cardinalities of clusters in the Relative Cluster Cardinality method.
-Points in clusters in relatively small components are considered more anomalous than points in clusters in relatively large components, and points in clusters in the same component are considered equally anomalous.
+Points in clusters in relatively small components are considered more anomalous than points in clusters in relatively large components, and points in clusters in the same component are considered equally anomalous. The algorithm is defined in Algorithm~\ref{alg:rcc}. This algorithm first finds the components of the graph, so its time complexity is $O(|E| + |V|)$.
 
-The algorithm is as follows:
-
-\begin{itemize}
-    \item for each component $C$ in graph $g$:
-    \begin{itemize}
-        \item for each cluster $c$ in $C$:
-        \begin{itemize}
-            \item $scores[c] \leftarrow -|C|$.
-        \end{itemize}
-    \end{itemize}
-\end{itemize}
-
-This algorithm first finds the components of the graph, so its time complexity is $O(|E| + |V|)$.
+\begin{algorithm}[h]
+    \caption{Relative Component Cardinality}
+    \label{alg:rcc}
+\begin{algorithmic}[1]
+    \Require $G$, a graph
+    \ForEach {component $C \in G$}
+    \State $scores[C] \gets -|C|$
+    \EndFor
+\end{algorithmic}
+\end{algorithm}
 
 \subsubsection{Graph Neighborhood Size:}
 Given the graph with clusters and edges, consider the number of clusters reachable from a starting cluster within a given graph distance $k$.
 We call this number the \textit{graph-neighborhood} of the starting cluster.
 With $k$ relatively small compared to the diameter of the graph, we can consider the relative sizes of \textit{graph-neighborhood} of the clusters in the graph.
-Points in clusters with small graph-neighborhoods are considered more anomalous than points in clusters with large graph-neighborhoods.
-
-The algorithm is as follows:
-
-\begin{itemize}
-    \item let $f$ be a real number in the $(0, 1]$ range ($0.25$) works well.
-    \item for each cluster $c$ in graph $g$:
-    \begin{itemize}
-        \item let $e_c$ be the eccentricity of $c$.
-        \item let $s$ be $e_c * f$.
-        \item perform a breadth-first traversal from $c$ with $s$ steps.
-        \item let $size$ be the number of unique clusters visited by the breadth-first traversal.
-        \item $scores[c] \leftarrow -size$.
-    \end{itemize}
-\end{itemize}
-
+Points in clusters with small graph-neighborhoods are considered more anomalous than points in clusters with large graph-neighborhoods. The algorithm is defined in Algorithm~\ref{alg:gns}.
 This algorithm is dominated by the computation of the eccentricity of each cluster.
 Its time complexity is $O(|E| \cdot |V|)$.
 
-\subsubsection{Child-Parent Cardinality Ratio:}
-As described in CHESS~\cite{ishaq2019clustered}, a cluster is partitioned by using its two maximally distant points as poles.
+
+\begin{algorithm}[h]
+    \caption{Graph Neighborhood Size}
+    \label{alg:gns}
+\begin{algorithmic}[1]
+    \Require $G$, a graph
+    \Require $f \in \mathbb{R}$ in the range $(0,1]$ ($0.25$ by default).
+    \ForEach {cluster $c \in G$}
+    \State $e_c \gets$ the eccentricity of $c$
+    \State $s \gets e_c \times f$
+    \State perform a breadth-first traversal from $c$ with $s$ steps
+    \State $v \gets$ the number of unique clusters visited by the traversal
+    \State $scores[c] \gets -v$
+    \EndFor
+\end{algorithmic}
+\end{algorithm}
+
+
+
+\subsubsection{Child-Parent Cardinality Ratio}
+% As described in CHESS~\cite{ishaq2019clustered},
+As described in Section~\ref{subsubsec:methods:clam:clustering}, a cluster is partitioned by using its two maximally distant points as poles.
 The points are split among children by whichever pole they are closer to.
 Consider the fraction of points in a cluster that are assigned to each child.
-If a child cluster only contains a small fraction of the points that its parent did, then we consider the points in that child cluster to be anomalous.
+If a child cluster only contains a small fraction of the points that its parent did, then we consider the points in that child cluster to be more anomalous.
 These child-parent cardinality ratios are accumulated for each point down its branch in the tree, terminating when the child cluster is a node in the graph.
-Points with a low value of these accumulated ratios are considered more anomalous than points with a high value of these accumulated ratios.
+Points with a low value of these accumulated ratios are considered more anomalous than points with a high value of these accumulated ratios. The algorithm is defined in Algorithm~\ref{alg:cpcr}. The time complexity of this algorithm is $O(|V|)$.
 
-The algorithm is as follows:
+\begin{algorithm}[h]
+    \caption{Child-Parent Cardinality Ratio}
+    \label{alg:cpcr}
+\begin{algorithmic}[1]
+    \Require $G$, a graph
+    \ForEach {cluster $c \in G$}
+    \State $p \gets$ the parent cluster of $c$
+    \State $scores[c] \gets \frac{|p|}{|c|}$
+    \EndFor
+\end{algorithmic}
+\end{algorithm}
 
-\begin{itemize}
-    \item for each cluster $c$ in graph $g$:
-    \begin{itemize}
-        \item let $p$ be the parent cluster of $c$.
-        \item $scores[c] \leftarrow \frac{|p|}{|c|}$.
-    \end{itemize}
-\end{itemize}
 
-The time complexity of this algorithm is $O(|V|)$.
-
-
-\subsubsection{Random Walks:}
-We perform long random-walks on each component of a graph, and we count the number of times each cluster was visited.
+\subsubsection{Random Walks}
+We perform long random walks on each component of a graph, and we count the number of times each cluster was visited.
 We consider the relative visitation counts among the clusters to be inversely related to their anomalousness.
-The least visited clusters are anomalous, and the most visited clusters are not.
-
-The algorithm is as follows:
-
-\begin{itemize}
-    \item let $visits$ be a dictionary of clusters and their visitation counts, initialized to $0$.
-    \item let $s$ be a large number of steps for the random walk.
-    \item for each cluster $c$ in graph $g$:
-    \begin{itemize}
-        \item perform a random walk from $c$ with $s$ steps and increment the value of the visited cluster in $visits$ with each step.
-    \end{itemize}
-    \item for each cluster $c$ in graph $g$:
-    \begin{itemize}
-        \item $scores[c] \leftarrow -visits[c]$.
-    \end{itemize}
-\end{itemize}
-
+The least visited clusters are anomalous, and the most visited clusters are not. The algorithm is defined in Algorithm~\ref{alg:rw}.
 This algorithm is dominated by the computation of the transition matrix for the graph.
 Its worst-case time complexity is $O(|V|^2)$, but is often better because the transition matrix is computed separately for each component in the graph.
 
-\subsubsection{Stationary Probabilities:}
-We compute the transition probability matrix of each component of a graph that contains at least two clusters.
-We then compute successive powers of this matrix.
-This process will eventually converge (add citation here), and we find this convergent matrix.
-The sum of the values along a row is inversely related to the anomalousness of the respective cluster.
-
 The algorithm is as follows:
 
-\begin{itemize}
-    \item for each component $C$ in graph $g$:
-    \begin{itemize}
-        \item let $M$ be the transition matrix for $C$.
-        \item keep squaring $M$ until the matrix converges.
-        \item let $S$ be this converged matrix.
-        \item for each cluster $c$ in $C$:
-        \begin{itemize}
-            \item let $s$ be the respective row from $S$.
-            \item $scores[c] \leftarrow -sum(s)$
-        \end{itemize}
-    \end{itemize}
-\end{itemize}
+\begin{algorithm}[h]
+    \caption{Random Walks}
+    \label{alg:rw}
+\begin{algorithmic}[1]
+    \Require $G$, a graph
+    \State Initialize $v[c] \gets 0 \forall c \in G$
+    \State Initialize $s$ to be a large number of steps. % how many?
+    \ForEach {cluster $c \in G$}
+        \State $c' \gets c$
+        \FOR{$i=1$ {\bfseries to} $s$}
+            \State $\c'$ \gets a random neighbor of $d$
+            \State increment $v[c']$
+        \EndFor
+    \EndFor
+    \ForEach {cluster $c \in G$}
+        \State $scores[c] \gets \frac{|p|}{|c|}$
+    \EndFor
+\end{algorithmic}
+\end{algorithm}
 
+
+\subsubsection{Stationary Probabilities}
+We compute the transition probability matrix of each component of a graph that contains at least two clusters.
+We then compute successive powers of this matrix. % TODO citation
+This process will eventually converge (add citation here), and we find this convergent matrix.
+The sum of the values along a row is inversely related to the anomalousness of the respective cluster. The algorithm is defined in Algorithm~\ref{alg:sp}.
 This algorithm is dominated by the computation of the transition matrix for each component in the graph.
 Its time worst-case time complexity is $O(|V|^2)$, but is often better in practice.
+
+\begin{algorithm}[h]
+    \caption{Stationary Probabilities}
+    \label{alg:sp}
+\begin{algorithmic}[1]
+    \Require $G$, a graph
+    \ForEach {component $C \in G$}
+        \State $M \gets$ the transition matrix for $C$
+        \Repeat
+            \State $M \gets M^2$
+        \Until $M$ converges
+        \Foreach {cluster $c \in C$}
+            \State $s \gets $ the row from $M$ corresponding to $c$
+            \State $scores[c] \gets -\Sigma(s)$ 
+        \EndFor
+    \EndFor
+\end{algorithmic}
+\end{algorithm}
+
+
 
 
 \subsection{Normalization}\label{subsec:methods:normalization}
