@@ -31,12 +31,11 @@ Given a clustering and a new point, one can estimate the anomalousness of the ne
 
 There have been few advancements in clustering techniques over the past decade~\cite{wang2019progress}.
 This may be explained by the poor performance of clustering in high-dimensional space~\cite{zhang2013advancements} thus far.
-The major clustering approaches are as follows.
 
 % \subsubsection{Distance-based Clustering}
 % \label{subsubsec:introduction:clustering-based-approaches:distance-based-clustering}
 Distance-based clustering relies on some distance measure to partition data into some number of clusters.
-Within this approach, the numbers and/or sizes of clusters are often predetermined: either user-specified, or chosen at random~\cite{wang2019progress}.
+Within this approach, the numbers or sizes of clusters are often predetermined: either user-specified, or chosen at random~\cite{wang2019progress}.
 Some examples of distance-based clustering are
 K-Means~\cite{macqueen1967some},
 PAM~\cite{kaufman2009finding},
@@ -45,22 +44,22 @@ CLARA~\cite{kaufman2009finding}.
 
 % \subsubsection{Hierarchical Clustering}
 % \label{subsubsec:introduction:clustering-based-approaches:hierarchical-clustering}
-Hierarchical clustering methods utilize a tree-like structure, where points are allocated into leaf nodes~\cite{wang2019progress}.
-These tree-like structures can be created bottom-up (agglomerative clustering) or top-down (divisive clustering)~\cite{agrawal1998automatic}.
-A major drawback of these methods is the high cost of pairwise distance computations required to build each level of the tree.
+Hierarchical clustering methods utilize a tree, where points are allocated into leaves~\cite{wang2019progress}.
+These trees can be created via bottom-up (agglomerative) or top-down (divisive)~\cite{agrawal1998automatic} clustering.
+One drawback of these methods is the high cost of pairwise distance computations required to build each level of the tree.
 Examples of hierarchical clustering include
 MST~\cite{zahn1971graph},
-CURE~\cite{guha1998cure} and
+CURE~\cite{guha1998cure}, and
 CHAMELEON~\cite{karypis1999hierarchical}.
 
 % \subsubsection{Grid-based Clustering}
 % \label{subsubsec:introduction:clustering-based-approaches:grid-based-clustering}
 Grid-based clustering works via segmenting the entire space into a discrete number of cells, and then scanning those cells to find regions of high density.
 Utilizing a grid structure for clustering means that these algorithms typically scale well to larger datasets.
-Some examples of grid-based clustering include
+Some examples include
 STING~\cite{wang1997sting},
 Wavecluster~\cite{sheikholeslami2000wavecluster}, and
-CLIQUE~\cite{agrawal1998automatic}. In this paper, we compare against two clustering-based approaches: Clustering Based Local Outlier Factor (CBLOF)~\cite{he2003cblof}, and
+CLIQUE~\cite{agrawal1998automatic}. In this paper, we compare against Clustering Based Local Outlier Factor (CBLOF)~\cite{he2003cblof}, and
 Local Correlation Integral (LOCI)~\cite{papadimitriou2003loci}.
 
 
@@ -80,7 +79,7 @@ In this paper, we compare against Local Outlier Factor (LOF)~\cite{breunig2000lo
 \subsection{Graph-based Approaches}
 \label{subsec:introduction:graph-based-approaches}
 
-Graph-based methods build graph representations of the data by treating points, or collections of points, as nodes in a graph and drawing edges between them based of various rules. In this paper, we compare against the following Connectivity-based Outlier Factor (COF)~\cite{tang2002cof}.
+Graph-based methods build graph representations of the data by treating points, or collections of points, as nodes in a graph and drawing edges between them based on various rules. In this paper, we compare against Connectivity-based Outlier Factor (COF)~\cite{tang2002cof}.
 
 
 
@@ -93,7 +92,7 @@ Distance-based approaches tend to use the following intuitions. First, points wi
 and finally, the $n$ points with the greatest average distance to their $k$ nearest neighbors are outliers.
 
 In this paper, we compare against
-k-Nearest Neighbors (kNN)~\cite{ramaswamy2000efficient, sridhar2000knn, fabrizio2002knn},
+k-Nearest Neighbors (kNN)~\cite{ramaswamy2000efficient, sridhar2000knn, fabrizio2002knn}
 and Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 
 
@@ -127,28 +126,15 @@ The manifold mapping component is motivated by a hierarchical clustering approac
 While CHESS clustered to a specific depth solely for purposes of accelerating search, CLAM
 divisively clusters the data until each cluster contains only one datum, thus ``shattering'' the dataset.
 At any given depth of this tree, CLAM can induce a graph by mapping each cluster to a vertex of the graph, and drawing an edge between any two vertices whose corresponding cluster volumes overlap (that is, the sum of their radii is greater than the distances separating their centers).
-Clusters can be selected by a fixed depth, at heterogeneous depths based on geometric properties, such as local fractal dimension, cardinality, or cluster radius.
+Clusters can be selected by a fixed depth, or at heterogeneous depths based on geometric properties, such as local fractal dimension, cardinality, or cluster radius.
 Graphs can be constrained to a uniform-depth layer from the tree, and we call these \textit{layer graphs}.
-We call graphs that are not constrained to a certain layer \textit{optimal graphs}.
+We call graphs from heterogenous depths \textit{optimal graphs}.
 
 Inducing an optimal graph, across a variety of depths, effectively builds a manifold with a variety of ``resolutions'', given by the depth of the cluster in the tree. The intuition is that some regions of the manifold may be denser (or sparser) than others, and thus graphs induced from deeper (or shallower) clusters in those regions may be more informative.
 We can also consider clusters higher in the tree to be in some sense ``lower resolution'' than those at greater depth.
 
 Once we have mapped a manifold, we can ask about the cardinality of various clusters at different depths, how connected a given cluster is, or even how often a cluster is visited by random walks on the manifold.
 These approaches are combined into an ensemble approach to anomaly and outlier detection.
-
-Figure~\ref{fig:introduction:graph-generation} illustrates how a graph can be induced by clusters and their overlaps at different depths of a tree.
-
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=3in]{images/tree-graph.pdf}
-    \caption{Cartoon illustration of how CLAM induces a graph from a cluster tree.
-        Dots in the tree represent cluster centers;
-        blue dots represent cluster centers chosen as graph vertices.
-        Circles around those centers represent the volume of a cluster (the radius is the distance from the center to the furthest point contained within that cluster).
-        Gray arrows point to the induced subgraphs, which are indicated in blue below the horizontal line.}
-    \label{fig:introduction:graph-generation}
-\end{figure}
 
 We test our methods on 24 real-world datasets.
 The datasets span a wide variety of domains, each having a different quantity of anomalous data.
