@@ -329,16 +329,14 @@ set CHAODA-fast as the default in our implementation.
 We sourced 24 datasets, all from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}, for training CHAODA and testing its performance.
 All of these datasets were adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and were standardized, by ODDS, for benchmarks on anomaly and outlier detection.
 
-Of these 24 datasets, we selected a random sample of 6 datasets to use for training CHAODA\@.
-These training datasets were: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
+Of these 24 datasets, we selected 6 at random to use for training CHAODA: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
 The remaining datasets were used to benchmark the performance of CHAODA\@.
-Our performance on the test set is shown in Table~\ref{table:results:test-performance}.
+Test performance is shown in Table~\ref{table:results:test-performance}.
 We benchmarked CHAODA 30 times with the same split of test and training datasets, with different random seeds for CLAM clustering and CHAODA's random walk algorithm.
-We provide more details on the datasets, including their size, dimensionality, and fraction of outliers, in the supplementary materials.
-All benchmarks were conducted on an Intel Xeon E5-2690 v4 2.60GHz with 28 cores, with 512GB RAM and CentOS 7 Linux with kernel 3.10.0-1127.13.1.el7.x86\_64 \#1 SMP.
-Python 3.6.8 was used.
+We provide more details on the datasets, including size, dimensionality, and fraction of outliers, in the Supplement.
+All benchmarks were conducted on a 28-core Intel Xeon E5-2690 v4 2.60GHz, 512GB RAM and CentOS 7 Linux with kernel 3.10.0-1127.13.1.el7.x86\_64 \#1 SMP and Python 3.6.8.
 
-Note that CHAODA is an unsupervised algorithm for outlier detection.
+Note that CHAODA is an unsupervised algorithm.
 As such, we compare only against other unsupervised algorithms.
 We compared against $18$ unsupervised algorithms collected in the pyOD suite~\cite{zhao2019pyod} and Scikit-Learn~\cite{pedregosa2011scikit}, as well as RS-Hash~\cite{sathe2016subspace}.
 A supervised version of CHAODA will be possible future work, in which we will compare against supervised methods such as REPEN~\cite{pang2018learning}.

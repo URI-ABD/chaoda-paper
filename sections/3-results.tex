@@ -4,22 +4,21 @@
 The performance on the 18 test datasets is in Table~\ref{table:results:test-performance}.
 Performance on the 6 training datasets is shown in the Supplement.
 Each column shows the AUC ROC scores of CHAODA and every competitor.
-The best, i.e.\ highest, score, and every score with 0.02 of that best score, are presented in bold.
+The best, i.e.\ highest, score, and every score within 0.02 of that best score, are presented in bold.
 In our 30 experimental runs, setting a different random seed resulted in a variance of at most $0.02$ AUC.
 
-If a method took longer than 10 hours on a dataset, we terminated that run and marked the corresponding cell with ``\textit{TO}''.
+If a method took longer than 10 hours on a dataset, we terminated it and marked the corresponding cell with ``\textit{TO}''.
 If a method crashed, we mark the cell with ``\textit{EX}''.
 Notably, CHAODA performs best (or ties for best) on 14 of the 18 test datasets.
-
 Runtime performance is presented in the Supplement, due to space constraints. 
 Note that we implemented CLAM and CHAODA entirely in Python.
-While we use the provided wrappers for each method we compare against, those methods are often implemented in C and C++.
-Therefore, the comparison of wall-clock time performance is not truly fair to CHAODA.
-A reimplementation of CLAM and CHAODA in a high-performance language, such as Rust, would be worthwhile.
+While we use the provided wrappers for each method we compare against, those methods are often implemented in C/C++.
+Therefore, the comparison of wall-clock time is not truly fair to CHAODA.
+A reimplementation in a high-performance language, such as Rust, would be worthwhile.
 
 
 \begin{table*}[!t]
-\renewcommand{\arraystretch}{1.15}
+% \renewcommand{\arraystretch}{1.15}
 % \caption{Performance on the first half of the Test Datasets}
 \caption{Performance on the Test Datasets}
 % \label{table:results:test-performance-1}
@@ -123,9 +122,9 @@ SOGAAL &          0.48 &               0.52 &          0.48 &                0.4
 \end{table*}
 
 
-We considered several recently published algorithms for anomaly detection to compare against.
-Algorithms for with available implementations are included in Table~\ref{table:results:test-performance}.
-In the cases were we were unable to find a working implementation, we include here the performance claimed by the respective authors.
+We considered several recently published algorithms to compare against.
+Those with available implementations are included in Table~\ref{table:results:test-performance}.
+Where we were unable to find a working implementation, we include here the performance claimed by the respective authors.
 RS-Hash~\cite{sathe2016subspace} reported AUCs of $0.92$ on Cardio, $1.00$ on Lympho, $0.99$ on Musk, and $0.76$ on OptDigits.
 This beats CHAODA on Cardio, ties on Lympho and Musk, and is outperformed by CHAODA on OptDigits.
 We considered Clustering with Outlier Removal~\cite{liu2019clustering} but we could not find a working implementation and the authors did not report AUC scores, and instead only reported F-measure.
