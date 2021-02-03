@@ -213,7 +213,7 @@ the time complexity of scoring a point is $O(1)$.
     \REQUIRE $G$, a graph
     \FOR {cluster $c \in G$}
         \STATE $p \gets$ the parent cluster of $c$
-        \STATE $scores[c] \gets \frac{|p|}{|c|}$
+        \STATE $scores[c] \gets \frac{|p|}{|c|} + scores[p]$
     \ENDFOR
 \end{algorithmic}
 \end{algorithm}
