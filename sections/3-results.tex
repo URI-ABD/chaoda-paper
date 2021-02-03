@@ -8,12 +8,12 @@ The best, i.e.\ highest, score, and every score with 0.02 of that best score, ar
 In our 30 experimental runs, setting a different random seed resulted in a variance of at most $0.02$ AUC.
 
 If a method took longer than 10 hours on a dataset, we terminated that run and marked the corresponding cell with ``\textit{TO}''.
-If a method crashed on a given dataset, we mark the cell with ``\textit{EX}''.
+If a method crashed, we mark the cell with ``\textit{EX}''.
 Notably, CHAODA performs best (or ties for best) on 14 of the 18 test datasets.
 
 Runtime performance is presented in the Supplement, due to space constraints. 
 Note that we implemented CLAM and CHAODA entirely in Python.
-While we use the provided wrappers for each method we compare against, those methods are often implemented in C and C++, while several other methods leverage the GPU.
+While we use the provided wrappers for each method we compare against, those methods are often implemented in C and C++.
 Therefore, the comparison of wall-clock time performance is not truly fair to CHAODA.
 A reimplementation of CLAM and CHAODA in a high-performance language, such as Rust, would be worthwhile.
 
@@ -124,9 +124,8 @@ SOGAAL &          0.48 &               0.52 &          0.48 &                0.4
 
 
 We considered several recently published algorithms for anomaly detection to compare against.
-Algorithms for which we found working implementations are included in Table~\ref{table:results:test-performance}.
+Algorithms for with available implementations are included in Table~\ref{table:results:test-performance}.
 In the cases were we were unable to find a working implementation, we include here the performance claimed by the respective authors.
-
 RS-Hash~\cite{sathe2016subspace} reported AUCs of $0.92$ on Cardio, $1.00$ on Lympho, $0.99$ on Musk, and $0.76$ on OptDigits.
 This beats CHAODA on Cardio, ties on Lympho and Musk, and is outperformed by CHAODA on OptDigits.
 We considered Clustering with Outlier Removal~\cite{liu2019clustering} but the authors did not report AUC scores, and instead used F-measure as the performance metric.

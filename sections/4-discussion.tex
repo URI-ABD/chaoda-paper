@@ -10,7 +10,7 @@ CLAM's selection of ``poles'' for partitioning clusters is also more efficient t
 CHAODA builds on this manifold-mapping framework for anomaly and outlier detection.
 Intuitively, we expect CHAODA to perform particularly well when the data lie on an ``interesting'' manifold, and to perform merely average when the data derive from an easily-described distribution (or ``boring'' manifold).
 Just as CHESS demonstrated an acceleration of search when the data exhibited \emph{low fractal dimension} and \emph{low metric entropy}, with CHAODA, we see that AUC scores are vastly improved when the data exhibit these properties and often competitive when the data do not exhibit these properties.
-We believe that CLAM is free of hyperparameters; the weights learned from the meta-ML step could obviously vary, but we learned them once on a distinct training set.
+We believe that CLAM is free of hyperparameters; the weights learned from the meta-ML step could vary, but we learned them once on a distinct training set.
 
 % A simple visualization in Figure~\ref{fig:conclusions:umap-embeddings} using UMAP~\cite{mcinnes2018umap} illustrates two different examples; the anomalies in one dataset, where CHAODA outperforms other methods, appear to be at the edges of a complex manifold (though, clearly, the UMAP projection has distorted the manifold) while in another dataset, where most methods perform fairly comparably, the distribution is less interesting and many anomalies are distributed apparently randomly across it.
 
