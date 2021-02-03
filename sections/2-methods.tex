@@ -28,11 +28,13 @@ The root-cluster contains all points in the dataset and clusters are recursively
 \label{alg:clam-partition} % and a label for \ref{} commands later in the document
 \begin{algorithmic}[1] % enter the algorithmic environment
     \REQUIRE $cluster$
+    \STATE $k \leftarrow \lfloor \sqrt{|cluster.points|} \rfloor$
+    \STATE $seeds \leftarrow k$ random points from $cluster.points$
     \STATE $c \leftarrow$ geometric median of $cluster.points$
     \STATE $r \leftarrow \argmax d(c,x) \ \forall \ x \in cluster.points$
     \STATE $l \leftarrow \argmax d(r,x) \ \forall \ x \in cluster.points$
-    \STATE $cluster.left \leftarrow \{x | x \in data \land d(l,x) \le d(r,x)\}$
-    \STATE $cluster.right \leftarrow \{x | x \in data \land d(r,x) < d(l,x)\}$
+    \STATE $cluster.left \leftarrow \{x | x \in cluster.points \land d(l,x) \le d(r,x)\}$
+    \STATE $cluster.right \leftarrow \{x | x \in cluster.points \land d(r,x) < d(l,x)\}$
     \IF{$|cluster.left| > 1$}
         \STATE Partition(cluster.left)
     \ENDIF
