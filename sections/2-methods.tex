@@ -90,7 +90,7 @@ Area Under the Curve (AUC) of the Receiver Operating Characteristic (ROC) is oft
 we wish to choose clusters that are expected to maximize this measure.
 We do this by learning a function that takes a cluster and predicts its contribution to AUC if that cluster were selected for the graph.
 Any function $f: Cluster \mapsto \mathbb{R}^+$ will suffice.
-This is essentially a form a transfer learning: we will learn such functions from a set of datasets that is \emph{completely distinct from} the set of datasets we sue for benchmarking.
+This is essentially a form a transfer learning: we will learn such functions from a set of datasets that is \emph{completely distinct from} the set of datasets we use for benchmarking.
 We are not learning any dataset-specific parameters, but instead the general geometric and topological properties common among datasets.
 
 We chose a linear regression model and a regression tree model to fill this role.
