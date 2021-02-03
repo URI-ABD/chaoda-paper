@@ -340,7 +340,6 @@ Our performance on the test set is shown in Table~\ref{table:results:test-perfor
 We provide more details on the datasets, including their size, dimensionality, and fraction of outliers, in the supplementary materials.
 
 Note that CHAODA is an unsupervised algorithm for outlier detection.
-As such, we compare only against other unsupervised algorithms. %TODO but REPEN?
-We compared against $18$ unsupervised algorithms collected in the pyOD suite~\cite{zhao2019pyod}, as well as (list others here)~\cite{}. % TODO fill this in. SKLearn
-% looks like just loci in the table, and rs-hash for a couple datasets, is this right? if so, let's clarify here.
-A supervised version of CHAODA will be possible future work.
+As such, we compare only against other unsupervised algorithms.
+We compared against $18$ unsupervised algorithms collected in the pyOD suite~\cite{zhao2019pyod} and Scikit-Learn~\cite{pedregosa2011scikit}, as well as RS-Hash~\cite{sathe2016subspace}.
+A supervised version of CHAODA will be possible future work, in which we will compare against supervised methods such as REPEN~\cite{pang2018learning}.

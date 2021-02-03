@@ -18,7 +18,6 @@ While we use the provided wrappers for each method we compare against, those met
 Therefore, the comparison of wall-clock time performance is not truly fair to CHAODA.
 A reimplementation of CLAM and CHAODA in a high-performance language, such as Rust, would be worthwhile.
 
-% TODO summarize results in text here, but I don't want to rewrite this twice, so let's finalize everything first.
 
 \begin{table*}[!t]
 \renewcommand{\arraystretch}{1.15}
@@ -126,7 +125,7 @@ SOGAAL &          0.48 &               0.52 &          0.48 &                0.4
 
 
 We considered several recently published algorithms for anomaly detection to compare against.
-Algorithms for which we found working implementations are included in Table~\ref{table:results:test-performance}. % TODO just LOCI?
+Algorithms for which we found working implementations are included in Table~\ref{table:results:test-performance}.
 In the cases were we were unable to find a working implementation, we include here the performance claimed by the respective authors.
 
 RS-Hash~\cite{sathe2016subspace} reported AUCs of $0.92$ on Cardio, $1.00$ on Lympho, $0.99$ on Musk, and $0.76$ on OptDigits.

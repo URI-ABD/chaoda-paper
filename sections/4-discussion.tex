@@ -11,7 +11,6 @@ CHAODA builds on this manifold-mapping framework for anomaly and outlier detecti
 Intuitively, we expect CHAODA to perform particularly well when the data lie on an ``interesting'' manifold, and to perform merely average when the data derive from an easily-described distribution (or ``boring'' manifold).
 Just as CHESS demonstrated an acceleration of search when the data exhibited \emph{low fractal dimension} and \emph{low metric entropy}, with CHAODA, we see that AUC scores are vastly improved when the data exhibit these properties and often competitive when the data do not exhibit these properties.
 
-% TODO choose two different datasets, not to illustrate performance but to illustrate this point!
 
 % A simple visualization in Figure~\ref{fig:conclusions:umap-embeddings} using UMAP~\cite{mcinnes2018umap} illustrates two different examples; the anomalies in one dataset, where CHAODA outperforms other methods, appear to be at the edges of a complex manifold (though, clearly, the UMAP projection has distorted the manifold) while in another dataset, where most methods perform fairly comparably, the distribution is less interesting and many anomalies are distributed apparently randomly across it.
 
@@ -24,9 +23,8 @@ Just as CHESS demonstrated an acceleration of search when the data exhibited \em
 % \end{figure*}
 
 % \subsection{Future Directions}
-% \label{subsec:discussion:duture-directions}
+% \label{subsec:discussion:future-directions}
 
-% TODO: rework this since we can now combine several distance functions.
 
 The choice of distance function could have a significant impact on anomaly-detection performance.
 In this case, domain knowledge is likely the best way to determine the distance function of choice.
