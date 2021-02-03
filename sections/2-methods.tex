@@ -1,6 +1,7 @@
 \section{Methods}
 \label{sec:methods}
 
+
 \subsection{CLAM}
 \label{subsec:methods:clam}
 
@@ -10,40 +11,35 @@ A dataset is a collection of $n$-points in a $D$-dimensional embedding space, $\
 A Distance Function takes two points in the dataset and deterministically produces a non-negative real number, $f : (\mathbb{R}^D, \mathbb{R}^D) \mapsto \mathbb{R}^+$.
 The distance must be such that $f(x, x) = 0$ and $f(x, y) = f(y, x)$ $\forall x, y \in X$.
 The distance function may or may not obey the triangle-inequality.
-In this paper we used $L1$ and $L2$ norms, which are metrics.
+In this paper we used $L1$-norm and $L2$-norm, which are metrics.
 
 \subsubsection{Clustering}
 \label{subsubsec:methods:clam:clustering}
 
-% describe creation of Cluster Tree
 We start by building a divisive-hierarchical clustering of the data based on a random sampling of $\sqrt k$ points from the  $k$ points in a given cluster from the tree.
 This achieves clustering in expected $\mathcal{O}(n \lg n)$ time.
 This gives us a tree of clusters, with the root containing every point in the dataset, and each leaf containing a single point from the dataset.
-The CLAM clustering algorithm is defined in Algorithm~\ref{alg:clam}.
-% The procedure is detailed in~\cite{ishaq2019clustered}.
+The CLAM clustering algorithm is defined in Algorithm~\ref{alg:clam-partition}.
+The procedure is inspired from~\cite{ishaq2019clustered}, although we have improved upon their partition method.
+The root-cluster contains all points in the dataset and clusters are recursively partitioned until each leaf-cluster contains only one point.
 % We can't cite our work as "us" during the review process
 
 \begin{algorithm} % enter the algorithm environment
-\caption{Cluster} % give the algorithm a caption
-\label{alg:clam} % and a label for \ref{} commands later in the document
+\caption{Partition} % give the algorithm a caption
+\label{alg:clam-partition} % and a label for \ref{} commands later in the document
 \begin{algorithmic}[1] % enter the algorithmic environment
-\STATE $minsize \leftarrow 1$
-\STATE $data$, a dataset.
-\STATE $d \gets 0$
-\STATE $clusters = \{\}$
-\STATE $n = |data|$
-\WHILE{true}
-    \STATE $seeds \leftarrow \sqrt{n}$ random points from $data$
-    \STATE $l, r \gets \{l, r | l,r \in seeds \land l,r = \argmax d(x,y) | x,y \in seeds\}$
-    \STATE $clusters[l] \gets \{x | x \in data \land d(l,x) \le d(r,x)\}$
-    \STATE $clusters[r] \gets \{x | x \in data \land d(r,x) < d(l,x)\}$
-    \IF{$|clusters[l]| > minsize$}
-        \STATE Cluster(clusters[l])
+    \REQUIRE $cluster$
+    \STATE $c \leftarrow$ geometric median of $cluster.points$
+    \STATE $r \leftarrow \argmax d(c,x) \ \forall \ x \in cluster.points$
+    \STATE $l \leftarrow \argmax d(r,x) \ \forall \ x \in cluster.points$
+    \STATE $cluster.left \leftarrow \{x | x \in data \land d(l,x) \le d(r,x)\}$
+    \STATE $cluster.right \leftarrow \{x | x \in data \land d(r,x) < d(l,x)\}$
+    \IF{$|cluster.left| > 1$}
+        \STATE Partition(cluster.left)
     \ENDIF
-    \IF{$|clusters[r]| > minsize$}
-        \STATE Cluster(clusters[r])
+    \IF{$|cluster.right| > 1$}
+        \STATE Partition(cluster.right)
     \ENDIF
-\ENDWHILE
 \end{algorithmic}
 \end{algorithm}
 
@@ -52,66 +48,66 @@ These include the \textit{cardinality}, the number of points in a cluster;
 \textit{center}, the geometric median of points contained in a cluster;
 \textit{radius}, the distance to the farthest point from the center;
 and \textit{local fractal dimension}, as described in~\cite{ishaq2019clustered}.
-We can also consider individual \textit{parent-child ratios} of cardinality, radius, and local fractal dimension, as well as \textit{exponential moving averages} of those parent-child ratios along a branch of the tree.
-Each of these properties is computed during the process of clustering, and stored as metadata for each cluster.
+We can also consider individual \textit{parent-child ratios} of cardinality, radius, and local fractal dimension, as well as the \textit{exponential moving averages} of those parent-child ratios along a branch of the tree.
+Each of these properties is computed during the process of clustering, and cached as metadata for each cluster.
 In particular, we use the parent-child ratios and the exponential moving averages of those ratios to generalize our method from a small set of datasets to a large, distinct set of datasets.
 
 \subsubsection{Graphs}
 Clusters that are close in the embedding space sometimes have overlapping volumes, i.e.\ the distance between their centers is less than or equal to the sum of their radii.
 We define a graph $G=(V,E)$ with the selected clusters in one-to-one correspondence to vertices, and with an edge between two vertices if and only if their corresponding clusters overlap.
-Note that any given datapoint will be a member of only one cluster at a given depth in the tree, even though it might exist inside another clusters' radii.
-Thus, the clusters are not necessarily hyperspheres, but rather polytopes akin to a high-dimensional version of a Voronoi diagram~\cite{voronoi1908nouvelles}.
+Note that any given datapoint will be a member of only one cluster at a given depth in the tree, even though it might exist inside other clusters' radii.
+Thus, the clusters are not necessarily hyperspheres, but rather polytopes akin to a high-dimensional analog of a Voronoi diagram~\cite{voronoi1908nouvelles}.
 For our purposes, a graph also exhibits a particular invariant.
 The clusters corresponding to vertices in the graph collectively contain every point in the dataset.
-In addition, each point in the dataset is in exactly one cluster corresponding to exactly one vertex in the graph.
+In addition, each point in the dataset is in exactly one cluster in the graph.
 
-A corollary to this invariant is that the graph will never contain two vertices such that one vertex corresponds to a parent or child cluster of another vertex.
+A corollary to this invariant is that the graph will never contain two vertices such that one vertex corresponds to a ancestor or descendent cluster of another vertex.
 A Graph can be built from clusters at a fixed depth in the cluster-tree (a layer-graph), or from clusters from multiple different depths in the tree (an optimal-graph).
 In this work we consider the cardinality of a graph to be \textit{vertex cardinality}, i.e.\ the number of vertices (clusters) in the graph.
 
 \subsubsection{The Manifold}
-% describe Manifold as containing the tree and all the graphs.
-According to the ``manifold hypothesis''~\cite{fefferman2016testing},
-datasets from constrained generating processes that are embedded in a high-dimensional space typically only occupy a low-dimensional manifold in that space.
+According to the ``manifold hypothesis''~\cite{fefferman2016testing}, datasets collected from constrained generating processes that are embedded in a high-dimensional space typically only occupy a low-dimensional manifold in that space.
 
-The graphs discussed so far map this low-dimensional manifold in the original embedding space.
+The graphs discussed thus far map this low-dimensional manifold in the original embedding space.
 Different graphs do this at different levels of local or global resolution.
 Our aim is to properly build such a graph, where different resolutions may be necessary for different regions of the manifold.
 We can then apply several anomaly detection algorithms to these graphs.
-These algorithms will often also incorporate information from the tree, such as parent-child relationships.
+These algorithms will often also incorporate information from the tree, such as the parent-child ratios described in Section~\ref{subsubsec:methods:clam:clustering}.
 
 We describe some algorithms in Section~\ref{subsec:methods:individual-algorithms}.
-While these algorithms are themselves fairly simple, the real challenge is in selecting the right clusters for the graphs for the algorithms to operate on.
+While these algorithms are themselves fairly simple, the real challenge is in selecting the right clusters for the graphs for these algorithms to operate upon.
 We will demonstrate CLAM's manifold mapping to be effective enough that even these simple algorithms, more often than not, outperform state-of-the-art anomaly detection algorithms.
 
 
 \subsection{Induced Graphs}
 \label{subsec:methods:induced-graphs}
 
-The heart of the problem with our methods for anomaly detection is building the right graph to represent the underlying manifold.
+The heart of the problem with CHAODA is building the right graph(s) to represent the underlying manifold.
 One could try using every possible combination of clusters to form every possible graph but this leads to combinatorial explosion.
-Instead, we must intelligently select those clusters that, when used to build the graph, perform best for anomaly detection.
+Instead, we must intelligently select those clusters that build a graph which performs well for anomaly detection.
 
 Area Under the Curve (AUC) of the Receiver Operating Characteristic (ROC) is often used to measure the performance of anomaly detectors;
 we wish to choose clusters that are expected to maximize this measure.
 We do this by learning a function that takes a cluster and predicts its contribution to AUC if that cluster were selected for the graph.
 Any function $f: Cluster \mapsto \mathbb{R}^+$ will suffice.
-Importantly, we will learn this function on datasets \emph{completely unrelated to} the ones on which we test; we are learning not dataset-specific parameters, but geometric and topological properties of data.
+Importantly, we will learn this function on datasets \emph{completely unrelated to} the ones on which we test;
+we are not learning any dataset-specific parameters, but instead the geometric and topological properties of the data.
 
 We chose a linear regression model and a regression tree model to fill this role.
 Such models need some data to train with.
-To generate this data, we took a random sample from the datasets described in Section~\ref{subsec:methods:datasets}, choosing six datasets at random which had between 1,000 and 100,000 samples.
-We generate CLAM manifolds for these training datasets, use the linear regression  and regression tree models to learn from these datasets, and apply the results to an entirely different collection of datasets.
+To generate this data, we took a random sample from the datasets described in Section~\ref{subsec:methods:datasets}, choosing six datasets at random which had between 1,000 and 100,000 points.
+We generate CLAM manifolds for these training datasets, use the linear regression and regression tree models to learn from these datasets, and apply the results to an entirely different collection of datasets.
 The process is as follows.
 
-We generate the initial training data by considering layer-graphs.
-For each such graph, we calculate the means of the parent-child cardinality ratio, radius ratio, and local fractal dimension ratio;
+We generate CLAM trees for each training dataset.
+We generate the initial training data by considering layer-graphs induced from these trees.
+For each such graph, we calculate the arithmetic, geometric, and harmonic means of the parent-child cardinality ratio, radius ratio, and local fractal dimension ratio;
 along with the exponential moving averages of these ratios, as described in Section~\ref{subsubsec:methods:clam:clustering}.
-These ratios form the feature vector for that one graph.
+Each set of means forms a 6-dimensional feature vector, giving us three feature vectors for each graph.
 For each individual algorithm described in Section~\ref{subsec:methods:individual-algorithms}, we apply it to the graph and obtain an AUC ROC\@.
-We then train the linear regression and decision tree models to predict this AUC from the feature vector extracted from the graph.
-The result is a pair of models for each indivisual algorithm of CHAODA, trained from the six training datasets;
-the weights learned here are then used for all test datasets, regardless of their dimensionality or other properties.
+We then train the linear regression and decision tree models to predict this AUC from the feature vectors extracted from the graph.
+The result is a set of models for each individual algorithm of CHAODA, trained from the six training datasets;
+the decision functions from the fitted models are then used to make predictions for all test datasets, regardless of any differences in dimensionality or other properties of those datasets.
 Figure~\ref{fig:methods:graph-generation} illustrates how a graph can be induced by clusters and their overlaps at different depths of a tree.
 
 \begin{figure}[ht!]
@@ -126,7 +122,6 @@ Figure~\ref{fig:methods:graph-generation} illustrates how a graph can be induced
 \end{figure}
 
 
-% describe individual algorithms.
 \subsection{Individual Algorithms}
 \label{subsec:methods:individual-algorithms}
 
@@ -138,14 +133,9 @@ the cardinality of a cluster $c$ is denoted by $|c|$, the number of points in th
 
 \subsubsection{Relative Cluster Cardinality}
 We measure the anomalousness of a point by the cardinality of the cluster that the point belongs to relative to the cardinalities of the other clusters in the graph.
-Points in the same cluster are considered equally anomalous and points in clusters with lower cardinalities are considered more anomalous than points in clusters with higher cardinalities. The algorithm is defined in Algorithm~\ref{alg:rclc}. The time complexity of this algorithm is $O(|V|)$.
-
-% \begin{itemize}
-%     \item for each cluster $c$ in graph $g$:
-%     \begin{itemize}
-%         \item $scores[c] \leftarrow -|c|$.
-%     \end{itemize}
-% \end{itemize}
+Points in the same cluster are considered equally anomalous and points in clusters with lower cardinalities are considered more anomalous than points in clusters with higher cardinalities.
+The algorithm is defined in Algorithm~\ref{alg:rclc}.
+The time complexity of this algorithm is $O(|V|)$.
 
 \begin{algorithm}[h]
     \caption{Relative Cluster Cardinality}
@@ -159,9 +149,11 @@ Points in the same cluster are considered equally anomalous and points in cluste
 \end{algorithm}
 
 \subsubsection{Relative Component Cardinality}
-We use the usual definition of connected components: no two nodes from different components have an edge between them, and every pair of nodes in the same component has a path connecting them.
+We use the usual definition of connected components:
+no two nodes from different components have an edge between them, and
+every pair of nodes in the same component has a path connecting them.
 Consider the relative cardinalities of each component in much the same way as we considered the relative cardinalities of clusters in the Relative Cluster Cardinality method.
-Points in clusters (nodes) in smaller components are considered more anomalous than points in clusters in larger components,
+Points in clusters (vertices) in smaller components are considered more anomalous than points in clusters in larger components,
 and points in clusters in the same component are considered equally anomalous.
 The algorithm is defined in Algorithm~\ref{alg:rcc}.
 This algorithm first finds the components of the graph, so its time complexity is $O(|E| + |V|)$.
@@ -177,10 +169,10 @@ This algorithm first finds the components of the graph, so its time complexity i
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Graph Neighborhood Size:}
+\subsubsection{Graph Neighborhood Size}
 Given the graph with clusters and edges, consider the number of clusters reachable from a starting cluster within a given graph distance $k$.
 We call this number the \textit{graph-neighborhood} of the starting cluster.
-With $k$ small compared to the diameter of the graph, we consider the relative sizes of \textit{graph-neighborhood} of the clusters.
+With $k$ small compared to the diameter of the graph, we consider the relative sizes of graph-neighborhoods of the clusters.
 Points in clusters with small graph-neighborhoods are considered more anomalous than points in clusters with large graph-neighborhoods.
 The algorithm is defined in Algorithm~\ref{alg:gns}.
 This algorithm is dominated by computing the eccentricity of each cluster, so its time complexity is $O(|E| \cdot |V|)$.
@@ -202,7 +194,6 @@ This algorithm is dominated by computing the eccentricity of each cluster, so it
 \end{algorithm}
 
 \subsubsection{Child-Parent Cardinality Ratio}
-% As described in CHESS~\cite{ishaq2019clustered},
 As described in Section~\ref{subsubsec:methods:clam:clustering}, a cluster is partitioned by using its two maximally distant points as poles.
 All points in a cluster are split among the children by whichever pole they are closer to.
 Consider the fraction of points in a cluster that are assigned to each child.
@@ -210,8 +201,10 @@ If a child cluster contains only a small fraction of its parent's points, then w
 These child-parent cardinality ratios are accumulated for each point down its branch in the tree, terminating when the child cluster is a node in the induced optimal graph.
 Points with a low value of these accumulated ratios are considered more anomalous than points with a higher value.
 The algorithm is defined in Algorithm~\ref{alg:cpcr}.
-The time complexity of calculating the ratios is $O(|V|)$at clustering time, which is amortized over scoring the points; the time complexity of scoring a point is $O(1)$.
+The time complexity of calculating the ratios is $O(|V|)$ at clustering time, which is amortized over scoring the points;
+the time complexity of scoring a point is $O(1)$.
 
+% TODO: Make this faithful to the description in text. scores are accumulated down the tree.
 \begin{algorithm}[h]
     \caption{Child-Parent Cardinality Ratio}
     \label{alg:cpcr}
@@ -246,7 +239,7 @@ Its worst-case time complexity is $O(|V|^2)$, but is often better because the tr
         \ENDFOR
     \ENDFOR
     \FOR {cluster $c \in G$}
-        \STATE $scores[c] \gets \frac{|p|}{|c|}$
+        \STATE $scores[c] \gets -v[c]$
     \ENDFOR
 \end{algorithmic}
 \end{algorithm}
@@ -255,7 +248,7 @@ Its worst-case time complexity is $O(|V|^2)$, but is often better because the tr
 We compute the transition probability matrix of each component of a graph that contains at least two clusters.
 We then compute successive squares of this matrix.
 This process will eventually converge as long as the graph is connected and aperiodic~\cite{levin2017markov}, and we find this convergent matrix.
-The sum of the values along a row is inversely related to the anomalousness of the respective cluster.
+We consider the sum of the values along a row to be inversely related to the anomalousness of the respective cluster.
 The algorithm is defined in Algorithm~\ref{alg:sp}.
 This algorithm is dominated by the computation of the transition matrix for each component in the graph.
 Its worst-case time complexity is $O(|V|^2)$, but is often better in practice.
@@ -289,20 +282,36 @@ Since our graphs guarantee that each point is in exactly one cluster, and that e
 However, the individual methods still produce scores in a wide range of values.
 The only common feature among these scores is that low scores correspond to inliers and high scores correspond to outliers.
 Therefore, we cannot directly compare scores from different methods, which is needed for ensemble methods.
-We normalize to the range $[0, 1]$, using gaussian normalization by default, though we include sigmoid normalization and min-max normalization as options in our implementation.
+We normalize to the range $[0, 1]$, using gaussian normalization by default as described in~\ref{alg:ormalization}.
+We include sigmoid normalization and min-max normalization as options in our implementation.
 % TODO: Add equations and/or citations for normalization methods.
 % if room.
+
+\begin{algorithm}[h]
+    \caption{Gaussian Normalization}
+    \label{alg:ormalization}
+\begin{algorithmic}[1]
+    \REQUIRE $X$, a dataset
+    \REQUIRE $S$, a set of outlier scores for each point in $X$
+    \STATE $erf: x \mapsto \frac{2}{\sqrt{\pi}} \int_{0}^{x} e^{-u^2} \,du $
+    \STATE $\mu \gets mean(S)$
+    \STATE $\sigma \gets std(S)$
+    \FOR {point $p \in X$}
+        \STATE $S[p] \gets \frac{1}{2} \Big( 1 + erf \big(\frac{S[p] - \mu}{\sigma \cdot \sqrt{2}}\big) \Big) $
+    \ENDFOR
+\end{algorithmic}
+\end{algorithm}
 
 \subsection{Ensemble}
 \label{subsec:methods:ensemble}
 
 Given a dataset and a list of distance functions for the dataset, we start by building a CLAM tree for each distance function on the dataset.
-we extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
+We extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
 Given the set of models learned from the training datasets described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster, normalized by cardinality.
 The highest ranked clusters from each tree are then used to build a graph.
 This gives us one graph for each combination of individual algorithm, meta-ML model, and distance function used.
-We used the six individual algorithms described in~\ref{subsec:methods:individual-algorithms}, linear regression and regression trees as the meta-ML models, and L1-norm and L2-norm as distance functions;
-thus, we have upto $24$ graphs for each dataset.
+We used the six individual algorithms described in~\ref{subsec:methods:individual-algorithms}, three means (arithmetic, geometric, and harmonic), two meta-ML models (linear regression and regression trees), and two distance metrics ($L1$-norm and $L2$-norm);
+thus, we have upto $72$ graphs for each dataset.
 
 Each graph is then used with its corresponding individual algorithm to calculate an outlier score for each point in the dataset.
 These outlier scores are then combined into an ensemble by simply taking the mean of all the scores for each point.
@@ -312,7 +321,7 @@ We present the AUC scores from this ensemble in Section~\ref{sec:results}.
 
 During testing, we noticed that even though we often see $|V| \ll n $, where $n$ is the number of points in the dataset and $V$ is the set of vertices in a graph, the more expensive methods from~\ref{subsec:methods:individual-algorithms} took too long to run.
 We remedy this by only running the expensive algorithms, i.e.\ Graph Neighborhood Size, Random Walks, and Stationary Probabilities, when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
-We compared the effect on AUC of using this threshold and present the results in Table~\ref{table:results:test-performance} under the CHAODA-fast rows as compared to not using the threshold under the CHAODA rows.
+We compared the effect on AUC of using this threshold and present the results in Table~\ref{table:results:test-performance} under the CHAODA-fast and CHAODA rows.
 CHAODA-fast exhibits negligible difference from CHAODA in performance, so we
 set CHAODA-fast as the default in our implementation.
 
@@ -323,16 +332,14 @@ set CHAODA-fast as the default in our implementation.
 We sourced 24 datasets, all from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}, for training CHAODA and testing its performance.
 All of these datasets were adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and were standardized, by ODDS, for benchmarks on anomaly and outlier detection.
 
-% TODO: Did we repeat this experiment with a different six? Was it actually at random? Najib: I'm planning on upping this to 8 datasets, and then doing 4-fold cross-validation. This selection was completely random.
-
 Of these 24 datasets, we selected a random sample of 6 datasets to use for training CHAODA\@.
-The training datasets from ODDS were: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
-The remaining datasets were used to measure the performance of CHAODA\@.
-Our performance on the test set of datasets is shown in Table~\ref{table:results:test-performance}.
+These training datasets were: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
+The remaining datasets were used to benchmark the performance of CHAODA\@.
+Our performance on the test set is shown in Table~\ref{table:results:test-performance}.
 We provide more details on the datasets, including their size, dimensionality, and fraction of outliers, in the supplementary materials.
 
 Note that CHAODA is an unsupervised algorithm for outlier detection.
 As such, we compare only against other unsupervised algorithms. %TODO but REPEN?
-We compared against $18$ unsupervised algorithms implemented in pyOD~\cite{zhao2019pyod}, as well as (list others here)~\cite{}. % TODO fill this in
+We compared against $18$ unsupervised algorithms collected in the pyOD suite~\cite{zhao2019pyod}, as well as (list others here)~\cite{}. % TODO fill this in. SKLearn
 % looks like just loci in the table, and rs-hash for a couple datasets, is this right? if so, let's clarify here.
 A supervised version of CHAODA will be possible future work.

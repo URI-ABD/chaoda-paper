@@ -2,7 +2,8 @@
 \label{sec:introduction}
 
 Detecting anomalies and outliers from data is a well-studied problem in machine learning.
-When data occupy easily-characterizable distributions, such as the Gaussian, the task is relatively easy: one need only identify when a datum is sufficiently far from the mean.
+When data occupy easily-characterizable distributions, such as the Gaussian, the task is relatively easy:
+one need only identify when a datum is sufficiently far from the mean.
 However, in ``big data'' scenarios, where data can occupy high-dimensional spaces, anomalous behavior becomes harder to quantify.
 If the data happen to be uniformly distributed, one can conceive of simple mechanisms, such as a one-class SVM, that would be effective in any number of dimensions.
 However, real-world data are rarely distributed uniformly.
@@ -16,8 +17,6 @@ novel instances of data may emerge over time,
 or normal behavior may evolve towards the outliers.
 Moreover, even if data collection is executed perfectly and shifts in behavior accounted for, there is still a risk of adversarial attacks being provided as inputs to machine-learning algorithms~\cite{elsayed2018adversarial}.
 
-% TODO: \subsection{Related Works}
-
 Modern algorithms designed to detect anomalous behavior fail for a variety of reasons, in particular when anomalies live close to, but not on, a complex manifold in high-dimensional space.
 Our approach is designed to map these complex manifolds.
 Here we briefly survey contemporary approaches to anomaly detection in order to provide the context needed to understand how our approach differs.
@@ -27,41 +26,35 @@ Here we briefly survey contemporary approaches to anomaly detection in order to 
 
 Clustering refers to techniques for grouping points in a way that provides value.
 This is generally done by assigning \textit{similar} points to the same cluster.
-Given a clustering and a new point, one can estimate the anomalousness of the new point by measuring its distance to its nearest cluster.
+Given a clustering and a new point, one can estimate the anomalousness of that new point by measuring its distance to its nearest cluster(s).
 
 There have been few advancements in clustering techniques over the past decade~\cite{wang2019progress}.
-This may be explained by the poor performance of clustering in high-dimensional space~\cite{zhang2013advancements} thus far.
+This may be explained by the poor performance, thus far, of clustering in high-dimensional space~\cite{zhang2013advancements}.
 
-% \subsubsection{Distance-based Clustering}
-% \label{subsubsec:introduction:clustering-based-approaches:distance-based-clustering}
 Distance-based clustering relies on some distance measure to partition data into some number of clusters.
 Within this approach, the numbers or sizes of clusters are often predetermined: either user-specified, or chosen at random~\cite{wang2019progress}.
-Some examples of distance-based clustering are
+Some examples of distance-based clustering algorithms are
 K-Means~\cite{macqueen1967some},
 PAM~\cite{kaufman2009finding},
 CLARANS~\cite{ng1994efficient} and
 CLARA~\cite{kaufman2009finding}.
 
-% \subsubsection{Hierarchical Clustering}
-% \label{subsubsec:introduction:clustering-based-approaches:hierarchical-clustering}
 Hierarchical clustering methods build a tree, where points are allocated into leaves~\cite{wang2019progress}.
 These trees can be created via bottom-up (agglomerative) or top-down (divisive)~\cite{agrawal1998automatic} clustering.
 One drawback of these methods is the high cost of all-pairs distance computations.
-Examples of hierarchical clustering include
+Examples of hierarchical clustering algorithms include
 MST~\cite{zahn1971graph},
 CURE~\cite{guha1998cure}, and
 CHAMELEON~\cite{karypis1999hierarchical}.
 
-% \subsubsection{Grid-based Clustering}
-% \label{subsubsec:introduction:clustering-based-approaches:grid-based-clustering}
-Grid-based clustering works via segmenting the entire space into a discrete number of cells, and then scanning those cells to find regions of high density.
+Grid-based clustering works via segmenting the entire volume into a discrete number of cells, and then scanning those cells to find regions of high density.
 Utilizing a grid structure for clustering means that these algorithms typically scale well to larger datasets.
 Some examples include
 STING~\cite{wang1997sting},
 Wavecluster~\cite{sheikholeslami2000wavecluster}, and
-CLIQUE~\cite{agrawal1998automatic}. In this paper, we compare against Clustering Based Local Outlier Factor (CBLOF)~\cite{he2003cblof}, and
+CLIQUE~\cite{agrawal1998automatic}.
+In this paper, we compare against Clustering Based Local Outlier Factor (CBLOF)~\cite{he2003cblof}, and
 Local Correlation Integral (LOCI)~\cite{papadimitriou2003loci}.
-
 
 
 \subsection{Density-based Approaches}
@@ -75,12 +68,11 @@ DENCLUE~\cite{hinneburg1998efficient}.
 In this paper, we compare against Local Outlier Factor (LOF)~\cite{breunig2000lof}.
 
 
-
 \subsection{Graph-based Approaches}
 \label{subsec:introduction:graph-based-approaches}
 
-Graph-based methods build graph representations of the data by treating points, or collections of points, as nodes in a graph and drawing edges between them based on various rules. In this paper, we compare against Connectivity-based Outlier Factor (COF)~\cite{tang2002cof}.
-
+Graph-based methods build graph representations of the data by treating points, or collections of points, as nodes in a graph and drawing edges between them based on various rules.
+In this paper, we compare against Connectivity-based Outlier Factor (COF)~\cite{tang2002cof}.
 
 
 \subsection{Distanced-based Approaches}
@@ -88,7 +80,9 @@ Graph-based methods build graph representations of the data by treating points, 
 
 Distance-based methods use direct distance comparisons.
 These methods largely employ k-Nearest Neighbors as their substrate~\cite{wang2019progress}.
-They tend to use the following intuitions. First, points with fewer than $p$ other points within some distance $d$ are outliers; second, the $n$ points with the greatest distances to their $k^{th}-$nearest neighbor are outliers;
+They tend to use the following intuitions
+First, points with fewer than $p$ other points within some distance $d$ are outliers;
+second, the $n$ points with the greatest distances to their $k^{th}-$nearest neighbor are outliers;
 and finally, the $n$ points with the greatest average distance to their $k$ nearest neighbors are outliers.
 In this paper, we compare against
 k-Nearest Neighbors (kNN)~\cite{ramaswamy2000efficient, sridhar2000knn, fabrizio2002knn}
@@ -103,12 +97,12 @@ These methods often rely on Support-Vector Machines, Random Forests, or Histogra
 
 In this paper, we compare against a number of miscellaneous approaches:
 Histogram-Based Outlier Detection (HBOS)\cite{goldstein2012histogram},
-Isolation-Forest Outlier Detector (IFOREST)~\cite{tony2008iforest,tony2012iforest},
+Isolation-Forest (IFOREST)~\cite{tony2008iforest,tony2012iforest},
 One-class Support Vector Machine (OCSVM)~\cite{sholkopf2001ocsvm},
 Linear Model Deviation-base outlier Detection(LMDD)~\cite{arning1996linear},
 Lightweight Online Detector of Anomalies (LODA)~\cite{pevny2016loda},
-Minimum Covariance Determinant (MCD)~\cite{rousseeuw1999mcd,hardin2004mcd},
-and Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
+Minimum Covariance Determinant (MCD)~\cite{rousseeuw1999mcd,hardin2004mcd}, and
+Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 
 
 \subsection{CHAODA}
@@ -117,36 +111,32 @@ and Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 In this paper we introduce a novel technique, Clustered Learning of Approximate Manifolds (CLAM).
 This approach uses divisive hierarchical clustering to build a map of a manifold in a Banach space~\cite{banach1929fonctionnelles} defined by a distance metric.
 The space may also be defined by a distance \textit{function} that does not obey the triangle inequality, though we have not explored what difficulties this might introduce.
-As the term \emph{manifold learning} has largely become synonymous with dimension reduction for purposes of visualization, we propose \emph{manifold mapping} to refer to approaches that map out properties of the manifold in the original embedding.
-Once the manifold has been mapped, it can be used as input for a myriad of anomaly- or outlier-detection algorithms.
+As the term \emph{manifold learning} has largely become synonymous with dimension reduction for purposes of visualization, we propose \emph{manifold mapping} to refer to approaches that map out properties of the manifold in the original embedding space.
+Once the manifold has been mapped, it can be used as input for a myriad of anomaly and outlier detection algorithms.
 We introduce an ensemble of six such algorithms implemented on CLAM: CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms).
 
 The manifold mapping component is motivated by a hierarchical clustering approach, CHESS~\cite{ishaq2019clustered}, which was designed to accelerate approximate search on large high-dimensional datasets.
 While CHESS clustered to a specific depth solely for purposes of accelerating search, CLAM
 divisively clusters the data until each cluster contains only one datum.
-At any depth of this tree, CLAM can induce a graph by mapping each cluster to a vertex of the graph, and drawing an edge between any two vertices whose corresponding cluster volumes overlap (that is, the sum of their radii is greater than the distances separating their centers).
-Clusters can be selected by a fixed depth, or at heterogeneous depths based on geometric properties, such as local fractal dimension, cardinality, or cluster radius.
+From this tree, CLAM can induce a graph by mapping clusters to vertices of the graph, and drawing an edge between any two vertices whose corresponding cluster volumes overlap (i.e.\ the sum of their radii is greater than the distance separating their centers).
+Clusters can be selected by a fixed depth, or at heterogeneous depths based on geometric properties, such as local fractal dimension, cluster cardinality, or cluster radius.
 We call graphs constrained to a uniform-depth layer \textit{layer graphs}.
 We call graphs from heterogenous depths \textit{optimal graphs}.
 
-Inducing an optimal graph, across a variety of depths effectively builds a manifold with a variety of ``resolutions'', given by the depth of the cluster in the tree. The intuition is that some regions of the manifold may be denser (or sparser) than others, and thus graphs induced from deeper (or shallower) clusters in those regions may be more informative.
-We can also consider clusters higher in the tree to be in some sense ``lower resolution'' than those at greater depth.
+Inducing an optimal graph, across a variety of depths effectively maps a manifold with a variety of ``resolutions'', given by the depths of the clusters used.
+The intuition is that some regions of the manifold may be denser (or sparser) than others, and thus graphs induced from deeper (or shallower) clusters in those regions may be more informative.
+We can consider clusters higher in the tree to be in some sense ``lower resolution'' than those at greater depth.
 
 Once we have mapped a manifold, we can ask about the cardinality of various clusters at different depths, how connected a given cluster is, or even how often a cluster is visited by random walks on the manifold.
 These approaches are combined into an ensemble approach to anomaly and outlier detection.
 
-% This is covered in methods.
-% We test our methods on 24 real-world datasets.
-% The datasets span a wide variety of domains, each having a different quantity of anomalous data.
-% We consider several different approaches to identifying outliers and anomalies:
-% \textbf{distance-based}, examining several classical distance-based definitions of outliers, relying on CLAM's use of distance to cluster data;
-% \textbf{density-based}, examining the cardinality of clusters, under the hypothesis that clusters with lower cardinality are more likely to contain outliers;
-% \textbf{graph-based}, examining several graph-theoretic methods for anomaly detection, using the graphs constructed from clusters.
-
 Historically, clustering approaches have suffered from several problems.
-The most common deficiencies are: ineffective treatment of high dimensionality, the inability to interpret results, and the inability to scale to exponentially-growing datasets~\cite{agrawal1998automatic}.
+The most common deficiencies are:
+ineffective treatment of high dimensionality,
+the inability to interpret results, and
+the inability to scale to exponentially-growing datasets~\cite{agrawal1998automatic}.
 CLAM, as we will demonstrate, largely resolves these issues.
 
 Na\"ively, distance-based approaches require either linear time in the size of the data set for each query,
 or quadratic time to build an index before any queries can be made.
-CLAM builds an index in expected $\mathcal{O}(n \lg n)$ time, and all CHAODA methods are sublinear in the size of the dataset.
+CLAM builds an index in expected $\mathcal{O}(n \lg n)$ time, and queries for outlier scores are sublinear in the size of the dataset.

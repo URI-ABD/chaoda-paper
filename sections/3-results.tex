@@ -2,14 +2,13 @@
 \label{sec:results}
 
 Performance on the 6 training datasets is shown in the Supplement.
-% The performance on the test set of datasets is split among Tables~\ref{table:results:test-performance-1} and~\ref{table:results:test-performance-2}.
 The performance on the 18 test datasets is in Table~\ref{table:results:test-performance}.
 Each column shows the AUC ROC scores of CHAODA and every competitor.
 The best, i.e.\ highest, score, and every score with 0.02 of that best score, are presented in bold.
-We consider such a small difference of $0.02$ in ROC-AUC to be negligible.
-In our experiments, setting a different random seed resulted in a variance of $0.02$ AUC.
+In our experiments, setting a different random seed resulted in a variance of $0.02$ AUC, and so we consider such a small difference to be negligible.
 
 If a method took longer than 10 hours on a dataset, we terminated that run and marked the corresponding cell with ``\textit{TO}''.
+If a method crashed on a given dataset, we mark the cell with ``\textit{EX}''.
 Notably, CHAODA performs best (or ties for best) on 14 of the 18 test datasets.
 In addition, CHAODA-fast performs very comparably to CHAODA without the fast heuristic, so we leave CHAODA-fast as the default behavior.
 
@@ -18,21 +17,11 @@ Note that we implemented CLAM and CHAODA entirely in Python.
 While we use the provided wrappers for each method we compare against, those methods are often implemented in C and C++, while several other methods leverage the GPU.
 Therefore, the comparison of wall-clock time performance is not truly fair to CHAODA.
 A reimplementation of CLAM and CHAODA in a high-performance language, such as Rust, is possible future work.
-% With such an implementation, we can expect a two-orders-of-magnitude improvement in wall-clock times.
-% This would make wall-clock times comparable to many of the competitors.
-
-% Also note that REPEN~\cite{pang2018learning} is a supervised algorithm, while every other method in Table~\ref{table:results:test-performance} is an unsupervised algorithm.
-% TODO: Fill in cells marked with RUN when Minsky is done running.
 
 % TODO summarize results in text here, but I don't want to rewrite this twice, so let's finalize everything first.
 
-% Was this repeated? Reads like we picked the six we don't do well on so that we could do well. Najib: Technically, CHAODA won 3/6.
-% NMD: I'm leaving this out until we do cross-validation with more datasets in test. We didn't cherry-pick those, and need not make it look like we did.
-% Interestingly, CHAODA did not perform particularly well on the training set of datasets.
-% However, on the test set, CHAODA outperformed all competitors on 10 of the 18 datasets.
-
 \begin{table*}[!t]
-\renewcommand{\arraystretch}{1.2}
+\renewcommand{\arraystretch}{1.15}
 % \caption{Performance on the first half of the Test Datasets}
 \caption{Performance on the Test Datasets}
 % \label{table:results:test-performance-1}
@@ -49,60 +38,42 @@ A reimplementation of CLAM and CHAODA in a high-performance language, such as Ru
 \hline
         CHAODA &       0.75 &    \textbf{0.97} &   \textbf{0.80} &  \textbf{0.75} &  \textbf{0.70} & \textbf{1.00} &                \textbf{0.88} &   \textbf{0.98} &  \textbf{0.86} \\
 \hline
-                ABOD &                0.62 &             0.50 &            0.49 &           0.51 &           0.53 &          0.50 &                0.85 &            0.80 &           0.50 \\
+        ABOD &                0.62 &             0.50 &            0.49 &           0.51 &           0.53 &          0.50 &                0.85 &            0.80 &           0.50 \\
 \hline
-        AutoEncoder &                0.65 &             0.91 &            0.74 &           0.52 &           0.54 &          0.51 &                0.65 &            0.83 &           0.51 \\
+AutoEncoder &                0.65 &             0.91 &            0.74 &           0.52 &           0.54 &          0.51 &                0.65 &            0.83 &           0.51 \\
 \hline
-                CBLOF &                0.70 &             0.83 &            0.57 &    \textit{EX} &           0.54 &   \textit{EX} &                0.86 &            0.83 &           0.50 \\
+        CBLOF &                0.70 &             0.83 &            0.57 &    \textit{EX} &           0.54 &   \textit{EX} &                0.86 &            0.83 &           0.50 \\
 \hline
-                COF &                0.65 &             0.26 &            0.50 &           0.50 &           0.59 &          0.51 &                0.81 &            0.83 &           0.51 \\
+        COF &                0.65 &             0.26 &            0.50 &           0.50 &           0.59 &          0.51 &                0.81 &            0.83 &           0.51 \\
 \hline
-                HBOS &                0.65 &             0.93 &            0.58 &           0.49 &           0.48 &          0.51 &                0.36 &            0.91 &           0.50 \\
+        HBOS &                0.65 &             0.93 &            0.58 &           0.49 &           0.48 &          0.51 &                0.36 &            0.91 &           0.50 \\
 \hline
-        IFOREST &                0.72 &             0.91 &            0.69 &           0.50 &           0.54 &          0.53 &                0.77 &            0.83 &           0.59 \\
+IFOREST &                0.72 &             0.91 &            0.69 &           0.50 &           0.54 &          0.53 &                0.77 &            0.83 &           0.59 \\
 \hline
-                KNN &                0.68 &             0.84 &            0.51 &           0.51 &           0.54 &          0.51 &       \textbf{0.90} &            0.83 &           0.51 \\
+        KNN &                0.68 &             0.84 &            0.51 &           0.51 &           0.54 &          0.51 &       \textbf{0.90} &            0.83 &           0.51 \\
 \hline
-                LMDD &                0.68 &             0.64 &            0.60 &           0.49 &           0.54 &          0.51 &                0.67 &            0.65 &           0.56 \\
+        LMDD &                0.68 &             0.64 &            0.60 &           0.49 &           0.54 &          0.51 &                0.67 &            0.65 &           0.56 \\
 \hline
-                LOCI &                0.62 &      \textit{TO} &     \textit{TO} &    \textit{TO} &           0.58 &   \textit{TO} &                0.58 &            0.90 &    \textit{TO} \\
+        LOCI &                0.62 &      \textit{TO} &     \textit{TO} &    \textit{TO} &           0.58 &   \textit{TO} &                0.58 &            0.90 &    \textit{TO} \\
 \hline
-                LODA &                0.65 &             0.93 &            0.60 &           0.52 &           0.48 &          0.51 &                0.63 &            0.48 &           0.52 \\
+        LODA &                0.65 &             0.93 &            0.60 &           0.52 &           0.48 &          0.51 &                0.63 &            0.48 &           0.52 \\
 \hline
-                LOF &                0.67 &             0.30 &            0.49 &           0.50 &           0.54 &          0.51 &                0.79 &            0.83 &           0.53 \\
+        LOF &                0.67 &             0.30 &            0.49 &           0.50 &           0.54 &          0.51 &                0.79 &            0.83 &           0.53 \\
 \hline
-                MCD &                0.65 &             0.94 &            0.55 &           0.50 &           0.48 &          0.50 &       \textbf{0.90} &            0.83 &           0.51 \\
+        MCD &                0.65 &             0.94 &            0.55 &           0.50 &           0.48 &          0.50 &       \textbf{0.90} &            0.83 &           0.51 \\
 \hline
-        MOGAAL &                0.42 &             0.40 &            0.45 &    \textit{TO} &           0.59 &   \textit{TO} &                0.36 &            0.48 &    \textit{TO} \\
+MOGAAL &                0.42 &             0.40 &            0.45 &    \textit{TO} &           0.59 &   \textit{TO} &                0.36 &            0.48 &    \textit{TO} \\
 \hline
-                OCSVM &                0.70 &             0.77 &            0.70 &           0.56 &           0.54 &          0.50 &                0.68 &            0.83 &           0.60 \\
+        OCSVM &                0.70 &             0.77 &            0.70 &           0.56 &           0.54 &          0.50 &                0.68 &            0.83 &           0.60 \\
 \hline
-                SOD &                0.59 &             0.77 &            0.48 &    \textit{TO} &           0.54 &   \textit{TO} &                0.84 &            0.65 &           0.51 \\
+        SOD &                0.59 &             0.77 &            0.48 &    \textit{TO} &           0.54 &   \textit{TO} &                0.84 &            0.65 &           0.51 \\
 \hline
-        SOGAAL &                0.48 &             0.30 &            0.45 &           0.61 &           0.59 &          0.51 &                0.36 &            0.48 &           0.50 \\
+SOGAAL &                0.48 &             0.30 &            0.45 &           0.61 &           0.59 &          0.51 &                0.36 &            0.48 &           0.50 \\
 \hline
-                SOS &                0.51 &             0.50 &            0.50 &    \textit{TO} &           0.48 &   \textit{TO} &                0.72 &            0.48 &    \textit{TO} \\
+        SOS &                0.51 &             0.50 &            0.50 &    \textit{TO} &           0.48 &   \textit{TO} &                0.72 &            0.48 &    \textit{TO} \\
 \hline
-                VAE &                0.65 &    \textbf{0.95} &            0.74 &           0.52 &           0.48 &          0.51 &                0.65 &            0.83 &           0.56 \\
+        VAE &                0.65 &    \textbf{0.95} &            0.74 &           0.52 &           0.48 &          0.51 &                0.65 &            0.83 &           0.56 \\
 \hline
-% REPEN & \textbf{0.78} & \textbf{0.98} & 0.78 & 0.57 & \textit{EX} & \textbf{1.00} & \textbf{0.88} & \textit{EX} & \textit{RUN} \\
-\hline
-% \end{tabular}
-% \end{sc}
-% \end{small}
-% \end{center}
-% \vskip -0.1in
-% \end{table*}
-
-% \begin{table*}[!b]
-% \renewcommand{\arraystretch}{1.25}
-% \caption{Performance on the second half of the Test Datasets}
-% \label{table:results:test-performance-2}
-% \vskip 0.15in
-% \begin{center}
-% \begin{small}
-% \begin{sc}
-% \begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}
 \hline
 \textbf{Model} & \textbf{Musk} & \textbf{OptDigits} & \textbf{Pima} & \textbf{SatImg-2} & \textbf{Smtp} & \textbf{Vert} & \textbf{Vowels} &  \textbf{WBC} & \textbf{Wine} \\
 \hline
@@ -110,43 +81,41 @@ A reimplementation of CLAM and CHAODA in a high-performance language, such as Ru
 \hline
         CHAODA & \textbf{1.00} &               0.93 &          0.63 &       \textbf{1.00} & \textbf{0.95} &               0.29 &            0.70 & \textbf{0.97} & \textbf{0.99} \\
 \hline
-                ABOD &          0.47 &               0.54 &          0.60 &                0.53 &          0.50 &               0.49 &   \textbf{0.75} &          0.50 &          0.43 \\
+        ABOD &          0.47 &               0.54 &          0.60 &                0.53 &          0.50 &               0.49 &   \textbf{0.75} &          0.50 &          0.43 \\
 \hline
-        AutoEncoder &          0.63 &               0.48 &          0.57 &                0.71 &          0.50 &               0.49 &            0.51 &          0.77 &          0.51 \\
+AutoEncoder &          0.63 &               0.48 &          0.57 &                0.71 &          0.50 &               0.49 &            0.51 &          0.77 &          0.51 \\
 \hline
-                CBLOF & \textbf{1.00} &               0.52 &          0.64 &                0.90 &          0.50 &               0.49 &            0.52 &          0.82 &          0.46 \\
+        CBLOF & \textbf{1.00} &               0.52 &          0.64 &                0.90 &          0.50 &               0.49 &            0.52 &          0.82 &          0.46 \\
 \hline
-                COF &          0.53 &               0.52 &          0.54 &                0.56 &          0.50 &               0.51 &            0.71 &          0.47 &          0.46 \\
+        COF &          0.53 &               0.52 &          0.54 &                0.56 &          0.50 &               0.51 &            0.71 &          0.47 &          0.46 \\
 \hline
-                HBOS & \textbf{1.00} &               0.60 &          0.55 &                0.49 &          0.68 &               0.47 &            0.56 &          0.77 &          0.57 \\
+        HBOS & \textbf{1.00} &               0.60 &          0.55 &                0.49 &          0.68 &               0.47 &            0.56 &          0.77 &          0.57 \\
 \hline
-        IFOREST &          0.97 &               0.50 & \textbf{0.65} &                0.94 &          0.50 &               0.45 &            0.63 &          0.72 &          0.51 \\
+IFOREST &          0.97 &               0.50 & \textbf{0.65} &                0.94 &          0.50 &               0.45 &            0.63 &          0.72 &          0.51 \\
 \hline
-                KNN &          0.51 &               0.51 &          0.60 &                0.61 &          0.53 &               0.47 &            0.72 &          0.51 &          0.47 \\
+        KNN &          0.51 &               0.51 &          0.60 &                0.61 &          0.53 &               0.47 &            0.72 &          0.51 &          0.47 \\
 \hline
-                LMDD &          0.48 &               0.49 &          0.37 &                0.49 &          0.65 &               0.43 &            0.49 &          0.80 &          0.62 \\
+        LMDD &          0.48 &               0.49 &          0.37 &                0.49 &          0.65 &               0.43 &            0.49 &          0.80 &          0.62 \\
 \hline
-                LOCI &   \textit{TO} &        \textit{TO} &   \textit{TO} &         \textit{TO} &   \textit{TO} &               0.49 &     \textit{TO} &          0.72 &          0.46 \\
+        LOCI &   \textit{TO} &        \textit{TO} &   \textit{TO} &         \textit{TO} &   \textit{TO} &               0.49 &     \textit{TO} &          0.72 &          0.46 \\
 \hline
-                LODA &          0.54 &               0.51 &          0.62 &                0.69 &          0.57 &               0.43 &            0.51 &          0.82 &          0.57 \\
+        LODA &          0.54 &               0.51 &          0.62 &                0.69 &          0.57 &               0.43 &            0.51 &          0.82 &          0.57 \\
 \hline
-                LOF &          0.50 &               0.53 &          0.55 &                0.55 &          0.50 &               0.49 &            0.69 &          0.50 &          0.46 \\
+        LOF &          0.50 &               0.53 &          0.55 &                0.55 &          0.50 &               0.49 &            0.69 &          0.50 &          0.46 \\
 \hline
-                MCD &          0.97 &               0.48 & \textbf{0.66} &                0.61 &          0.50 &               0.45 &            0.63 &          0.60 &          0.46 \\
+        MCD &          0.97 &               0.48 & \textbf{0.66} &                0.61 &          0.50 &               0.45 &            0.63 &          0.60 &          0.46 \\
 \hline
-        MOGAAL &          0.48 &               0.48 &          0.61 &                0.49 &   \textit{TO} &               0.51 &            0.48 &          0.60 &          0.46 \\
+MOGAAL &          0.48 &               0.48 &          0.61 &                0.49 &   \textit{TO} &               0.51 &            0.48 &          0.60 &          0.46 \\
 \hline
-                OCSVM &          0.48 &               0.49 &          0.56 &                0.84 &          0.50 &               0.49 &            0.50 &          0.82 &          0.46 \\
+        OCSVM &          0.48 &               0.49 &          0.56 &                0.84 &          0.50 &               0.49 &            0.50 &          0.82 &          0.46 \\
 \hline
-                SOD &          0.51 &               0.51 &          0.56 &                0.58 &   \textit{TO} &               0.45 &            0.66 &          0.60 &          0.46 \\
+        SOD &          0.51 &               0.51 &          0.56 &                0.58 &   \textit{TO} &               0.45 &            0.66 &          0.60 &          0.46 \\
 \hline
-        SOGAAL &          0.48 &               0.52 &          0.48 &                0.49 &          0.62 &      \textbf{0.54} &            0.48 &          0.47 &          0.46 \\
+SOGAAL &          0.48 &               0.52 &          0.48 &                0.49 &          0.62 &      \textbf{0.54} &            0.48 &          0.47 &          0.46 \\
 \hline
-                SOS &          0.52 &               0.52 &          0.51 &                0.52 &   \textit{TO} &               0.49 &            0.59 &          0.52 &          0.46 \\
+        SOS &          0.52 &               0.52 &          0.51 &                0.52 &   \textit{TO} &               0.49 &            0.59 &          0.52 &          0.46 \\
 \hline
-                VAE &          0.63 &               0.48 &          0.61 &                0.71 &          0.50 &               0.45 &            0.51 &          0.77 &          0.67 \\
-\hline
-% REPEN & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} \\
+        VAE &          0.63 &               0.48 &          0.61 &                0.71 &          0.50 &               0.45 &            0.51 &          0.77 &          0.67 \\
 \hline
 \end{tabular}
 \end{sc}
