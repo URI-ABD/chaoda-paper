@@ -94,8 +94,7 @@ and Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 
 There are several approaches to anomaly detection that do not fall neatly into any of the aforementioned categories.
 These methods often rely on Support-Vector Machines, Random Forests, or Histograms to detect outliers.
-
-In this paper, we compare against a number of miscellaneous approaches:
+We compare against seven other approaches:
 Histogram-Based Outlier Detection (HBOS)\cite{goldstein2012histogram},
 Isolation-Forest (IFOREST)~\cite{tony2008iforest,tony2012iforest},
 One-class Support Vector Machine (OCSVM)~\cite{sholkopf2001ocsvm},
@@ -108,7 +107,7 @@ Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 \subsection{CHAODA}
 \label{subsec:introduction:chaoda}
 
-In this paper we introduce a novel technique, Clustered Learning of Approximate Manifolds (CLAM).
+We introduce a novel technique, Clustered Learning of Approximate Manifolds (CLAM).
 This approach uses divisive hierarchical clustering to build a map of a manifold in a Banach space~\cite{banach1929fonctionnelles} defined by a distance metric.
 The space may also be defined by a distance \textit{function} that does not obey the triangle inequality, though we have not explored what difficulties this might introduce.
 As the term \emph{manifold learning} has largely become synonymous with dimension reduction for purposes of visualization, we propose \emph{manifold mapping} to refer to approaches that map out properties of the manifold in the original embedding space.
@@ -127,7 +126,7 @@ Inducing an optimal graph, across a variety of depths effectively maps a manifol
 The intuition is that some regions of the manifold may be denser than others, and thus graphs induced from deeper clusters in those regions may be more informative.
 We can consider clusters at lower depths in the tree to be, in some sense, ``lower resolution'' than those at greater depth.
 
-Once we have mapped a manifold, we can ask about the cardinality of various clusters at different depths, how connected a given cluster is, or even how often a cluster is visited by random walks on the manifold.
+Once we have mapped a manifold, we can analyze the cardinality of clusters at different depths, how connected a cluster is, or how often a cluster is visited by random walks on the manifold.
 These approaches are combined into an ensemble approach to anomaly and outlier detection.
 
 Historically, clustering approaches have suffered from several problems.
@@ -138,5 +137,5 @@ the inability to scale to exponentially-growing datasets~\cite{agrawal1998automa
 CLAM, as we will demonstrate, largely resolves these issues.
 
 Na\"ively, distance-based approaches require either linear time in the size of the data set for each query,
-or quadratic time to build an index before any queries can be made.
+or quadratic time to build an index first.
 CLAM builds an index in expected $\mathcal{O}(n \lg n)$ time, and queries for outlier scores are sublinear in the size of the dataset.
