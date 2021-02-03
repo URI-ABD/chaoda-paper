@@ -281,7 +281,7 @@ Since our graphs guarantee that each point is in exactly one cluster, and that e
 However, the individual methods still produce scores in a wide range of values.
 The only common feature among these scores is that low scores correspond to inliers and high scores correspond to outliers.
 Therefore, we cannot directly compare scores across methods, which is needed for ensemble methods.
-We normalize to the range $[0, 1]$, using gaussian normalization~\cite{kriegel2011interpreting} by default as defined in~\ref{alg:normalization}.
+We normalize to the range $[0, 1]$, using gaussian normalization~\cite{kriegel2011interpreting} as defined in Algorithm~\ref{alg:normalization}.
 We include sigmoid normalization and min-max normalization as options in our implementation.
 
 \begin{algorithm}[h]

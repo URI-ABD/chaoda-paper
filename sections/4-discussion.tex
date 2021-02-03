@@ -16,9 +16,9 @@ We should note the Vertebral Column (Vert.) dataset.
 Most of the tested algorithms perform similarly to random guessing, while CHAODA performs much worse.
 We suspect this is because of how this specific dataset was collected.
 Each instance represents 6 biomechanical attributes derived from scans of a patient's pelvis and lumbar spine.
-%These attributes are: pelvic incidence, pelvic tilt, lumbar lordosis angle, sacral slope, pelvic radius and grade of spondylolisthesis.
+% These attributes are: pelvic incidence, pelvic tilt, lumbar lordosis angle, sacral slope, pelvic radius and grade of spondylolisthesis.
 This dataset contains 210 instances of the Abnormal class treated as inliers, and 30 instances of the Normal class treated as outliers.
-Each attribute has a narrow range to be in the Normal class, but can have a wideer range in the Abnormal class.
+Each attribute has a narrow range to be in the Normal class, but can have a wider range in the Abnormal class.
 This causes the Normal instances to group together, while Abnormal instances remain distant from each other.
 Since CHAODA relies on clusters as the substrate, they assign low scores to the instances in the Normal class, i.e.\ the outliers, and high scores to the Abnormal class, i.e.\ the inliers.
 Put plainly, CHAODA sees the manifold as the Normal class, which the dataset treats as outliers.
