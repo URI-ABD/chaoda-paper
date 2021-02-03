@@ -135,9 +135,9 @@
         In some cases, anomaly detection is easy, such as when data are drawn from well-characterized distributions such as the Gaussian.
         However, when data occupy high-dimensional spaces, anomaly detection becomes more difficult.
         We present CLAM (Clustered Learning of Approximate Manifolds), a fast hierarchical clustering technique that learns a manifold in a Banach space defined by a distance metric.
-        CLAM induces a graph from the cluster tree, based on overlapping clusters drawn from a cluster-tree determined by several geometric and topological features.
-        Upon several such graphs we implement CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms), exploring various properties of the graphs and their constituent clusters in order to compute scores of anomalousness.
-        On 24 publicly available datasets, we compare the performance of CHAODA (by measure of the AUC of a ROC curve) to a variety of state-of-the-art unsupervised anomaly-detection algorithms.
+        CLAM induces a graph from the cluster tree, based on overlapping clusters determined by several geometric and topological features.
+        On these graphs, we implement CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms), exploring various properties of the graphs and their constituent clusters to compute scores of anomalousness.
+        On 24 publicly available datasets, we compare the performance of CHAODA (by measure of ROC AUC) to a variety of state-of-the-art unsupervised anomaly-detection algorithms.
         Six of the datasets are used for training.
         Of the remaining 18, CHAODA outperforms other approaches on 14 datasets.
     \end{abstract}

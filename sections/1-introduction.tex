@@ -44,9 +44,9 @@ CLARA~\cite{kaufman2009finding}.
 
 % \subsubsection{Hierarchical Clustering}
 % \label{subsubsec:introduction:clustering-based-approaches:hierarchical-clustering}
-Hierarchical clustering methods utilize a tree, where points are allocated into leaves~\cite{wang2019progress}.
+Hierarchical clustering methods build a tree, where points are allocated into leaves~\cite{wang2019progress}.
 These trees can be created via bottom-up (agglomerative) or top-down (divisive)~\cite{agrawal1998automatic} clustering.
-One drawback of these methods is the high cost of pairwise distance computations required to build each level of the tree.
+One drawback of these methods is the high cost of all-pairs distance computations.
 Examples of hierarchical clustering include
 MST~\cite{zahn1971graph},
 CURE~\cite{guha1998cure}, and
@@ -67,9 +67,9 @@ Local Correlation Integral (LOCI)~\cite{papadimitriou2003loci}.
 \subsection{Density-based Approaches}
 \label{subsec:introduction:density-based-approaches}
 
-Density-based methods rely on finding regions of high point-density separated by regions of low point-density.
+Density-based methods rely on finding regions of high point-density separated by regions of lower density.
 These algorithms generally do not work well when data are sparse or uniformly distributed.
-Some examples of density-based clustering algorithms are
+Some examples include
 DBSCAN~\cite{ester1996density} and
 DENCLUE~\cite{hinneburg1998efficient}.
 In this paper, we compare against Local Outlier Factor (LOF)~\cite{breunig2000lof}.
@@ -86,11 +86,10 @@ Graph-based methods build graph representations of the data by treating points, 
 \subsection{Distanced-based Approaches}
 \label{subsec:related-works:distanced-based-approaches}
 
-Distance-based methods find anomalous points via distance comparisons.
+Distance-based methods use direct distance comparisons.
 These methods largely employ k-Nearest Neighbors as their substrate~\cite{wang2019progress}.
-Distance-based approaches tend to use the following intuitions. First, points with fewer than $p$ other points within some distance $d$ are outliers; second, the $n$ points with the greatest distances to their $k^{th}-$nearest neighbor are outliers;
+They tend to use the following intuitions. First, points with fewer than $p$ other points within some distance $d$ are outliers; second, the $n$ points with the greatest distances to their $k^{th}-$nearest neighbor are outliers;
 and finally, the $n$ points with the greatest average distance to their $k$ nearest neighbors are outliers.
-
 In this paper, we compare against
 k-Nearest Neighbors (kNN)~\cite{ramaswamy2000efficient, sridhar2000knn, fabrizio2002knn}
 and Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
@@ -125,23 +124,24 @@ We introduce an ensemble of six such algorithms implemented on CLAM: CHAODA (Clu
 The manifold mapping component is motivated by a hierarchical clustering approach, CHESS~\cite{ishaq2019clustered}, which was designed to accelerate approximate search on large high-dimensional datasets.
 While CHESS clustered to a specific depth solely for purposes of accelerating search, CLAM
 divisively clusters the data until each cluster contains only one datum.
-At any given depth of this tree, CLAM can induce a graph by mapping each cluster to a vertex of the graph, and drawing an edge between any two vertices whose corresponding cluster volumes overlap (that is, the sum of their radii is greater than the distances separating their centers).
+At any depth of this tree, CLAM can induce a graph by mapping each cluster to a vertex of the graph, and drawing an edge between any two vertices whose corresponding cluster volumes overlap (that is, the sum of their radii is greater than the distances separating their centers).
 Clusters can be selected by a fixed depth, or at heterogeneous depths based on geometric properties, such as local fractal dimension, cardinality, or cluster radius.
-Graphs can be constrained to a uniform-depth layer from the tree, and we call these \textit{layer graphs}.
+We call graphs constrained to a uniform-depth layer \textit{layer graphs}.
 We call graphs from heterogenous depths \textit{optimal graphs}.
 
-Inducing an optimal graph, across a variety of depths, effectively builds a manifold with a variety of ``resolutions'', given by the depth of the cluster in the tree. The intuition is that some regions of the manifold may be denser (or sparser) than others, and thus graphs induced from deeper (or shallower) clusters in those regions may be more informative.
+Inducing an optimal graph, across a variety of depths effectively builds a manifold with a variety of ``resolutions'', given by the depth of the cluster in the tree. The intuition is that some regions of the manifold may be denser (or sparser) than others, and thus graphs induced from deeper (or shallower) clusters in those regions may be more informative.
 We can also consider clusters higher in the tree to be in some sense ``lower resolution'' than those at greater depth.
 
 Once we have mapped a manifold, we can ask about the cardinality of various clusters at different depths, how connected a given cluster is, or even how often a cluster is visited by random walks on the manifold.
 These approaches are combined into an ensemble approach to anomaly and outlier detection.
 
-We test our methods on 24 real-world datasets.
-The datasets span a wide variety of domains, each having a different quantity of anomalous data.
-We consider several different approaches to identifying outliers and anomalies:
-\textbf{distance-based}, examining several classical distance-based definitions of outliers, relying on CLAM's use of distance to cluster data;
-\textbf{density-based}, examining the cardinality of clusters, under the hypothesis that clusters with lower cardinality are more likely to contain outliers;
-\textbf{graph-based}, examining several graph-theoretic methods for anomaly detection, using the graphs constructed from clusters.
+% This is covered in methods.
+% We test our methods on 24 real-world datasets.
+% The datasets span a wide variety of domains, each having a different quantity of anomalous data.
+% We consider several different approaches to identifying outliers and anomalies:
+% \textbf{distance-based}, examining several classical distance-based definitions of outliers, relying on CLAM's use of distance to cluster data;
+% \textbf{density-based}, examining the cardinality of clusters, under the hypothesis that clusters with lower cardinality are more likely to contain outliers;
+% \textbf{graph-based}, examining several graph-theoretic methods for anomaly detection, using the graphs constructed from clusters.
 
 Historically, clustering approaches have suffered from several problems.
 The most common deficiencies are: ineffective treatment of high dimensionality, the inability to interpret results, and the inability to scale to exponentially-growing datasets~\cite{agrawal1998automatic}.

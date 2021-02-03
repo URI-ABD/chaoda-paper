@@ -1,8 +1,8 @@
 \section{Discussion}
 \label{sec:discussion}
 
-We have presented CHAODA, an ensemble of four algorithms that use the map of the underlying manifold produced by CLAM\@.
-The six individual algorithms are simple to implement on top of CLAM and, when combined into an ensemble, often outperform the state-of-the-art in anomaly detection.
+We have presented CHAODA, an ensemble of six algorithms that use the map of the underlying manifold produced by CLAM\@.
+The six individual algorithms are simple to implement on top of CLAM and, when combined into an ensemble, often outperform state-of-the-art methods.
 
 CLAM uses the geometric and topological properties of fractal dimension and metric entropy of the data to build a map of the low-dimensional manifold that the data occupy.
 CLAM is inspired by the clustering algorithm from CHESS~\cite{ishaq2019clustered}, but differs by the introduction a novel graph-induction approach and a notion of optimal depths, learned via a form of ``meta-machine-learning'' and transfer learning.
@@ -38,5 +38,3 @@ After mapping the manifold of such activations, we would expect to detect malici
 % \label{subsec:discussion:conlcusion}
 
 In conclusion, we have demonstrated that by mapping the manifolds occupied by data, we can exploit that knowledge to implement simple algorithms capable of outperforming other state-of-the-art approaches to anomaly detection.
-
-% TODO discuss runtime

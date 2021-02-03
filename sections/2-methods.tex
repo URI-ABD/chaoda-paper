@@ -95,7 +95,7 @@ Instead, we must intelligently select those clusters that, when used to build th
 Area Under the Curve (AUC) of the Receiver Operating Characteristic (ROC) is often used to measure the performance of anomaly detectors;
 we wish to choose clusters that are expected to maximize this measure.
 We can accomplish this by learning a function that takes a cluster and predicts its contribution to AUC if that cluster were selected for the graph.
-Any function of the following form will suffice: $f: Cluster \mapsto \mathbb{R}^+$.
+Any function $f: Cluster \mapsto \mathbb{R}^+$ will suffice.
 
 We chose a linear regression model and a regression tree model to fill this role.
 Such models need some data to train with.
@@ -129,17 +129,15 @@ Figure~\ref{fig:methods:graph-generation} illustrates how a graph can be induced
 \subsection{Individual Algorithms}
 \label{subsec:methods:individual-algorithms}
 
-Here we describe several simple methods for anomaly detection.
-Each of these methods uses a graph of clusters from CLAM to calculate an anomalousness score for each point in the dataset.
-
+Here we describe several simple methods for anomaly detection, each of which uses a graph of clusters from CLAM to calculate an anomalousness score for each datapoint.
 For each algorithm, $scores$ is a dictionary of clusters and their outlier scores,
 $V$ is the set of clusters in a graph,
 $E$ is the set of edges in a graph, and
-the cardinality of a cluster $c$ is denoted by $|c|$, represneting the number of points in that cluster.
+the cardinality of a cluster $c$ is denoted by $|c|$, the number of points in that cluster.
 
 \subsubsection{Relative Cluster Cardinality}
 We measure the anomalousness of a point by the cardinality of the cluster that the point belongs to relative to the cardinalities of the other clusters in the graph.
-Points in the same cluster are considered equally anomalous and points in clusters with relatively low cardinalities are considered more anomalous than points in clusters with relatively high cardinalities. The algorithm is defined in Algorithm~\ref{alg:rclc}. The time complexity of this algorithm is $O(|V|)$.
+Points in the same cluster are considered equally anomalous and points in clusters with lower cardinalities are considered more anomalous than points in clusters with higher cardinalities. The algorithm is defined in Algorithm~\ref{alg:rclc}. The time complexity of this algorithm is $O(|V|)$.
 
 % \begin{itemize}
 %     \item for each cluster $c$ in graph $g$:
@@ -160,9 +158,9 @@ Points in the same cluster are considered equally anomalous and points in cluste
 \end{algorithm}
 
 \subsubsection{Relative Component Cardinality}
-We define the components of a graph by the property that no two clusters from different components have an edge between them, and every pair of clusters in the same component has a path connecting them.
+We use the usual definition of connected components: no two nodes from different components have an edge between them, and every pair of nodes in the same component has a path connecting them.
 Consider the relative cardinalities of each component in much the same way as we considered the relative cardinalities of clusters in the Relative Cluster Cardinality method.
-Points in clusters in relatively small components are considered more anomalous than points in clusters in relatively large components,
+Points in clusters (nodes) in smaller components are considered more anomalous than points in clusters in larger components,
 and points in clusters in the same component are considered equally anomalous.
 The algorithm is defined in Algorithm~\ref{alg:rcc}.
 This algorithm first finds the components of the graph, so its time complexity is $O(|E| + |V|)$.
@@ -181,10 +179,10 @@ This algorithm first finds the components of the graph, so its time complexity i
 \subsubsection{Graph Neighborhood Size:}
 Given the graph with clusters and edges, consider the number of clusters reachable from a starting cluster within a given graph distance $k$.
 We call this number the \textit{graph-neighborhood} of the starting cluster.
-With $k$ relatively small compared to the diameter of the graph, we can consider the relative sizes of \textit{graph-neighborhood} of the clusters in the graph.
+With $k$ small compared to the diameter of the graph, we consider the relative sizes of \textit{graph-neighborhood} of the clusters.
 Points in clusters with small graph-neighborhoods are considered more anomalous than points in clusters with large graph-neighborhoods.
 The algorithm is defined in Algorithm~\ref{alg:gns}.
-This algorithm is dominated by the computation of the eccentricity of each cluster and its time complexity is $O(|E| \cdot |V|)$.
+This algorithm is dominated by computing the eccentricity of each cluster, so its time complexity is $O(|E| \cdot |V|)$.
 
 \begin{algorithm}[h]
     \caption{Graph Neighborhood Size}
@@ -207,12 +205,11 @@ This algorithm is dominated by the computation of the eccentricity of each clust
 As described in Section~\ref{subsubsec:methods:clam:clustering}, a cluster is partitioned by using its two maximally distant points as poles.
 All points in a cluster are split among the children by whichever pole they are closer to.
 Consider the fraction of points in a cluster that are assigned to each child.
-If a child cluster contains only a small fraction of the points that its parent did, then we consider the points in that child cluster to be more anomalous.
-These child-parent cardinality ratios are accumulated for each point down its branch in the tree, terminating when the child cluster is a node in the graph.
-Points with a low value of these accumulated ratios are considered more anomalous than points with a high value of these accumulated ratios.
+If a child cluster contains only a small fraction of its parent's points, then we consider the points in that child cluster to be more anomalous.
+These child-parent cardinality ratios are accumulated for each point down its branch in the tree, terminating when the child cluster is a node in the induced optimal graph.
+Points with a low value of these accumulated ratios are considered more anomalous than points with a higher value.
 The algorithm is defined in Algorithm~\ref{alg:cpcr}.
-The cost of calculating the ratios is amortized in building the tree.
-The time complexity of this algorithm is $O(|V|)$.
+The time complexity of calculating the ratios is $O(|V|)$at clustering time, which is amortized over scoring the points; the time complexity of scoring a point is $O(1)$.
 
 \begin{algorithm}[h]
     \caption{Child-Parent Cardinality Ratio}
@@ -233,8 +230,6 @@ The least visited clusters are the most anomalous, and the most visited clusters
 The algorithm is defined in Algorithm~\ref{alg:rw}.
 This algorithm is dominated by the computation of the transition matrix for the graph.
 Its worst-case time complexity is $O(|V|^2)$, but is often better because the transition matrix is computed separately for each component in the graph.
-
-The algorithm is as follows:
 
 \begin{algorithm}[h]
     \caption{Random Walks}
@@ -257,12 +252,12 @@ The algorithm is as follows:
 
 \subsubsection{Stationary Probabilities}
 We compute the transition probability matrix of each component of a graph that contains at least two clusters.
-We then compute successive squares of this matrix. % TODO citation
-This process will eventually converge (add citation here), and we find this convergent matrix.
+We then compute successive squares of this matrix.
+This process will eventually converge as long as the graph is connected and aperiodic~\cite{levin2017markov}, and we find this convergent matrix.
 The sum of the values along a row is inversely related to the anomalousness of the respective cluster.
 The algorithm is defined in Algorithm~\ref{alg:sp}.
 This algorithm is dominated by the computation of the transition matrix for each component in the graph.
-Its time worst-case time complexity is $O(|V|^2)$, but is often better in practice.
+Its worst-case time complexity is $O(|V|^2)$, but is often better in practice.
 
 \begin{algorithm}[h]
     \caption{Stationary Probabilities}
@@ -286,46 +281,39 @@ Its time worst-case time complexity is $O(|V|^2)$, but is often better in practi
 \subsection{Normalization}
 \label{subsec:methods:normalization}
 
-The individual methods rescribed in~\ref{subsec:methods:individual-algorithms} produce outlier scores for each cluster, rather than for each point.
-We remedy this by having each point simply inherit the outlier score of the cluster it belongs to.
-Since our graphs guarantee that each point is in exactly one cluster, and that every point from the dataset is accounted for, this inheritance assigns an outlier score to each point in a dataset.
+The individual methods described in~\ref{subsec:methods:individual-algorithms} produce outlier scores for each cluster, rather than for each point.
+We remedy this by assigning each point the score of the cluster it belongs to.
+Since our graphs guarantee that each point is in exactly one cluster, and that every point from the dataset is accounted for, this assigns an outlier score to each point in a dataset.
 
 However, the individual methods still produce scores in a wide range of values.
 The only common feature among these scores is that low scores correspond to inliers and high scores correspond to outliers.
-Thesefore, scores from different methods or graphs cannot be directly compared with each other.
-We need some method for normalizing these scores to the same range.
-The standard range is $[0, 1]$, with high scores assigned to outliers.
-
-We use gaussian normalization by default, though we include sigmoid normalization and min-max normalization as options in our implementation.
-
+Therefore, we cannot directly compare scores from different methods, which is needed for ensemble methods.
+We normalize to the range $[0, 1]$, using gaussian normalization by default, though we include sigmoid normalization and min-max normalization as options in our implementation.
 % TODO: Add equations and/or citations for normalization methods.
-
-Once the scores are in a uniform range, we are ready for the ensemble.
-
+% if room.
 
 \subsection{Ensemble}
 \label{subsec:methods:ensemble}
 
 Given a dataset and a list of distance functions for the dataset, we start by building a CLAM tree for each distance function on the dataset.
 we extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
-Given the set of models learned from the training datasets described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster.
-These rankings are normalized by the cardinality of each cluster.
+Given the set of models learned from the training datasets described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster, normalized by cardinality.
 The highest ranked clusters from each tree are then used to build a graph.
 This gives us one graph for each combination of individual algorithm, meta-ML model, and distance function used.
 We used the six individual algorithms described in~\ref{subsec:methods:individual-algorithms}, linear regression and regression trees as the meta-ML models, and L1-norm and L2-norm as distance functions;
 thus, we have upto $24$ graphs for each dataset.
 
-Each graph is then used with its corresponding individual algorithm to calculate outlier scores for all points in the dataset.
+Each graph is then used with its corresponding individual algorithm to calculate an outlier score for each point in the dataset.
 These outlier scores are then combined into an ensemble by simply taking the mean of all the scores for each point.
 We present the AUC scores from this ensemble in Section~\ref{sec:results}.
 
-\subsubsection{A Note on Speed}
+\subsubsection{A Note on Runtime Performance}
 
 During testing, we noticed that even though we often see $|V| \ll n $, where $n$ is the number of points in the dataset and $V$ is the set of vertices in a graph, the more expensive methods from~\ref{subsec:methods:individual-algorithms} took too long to run.
 We remedy this by only running the expensive algorithms, i.e.\ Graph Neighborhood Size, Random Walks, and Stationary Probabilities, when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
 We compared the effect on AUC of using this threshold and present the results in Table~\ref{table:results:test-performance} under the CHAODA-fast rows as compared to not using the threshold under the CHAODA rows.
-Any difference in performance, when it exists, is negligble.
-Thus, we set CHAODA-fast as the default in our implementation.
+CHAODA-fast exhibits negligible difference from CHAODA in performance, so we
+set CHAODA-fast as the default in our implementation.
 
 
 \subsection{Datasets}
@@ -339,12 +327,10 @@ All of these datasets were adapted from the UCI Machine Learning Repository (UCI
 Of these 24 datasets, we selected a random sample of 6 datasets to use for training CHAODA\@.
 The training datasets from ODDS were: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
 The remaining datasets were used to measure the performance of CHAODA\@.
-% The test set of datasets is split among Tables~\ref{table:results:test-performance-1} and~\ref{table:results:test-performance-2}.
 Our performance on the test set of datasets is shown in Table~\ref{table:results:test-performance}.
-
 We provide more details on the datasets, including their size, dimensionality, and fraction of outliers, in the supplementary materials.
 
 Note that CHAODA is an unsupervised algorithm for outlier detection.
-As such, we compare only against other unsupervised algorithms.
+As such, we compare only against other unsupervised algorithms. %TODO but REPEN?
 We compared against $18$ unsupervised algorithms implemented in pyOD~\cite{zhao2019pyod}, as well as (list others here). % TODO fill this in
 A supervised version of CHAODA will be possible future work.

@@ -3,11 +3,11 @@
 
 Performance on the 6 training datasets is shown in the Supplement.
 % The performance on the test set of datasets is split among Tables~\ref{table:results:test-performance-1} and~\ref{table:results:test-performance-2}.
-The performance on the test set of datasets is in Table~\ref{table:results:test-performance}.
+The performance on the 18 test datasets is in Table~\ref{table:results:test-performance}.
 Each column shows the AUC ROC scores of CHAODA and every competitor.
 The best, i.e.\ highest, score, and every score with 0.02 of that best score, are presented in bold.
 We consider such a small difference of $0.02$ in ROC-AUC to be negligible.
-In our experiments, setting a different random seed resulted in a variance of $0.02$ in the AUC.
+In our experiments, setting a different random seed resulted in a variance of $0.02$ AUC.
 
 If a method took longer than 10 hours on a dataset, we terminated that run and marked the corresponding cell with ``\textit{TO}''.
 Notably, CHAODA performs best (or ties for best) on 14 of the 18 test datasets.
@@ -15,17 +15,15 @@ In addition, CHAODA-fast performs very comparably to CHAODA without the fast heu
 
 Runtime performance is presented in the Supplement, due to space constraints. 
 Note that we implemented CLAM and CHAODA entirely in Python.
-While we use the provided wrappers for each method we compare against, those methods are often implemented in C and C++.
-Several other algorithms utilize deep learning frameworks like tensorflow and leverage the GPU.
+While we use the provided wrappers for each method we compare against, those methods are often implemented in C and C++, while several other methods leverage the GPU.
 Therefore, the comparison of wall-clock time performance is not truly fair to CHAODA.
 A reimplementation of CLAM and CHAODA in a high-performance language, such as Rust, is possible future work.
-With such an implementation, we can expect a two-orders-of-magnitude improvement in wall-clock times.
-This would make wall-clock times comparable to many of the competitors.
+% With such an implementation, we can expect a two-orders-of-magnitude improvement in wall-clock times.
+% This would make wall-clock times comparable to many of the competitors.
 
-Also note that REPEN~\cite{pang2018learning} is a supervised algorithm, while every other method in Table~\ref{table:results:test-performance} is an unsupervised algorithm.
+% Also note that REPEN~\cite{pang2018learning} is a supervised algorithm, while every other method in Table~\ref{table:results:test-performance} is an unsupervised algorithm.
 % TODO: Fill in cells marked with RUN when Minsky is done running.
 
-Of the $18$ datasets we tested, CHAODA outperforms the competing algorithms on $14$ datasets.
 % TODO summarize results in text here, but I don't want to rewrite this twice, so let's finalize everything first.
 
 % Was this repeated? Reads like we picked the six we don't do well on so that we could do well. Najib: Technically, CHAODA won 3/6.
@@ -87,7 +85,7 @@ Of the $18$ datasets we tested, CHAODA outperforms the competing algorithms on $
 \hline
                 VAE &                0.65 &    \textbf{0.95} &            0.74 &           0.52 &           0.48 &          0.51 &                0.65 &            0.83 &           0.56 \\
 \hline
-REPEN & \textbf{0.78} & \textbf{0.98} & 0.78 & 0.57 & \textit{EX} & \textbf{1.00} & \textbf{0.88} & \textit{EX} & \textit{RUN} \\
+% REPEN & \textbf{0.78} & \textbf{0.98} & 0.78 & 0.57 & \textit{EX} & \textbf{1.00} & \textbf{0.88} & \textit{EX} & \textit{RUN} \\
 \hline
 % \end{tabular}
 % \end{sc}
@@ -148,7 +146,7 @@ REPEN & \textbf{0.78} & \textbf{0.98} & 0.78 & 0.57 & \textit{EX} & \textbf{1.00
 \hline
                 VAE &          0.63 &               0.48 &          0.61 &                0.71 &          0.50 &               0.45 &            0.51 &          0.77 &          0.67 \\
 \hline
-REPEN & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} \\
+% REPEN & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} & \textit{RUN} \\
 \hline
 \end{tabular}
 \end{sc}
@@ -164,6 +162,5 @@ In the cases were we were unable to find a working implementation, we include he
 
 RS-Hash~\cite{sathe2016subspace} reported AUCs of $0.92$ on Cardio, $1.00$ on Lympho, $0.99$ on Musk, and $0.76$ on OptDigits.
 This beats CHAODA on Cardio, ties on Lympho and Musk, and is outperformed by CHAODA on OptDigits.
-
 We considered Clustering with Outlier Removal~\cite{liu2019clustering} but the authors did not report AUC scores, and instead used F-measure as the performance metric.
-We could find a working implementation of COR to run ourselves.
+We could not find a working implementation of COR to run ourselves.
