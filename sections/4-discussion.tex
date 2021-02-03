@@ -32,7 +32,7 @@ The choice of distance function could have a significant impact on anomaly-detec
 In this case, domain knowledge is likely the best way to determine the distance function of choice.
 Future work should explore a more diverse collection of domain-appropriate distance functions, such as Wasserstein distance on images, Levenshtein edit distance on strings, and Jaccard distance on the maximal common subgraph of molecular structures.
 
-Since CHAODA is highly effective on high-dimensional datasets, it may apply to neural networks.
+CHAODA is demonstrably highly effective on high-dimensional datasets, and so may be applied to neural networks.
 Using CLAM to map a dataset where each datum represents the activations of a neural network from an input to the neural network, we would expect to detect malicious inputs to neural networks based on the intuition that malicious inputs produce atypical activation patterns.
 
 In conclusion, we have demonstrated that by mapping the manifolds occupied by data, CLAM reveals structure that allows CHAODA to outperform other state-of-the-art approaches to anomaly detection.

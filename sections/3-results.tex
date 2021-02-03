@@ -1,22 +1,22 @@
 \section{Results}
 \label{sec:results}
 
-Performance on the 6 training datasets is shown in the Supplement.
 The performance on the 18 test datasets is in Table~\ref{table:results:test-performance}.
+Performance on the 6 training datasets is shown in the Supplement.
 Each column shows the AUC ROC scores of CHAODA and every competitor.
 The best, i.e.\ highest, score, and every score with 0.02 of that best score, are presented in bold.
-In our experiments, setting a different random seed resulted in a variance of $0.02$ AUC, and so we consider such a small difference to be negligible.
+In our experiments, setting a different random seed resulted in a variance of $0.02$ AUC.
+Thus, we consider such a small difference to be negligible.
 
 If a method took longer than 10 hours on a dataset, we terminated that run and marked the corresponding cell with ``\textit{TO}''.
 If a method crashed on a given dataset, we mark the cell with ``\textit{EX}''.
 Notably, CHAODA performs best (or ties for best) on 14 of the 18 test datasets.
-In addition, CHAODA-fast performs very comparably to CHAODA without the fast heuristic, so we leave CHAODA-fast as the default behavior.
 
 Runtime performance is presented in the Supplement, due to space constraints. 
 Note that we implemented CLAM and CHAODA entirely in Python.
 While we use the provided wrappers for each method we compare against, those methods are often implemented in C and C++, while several other methods leverage the GPU.
 Therefore, the comparison of wall-clock time performance is not truly fair to CHAODA.
-A reimplementation of CLAM and CHAODA in a high-performance language, such as Rust, is possible future work.
+A reimplementation of CLAM and CHAODA in a high-performance language, such as Rust, would be worthwhile.
 
 % TODO summarize results in text here, but I don't want to rewrite this twice, so let's finalize everything first.
 

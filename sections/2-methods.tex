@@ -56,11 +56,12 @@ Clusters that are close in the embedding space sometimes have overlapping volume
 We define a graph $G=(V,E)$ with the selected clusters in one-to-one correspondence to vertices, and with an edge between two vertices if and only if their corresponding clusters overlap.
 Note that any given datapoint will be a member of only one cluster at a given depth in the tree, even though it might exist inside other clusters' radii.
 Thus, the clusters are not necessarily hyperspheres, but rather polytopes akin to a high-dimensional analog of a Voronoi diagram~\cite{voronoi1908nouvelles}.
-For our purposes, a graph also exhibits a particular invariant.
+Figure~\ref{fig:methods:graph-generation} illustrates how a graph can be induced by clusters and their overlaps at different depths of a tree.
+
+For our purposes, a graph exhibits an important invariant.
 The clusters corresponding to vertices in the graph collectively contain every point in the dataset.
 In addition, each point in the dataset is in exactly one cluster in the graph.
-
-A corollary to this invariant is that the graph will never contain two vertices such that one vertex corresponds to a ancestor or descendent cluster of another vertex.
+A corollary to this invariant is that a graph will never contain two vertices such that one vertex corresponds to an ancestor or descendent cluster of another vertex.
 A Graph can be built from clusters at a fixed depth in the cluster-tree (a layer-graph), or from clusters from multiple different depths in the tree (an optimal-graph).
 In this work we consider the cardinality of a graph to be \textit{vertex cardinality}, i.e.\ the number of vertices (clusters) in the graph.
 
@@ -107,7 +108,6 @@ For each individual algorithm described in Section~\ref{subsec:methods:individua
 We then train the linear regression and decision tree models to predict this AUC from the feature vectors extracted from the graph.
 The result is a set of models for each individual algorithm of CHAODA, trained from the six training datasets;
 the decision functions from the fitted models are then used to make predictions for all test datasets, regardless of any differences in dimensionality or other properties of those datasets.
-Figure~\ref{fig:methods:graph-generation} illustrates how a graph can be induced by clusters and their overlaps at different depths of a tree.
 
 \begin{figure}[ht!]
     \centering
@@ -168,7 +168,7 @@ This algorithm first finds the components of the graph, so its time complexity i
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Graph Neighborhood Size}
+\subsubsection{Graph Neighborhood}
 Given the graph with clusters and edges, consider the number of clusters reachable from a starting cluster within a given graph distance $k$.
 We call this number the \textit{graph-neighborhood} of the starting cluster.
 With $k$ small compared to the diameter of the graph, we consider the relative sizes of graph-neighborhoods of the clusters.
@@ -177,7 +177,7 @@ The algorithm is defined in Algorithm~\ref{alg:gns}.
 This algorithm is dominated by computing the eccentricity of each cluster, so its time complexity is $O(|E| \cdot |V|)$.
 
 \begin{algorithm}[h]
-    \caption{Graph Neighborhood Size}
+    \caption{Graph Neighborhood}
     \label{alg:gns}
 \begin{algorithmic}[1]
     \REQUIRE $G$, a graph
@@ -194,11 +194,10 @@ This algorithm is dominated by computing the eccentricity of each cluster, so it
 
 \subsubsection{Child-Parent Cardinality Ratio}
 \label{subsubsec:methods:individual-algorithms:cpcr}
-As described in Section~\ref{subsubsec:methods:clam:clustering}, a cluster is partitioned by using its two maximally distant points as poles.
-All points in a cluster are split among the children by whichever pole they are closer to.
+As described in Section~\ref{subsubsec:methods:clam:clustering}, the Partition algorithm splits a cluster into two child clusters.
 Consider the fraction of points in a cluster that are assigned to each child.
 If a child cluster contains only a small fraction of its parent's points, then we consider the points in that child cluster to be more anomalous.
-These child-parent cardinality ratios are accumulated for each point down its branch in the tree, terminating when the child cluster is a node in the induced optimal graph.
+These child-parent cardinality ratios are accumulated for each point down its branch in the tree, terminating when the child cluster is a node in the induced graph.
 Points with a low value of these accumulated ratios are considered more anomalous than points with a higher value.
 The algorithm is defined in Algorithm~\ref{alg:cpcr}.
 The time complexity of calculating the ratios is $O(|V|)$ at clustering time, which is amortized over scoring the points;
@@ -250,7 +249,7 @@ We then compute successive squares of this matrix.
 This process will eventually converge as long as the graph is connected and aperiodic~\cite{levin2017markov}, and we find this convergent matrix.
 We consider the sum of the values along a row to be inversely related to the anomalousness of the respective cluster.
 The algorithm is defined in Algorithm~\ref{alg:sp}.
-This algorithm is dominated by the computation of the transition matrix for each component in the graph.
+This algorithm is dominated by the computation of a separate transition matrix for each component in the graph.
 Its worst-case time complexity is $O(|V|^2)$, but is often better in practice.
 
 \begin{algorithm}[h]
@@ -282,14 +281,12 @@ Since our graphs guarantee that each point is in exactly one cluster, and that e
 However, the individual methods still produce scores in a wide range of values.
 The only common feature among these scores is that low scores correspond to inliers and high scores correspond to outliers.
 Therefore, we cannot directly compare scores from different methods, which is needed for ensemble methods.
-We normalize to the range $[0, 1]$, using gaussian normalization by default as described in~\ref{alg:ormalization}.
+We normalize to the range $[0, 1]$, using gaussian normalization by default as described in~\ref{alg:normalization}.
 We include sigmoid normalization and min-max normalization as options in our implementation.
-% TODO: Add equations and/or citations for normalization methods.
-% if room.
 
 \begin{algorithm}[h]
     \caption{Gaussian Normalization}
-    \label{alg:ormalization}
+    \label{alg:normalization}
 \begin{algorithmic}[1]
     \REQUIRE $X$, a dataset
     \REQUIRE $S$, a set of outlier scores for each point in $X$
