@@ -6,7 +6,7 @@
 \label{subsec:methods:clam}
 
 We present a manifold-mapping algorithm called CLAM (Clustered Learning of Approximate Manifolds).
-As input, we need a dataset and a distance function on the points in that dataset.
+As input, we need a dataset and a distance function for that dataset.
 A dataset is a collection of $n$-points in a $D$-dimensional embedding space, $\textbf{X} = \{x_1 \dots x_n\}, x_i \in \mathbb{R}^D$.
 A Distance Function takes two points in the dataset and deterministically produces a non-negative real number, $f : (\mathbb{R}^D, \mathbb{R}^D) \mapsto \mathbb{R}^+$.
 The distance must be such that $f(x, x) = 0$ and $f(x, y) = f(y, x)$ $\forall x, y \in X$.
@@ -17,8 +17,7 @@ In this paper we used $L1$-norm and $L2$-norm, which are metrics.
 \label{subsubsec:methods:clam:clustering}
 
 We start by building a divisive-hierarchical clustering of the data based on a random sampling of $\sqrt k$ points from the  $k$ points in a given cluster from the tree.
-This achieves clustering in expected $\mathcal{O}(n \lg n)$ time.
-This gives us a tree of clusters, with the root containing every point in the dataset, and each leaf containing a single point from the dataset.
+This achieves clustering in expected $\mathcal{O}(n \lg n)$ time, giving us a tree of clusters, with the root containing every point in the dataset, and each leaf containing a single point from the dataset.
 The CLAM clustering algorithm is defined in Algorithm~\ref{alg:clam-partition}.
 The procedure is inspired from~\cite{ishaq2019clustered}, although we have improved upon their partition method.
 The root-cluster contains all points in the dataset and clusters are recursively partitioned until each leaf-cluster contains only one point.
@@ -72,9 +71,9 @@ The graphs discussed thus far map this low-dimensional manifold in the original 
 Different graphs do this at different levels of local or global resolution.
 Our aim is to properly build such a graph, where different resolutions may be necessary for different regions of the manifold.
 We can then apply several anomaly detection algorithms to these graphs.
-These algorithms will often also incorporate information from the tree, such as the parent-child ratios described in Section~\ref{subsubsec:methods:clam:clustering}.
 
-We describe some algorithms in Section~\ref{subsec:methods:individual-algorithms}.
+We describe a set of algorithms in Section~\ref{subsec:methods:individual-algorithms}.
+While mainly relying on graph information, these algorithms can also incorporate information from the tree, such as the Child-Parent Cardinality Ratio method described in Section~\ref{subsubsec:methods:individual-algorithms:cpcr}.
 While these algorithms are themselves fairly simple, the real challenge is in selecting the right clusters for the graphs for these algorithms to operate upon.
 We will demonstrate CLAM's manifold mapping to be effective enough that even these simple algorithms, more often than not, outperform state-of-the-art anomaly detection algorithms.
 
@@ -90,8 +89,8 @@ Area Under the Curve (AUC) of the Receiver Operating Characteristic (ROC) is oft
 we wish to choose clusters that are expected to maximize this measure.
 We do this by learning a function that takes a cluster and predicts its contribution to AUC if that cluster were selected for the graph.
 Any function $f: Cluster \mapsto \mathbb{R}^+$ will suffice.
-Importantly, we will learn this function on datasets \emph{completely unrelated to} the ones on which we test;
-we are not learning any dataset-specific parameters, but instead the geometric and topological properties of the data.
+This is essentially a form a transfer learning: we will learn such functions from a set of datasets that is \emph{completely distinct from} the set of datasets we sue for benchmarking.
+We are not learning any dataset-specific parameters, but instead the general geometric and topological properties common among datasets.
 
 We chose a linear regression model and a regression tree model to fill this role.
 Such models need some data to train with.
@@ -194,6 +193,7 @@ This algorithm is dominated by computing the eccentricity of each cluster, so it
 \end{algorithm}
 
 \subsubsection{Child-Parent Cardinality Ratio}
+\label{subsubsec:methods:individual-algorithms:cpcr}
 As described in Section~\ref{subsubsec:methods:clam:clustering}, a cluster is partitioned by using its two maximally distant points as poles.
 All points in a cluster are split among the children by whichever pole they are closer to.
 Consider the fraction of points in a cluster that are assigned to each child.

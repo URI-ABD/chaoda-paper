@@ -116,16 +116,16 @@ Once the manifold has been mapped, it can be used as input for a myriad of anoma
 We introduce an ensemble of six such algorithms implemented on CLAM: CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms).
 
 The manifold mapping component is motivated by a hierarchical clustering approach, CHESS~\cite{ishaq2019clustered}, which was designed to accelerate approximate search on large high-dimensional datasets.
-While CHESS clustered to a specific depth solely for purposes of accelerating search, CLAM
+While CHESS clustered to a specific depth solely for the purpose of accelerating search, CLAM
 divisively clusters the data until each cluster contains only one datum.
 From this tree, CLAM can induce a graph by mapping clusters to vertices of the graph, and drawing an edge between any two vertices whose corresponding cluster volumes overlap (i.e.\ the sum of their radii is greater than the distance separating their centers).
 Clusters can be selected by a fixed depth, or at heterogeneous depths based on geometric properties, such as local fractal dimension, cluster cardinality, or cluster radius.
 We call graphs constrained to a uniform-depth layer \textit{layer graphs}.
 We call graphs from heterogenous depths \textit{optimal graphs}.
 
-Inducing an optimal graph, across a variety of depths effectively maps a manifold with a variety of ``resolutions'', given by the depths of the clusters used.
-The intuition is that some regions of the manifold may be denser (or sparser) than others, and thus graphs induced from deeper (or shallower) clusters in those regions may be more informative.
-We can consider clusters higher in the tree to be in some sense ``lower resolution'' than those at greater depth.
+Inducing an optimal graph, across a variety of depths effectively maps a manifold with a variety of ``resolutions''.
+The intuition is that some regions of the manifold may be denser than others, and thus graphs induced from deeper clusters in those regions may be more informative.
+We can consider clusters at lower depths in the tree to be, in some sense, ``lower resolution'' than those at greater depth.
 
 Once we have mapped a manifold, we can ask about the cardinality of various clusters at different depths, how connected a given cluster is, or even how often a cluster is visited by random walks on the manifold.
 These approaches are combined into an ensemble approach to anomaly and outlier detection.
