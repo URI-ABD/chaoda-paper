@@ -266,6 +266,7 @@ The total time-complexity of this algorithm is thus $\mathcal{O}(|E| \cdot |V|)$
 While building the tree with CLAM, we cache the child-parent cardinality ratios of every cluster, because it proved useful for purposes other than anomaly detection.
 This method performs a single linear pass over the clusters in the graph and looks-up the cached child-parent ratios as needed.
 The time-complexity is thus $\mathcal{O}(|V|)$.
+Since the ratios are cached with their respective clusters, the space complexity is $\mathcal{O}(|V|)$.
 
 \subsection{Random Walks}
 
@@ -275,9 +276,11 @@ In the worst-case, the graph contains only one component, so the time-complexity
 The remainder of the algorithm performs a random with with a relatively large number of steps.
 We used $10 \cdot |V|$ steps in our implementation.
 Thus the time-complexity stays at $\mathcal{O}(|V|^2)$.
+In terms of space, we need to store the transition matrix, and the visication count for each cluster.
+Therefore the space complexity is $\mathcal{O}(|V|^2)$.
 
 In practice, $|V| \ll n$ and graphs only rarely consist of only one component.
-Thus, the average performance is much better than that suggested by the quadratic space time-complexity.
+Thus, the average runtime performance is much better than that suggested by the quadratic space time-complexity.
 
 \subsection{Stationary Probabilities}
 
@@ -286,13 +289,15 @@ We then successively square this matrix until it converges.
 The transition matrices from our graphs obey the criteria required for convergence as proven in~\cite{levin2017markov}.
 Matrix multiplication for square matrices costs $\mathcal{O}(|V|^{2.373})$ with the Coppersmith-Winograd algorithm~\cite{coppersmith1987matrix}.
 Thus the worst-case time complexity is the same as that for the matrix-multiplication algorithm employed.
+For space, we need only store a single $|V| \times |V|$ matrix, giving us a space complexity of $\mathcal{O}(|V|^2)$.
 
-Also just as with Random Walks, because $|V| \ll n$ and graphs only rarely consist of only one component, the average-case performance is much better.
+Also just as with Random Walks, because $|V| \ll n$ and graphs only rarely consist of only one component, the average-case runtime performance is much better.
 
 \subsection{Normalization}
 
 Normalizing the outlier scores requires finding the mean and standard deviation of the raw scores, followed by a linear pass over the set of scores.
 Thus the time-complexity of this step is $\mathcal{O}(n)$.
+Since we need to store a score for each point, the space complexity is $\mathcal{O}(n)$.
 
 \subsection{Ensemble}
 
@@ -300,6 +305,7 @@ Given the normalized scores from the individual methods, we combine the scores b
 There is a small, constant, number of scores for each point; each score is from a different graph built using the meta-ml models.
 We simply take the mean of all scores for each point.
 Thus the time-complexity of voting among these scores is $\mathcal{O}(n)$ for the entire dataset.
+Since we need to store a score for each point, the space complexity is $\mathcal{O}(n)$.
 
 
 \section{UMAP Visualization}
