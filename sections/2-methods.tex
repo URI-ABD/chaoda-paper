@@ -12,6 +12,7 @@ A Distance Function takes two points in the dataset and produces a non-negative 
 The distance must be such that $f(x, x) = 0$ and $f(x, y) = f(y, x)$ $\forall x, y \in X$.
 The distance function may or may not obey the triangle-inequality.
 In this paper we used $L1$-norm and $L2$-norm, which are metrics.
+We provide proofs of the complexity of each algorithm in the Supplement.
 
 \subsubsection{Clustering}
 \label{subsubsec:methods:clam:clustering}
@@ -135,7 +136,7 @@ the cardinality of a cluster $c$ is denoted by $|c|$, the number of points in th
 We measure the anomalousness of a point by the cardinality of the cluster that the point belongs to relative to the cardinalities of the other clusters.
 Points in the same cluster are considered equally anomalous and points in clusters with lower cardinalities are considered more anomalous than points in clusters with higher cardinalities.
 The algorithm is defined in Algorithm~\ref{alg:rclc}.
-The time complexity is $O(|V|)$.
+The time complexity is $\mathcal{O}(|V|)$.
 
 \begin{algorithm}[h]
     \caption{Relative Cluster Cardinality}
@@ -156,7 +157,7 @@ Consider the relative cardinalities of each component in much the same way as we
 Points in clusters (vertices) in smaller components are considered more anomalous than those in larger components,
 and points in clusters in the same component are considered equally anomalous.
 The algorithm is defined in Algorithm~\ref{alg:rcc}.
-This algorithm first finds the components of the graph, so its time complexity is $O(|E| + |V|)$.
+This algorithm first finds the components of the graph, so its time complexity is $\mathcal{O}(|E| + |V|)$.
 
 \begin{algorithm}[h]
     \caption{Relative Component Cardinality}
@@ -175,7 +176,7 @@ We call this number the \textit{graph-neighborhood} of the starting cluster.
 With $k$ small compared to the diameter of the graph, we consider the relative sizes of graph-neighborhoods of the clusters.
 Points in clusters with small graph-neighborhoods are considered more anomalous than points in clusters with large graph-neighborhoods.
 The algorithm is defined in Algorithm~\ref{alg:gns}.
-This algorithm is dominated by computing the eccentricity of each cluster, so its time complexity is $O(|E| \cdot |V|)$.
+This algorithm is dominated by computing the eccentricity of each cluster, so its time complexity is $\mathcal{O}(|E| \cdot |V|)$.
 
 \begin{algorithm}[h]
     \caption{Graph Neighborhood}
@@ -202,8 +203,8 @@ These child-parent cardinality ratios are accumulated for each point down its br
 Points with a low value of these accumulated ratios are considered more anomalous than points with a higher value.
 The algorithm is defined in Algorithm~\ref{alg:cpcr}.
 Unlike other CHAODA algorithms, this one accumulates parent scores into the children.
-The time complexity of calculating the ratios is $O(|V|)$ at clustering time, which is amortized over scoring the points;
-the time complexity of scoring a point is $O(1)$.
+The time complexity of calculating the ratios is $\mathcal{O}(|V|)$ at clustering time, which is amortized over scoring the points;
+the time complexity of scoring a point is $\mathcal{O}(1)$.
 
 \begin{algorithm}[h]
     \caption{Child-Parent Cardinality Ratio}
@@ -223,7 +224,7 @@ We consider the relative visitation counts among the clusters to be inversely re
 The least visited clusters are the most anomalous, and the most visited clusters are the least anomalous.
 The algorithm is defined in Algorithm~\ref{alg:rw}.
 This algorithm is dominated by the computation of the transition matrix for the graph.
-Its worst-case time complexity is $O(|V|^2)$, but is often better because the transition matrix is computed separately for each component in the graph.
+Its worst-case time complexity is $\mathcal{O}(|V|^2)$, but is often better because the transition matrix is computed separately for each component in the graph.
 
 \begin{algorithm}[h]
     \caption{Random Walks}
@@ -251,7 +252,7 @@ This process will eventually converge as long as the graph is connected and aper
 We consider the sum of the values along a row to be inversely related to the anomalousness of the respective cluster.
 The algorithm is defined in Algorithm~\ref{alg:sp}.
 This algorithm is dominated by the computation of a separate matrix for each component in the graph.
-Its worst-case time complexity is $O(|V|^2)$, but is often better in practice.
+Its worst-case time complexity is $\mathcal{O}(|V|^2)$, but is often better in practice.
 
 \begin{algorithm}[h]
     \caption{Stationary Probabilities}
