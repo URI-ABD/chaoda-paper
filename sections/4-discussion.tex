@@ -13,30 +13,15 @@ Just as CHESS demonstrated an acceleration of search when the data exhibited \em
 We believe that CLAM is free of hyperparameters; the weights learned from the meta-ML step could vary, but we learned them once on a distinct training set.
 
 We should note the Vertebral Column (Vert.) dataset.
-Most of the tested algorithms perform similarly to random guessing, while CHAODA performs much worse.
+Most tested algorithms perform similarly to random guessing, while CHAODA performs much worse.
 We suspect this is because of how this specific dataset was collected.
 Each instance represents 6 biomechanical attributes derived from scans of a patient's pelvis and lumbar spine.
-% These attributes are: pelvic incidence, pelvic tilt, lumbar lordosis angle, sacral slope, pelvic radius and grade of spondylolisthesis.
 This dataset contains 210 instances of the Abnormal class treated as inliers, and 30 instances of the Normal class treated as outliers.
 Each attribute has a narrow range to be in the Normal class, but can have a wider range in the Abnormal class.
 This causes the Normal instances to group together, while Abnormal instances remain distant from each other.
-Since CHAODA relies on clusters as the substrate, they assign low scores to the instances in the Normal class, i.e.\ the outliers, and high scores to the Abnormal class, i.e.\ the inliers.
-Put plainly, CHAODA sees the manifold as the Normal class, which the dataset treats as outliers.
+Since CHAODA relies on clusters as the substrate, it assigns low scores to instances in the Normal class, i.e.\ the outliers, and high scores to those in the Abnormal class, i.e.\ the inliers.
+Put plainly, CHAODA sees the manifold as the Normal class, which the dataset labels as outliers.
 This curiosity could be remedied by a supervised version of CHAODA.
-
-% A simple visualization in Figure~\ref{fig:conclusions:umap-embeddings} using UMAP~\cite{mcinnes2018umap} illustrates two different examples; the anomalies in one dataset, where CHAODA outperforms other methods, appear to be at the edges of a complex manifold (though, clearly, the UMAP projection has distorted the manifold) while in another dataset, where most methods perform fairly comparably, the distribution is less interesting and many anomalies are distributed apparently randomly across it.
-
-% \begin{figure*}
-%    \centering
-%    \includegraphics[width=2in]{images/umaps/mnist-euclidean-umap2d.png}
-%    \includegraphics[width=2in]{images/umaps/ionosphere-euclidean-umap2d.png}
-%    \caption{UMAP projection of MNIST (left) and Ionosphere (right). Anomalies are in gray. Note that for MNIST, the UMAP projection does not find much structure, though most of the anomalies congregate to one side. For Ionosphere, there is a single main component to the manifold, with two more distant clusters, and anomalies tend to be at the edges of a manifold. Most algorithms perform comparably on MNIST, while CHAODA outperforms others on Ionosphere.}
-%    \label{fig:conclusions:umap-embeddings}
-% \end{figure*}
-
-% \subsection{Future Directions}
-% \label{subsec:discussion:future-directions}
-
 
 The choice of distance function could have a significant impact on anomaly-detection performance.
 In this case, domain knowledge is likely the best way to determine the distance function of choice.

@@ -2,7 +2,7 @@
 \label{sec:introduction}
 
 Detecting anomalies and outliers from data is a well-studied problem in machine learning.
-When data occupy easily-characterizable distributions, such as the Gaussian, the task is relatively easy:
+When data occupy simple distributions, such as the Gaussian, the task is relatively easy:
 one need only identify when a datum is sufficiently far from the mean.
 However, in ``big data'' scenarios, where data can occupy high-dimensional spaces, anomalous behavior becomes harder to quantify.
 If the data happen to be uniformly distributed, one can conceive of simple mechanisms, such as a one-class SVM, that would be effective in any number of dimensions.
@@ -12,10 +12,10 @@ Detecting anomalies in such a landscape is not easy.
 Imagine trying to identify if a point within the sphere of crumpled paper were anomalous, identifying whether or not the point sits on the sheet or within a gap of the lower-dimensional manifold presents a challenge.
 
 Anomalies (data that do not belong to a distribution) and outliers (data which represent the extrema of a distribution) are found in datasets for a variety of reasons.
-Errors in the measurement or collection of data may cause anomalous records to be stored,
-novel instances of data may emerge over time,
+Errors in the measurement of data cause anomalous records to be stored,
+novel instances of data emerge over time,
 or normal behavior may evolve towards the outliers.
-Moreover, even if data collection is executed perfectly and shifts in behavior accounted for, there is still a risk of adversarial attacks being provided as inputs to machine-learning algorithms~\cite{elsayed2018adversarial}.
+Moreover, even if data collection is executed perfectly and shifts in behavior are accounted for, there is still the risk of adversarial attacks on machine-learning algorithms~\cite{elsayed2018adversarial}.
 
 Modern algorithms designed to detect anomalous behavior fail for a variety of reasons, in particular when anomalies live close to, but not on, a complex manifold in high-dimensional space.
 Our approach is designed to map these complex manifolds.
@@ -31,8 +31,8 @@ Given a clustering and a new point, one can estimate the anomalousness of that n
 There have been few advancements in clustering techniques over the past decade~\cite{wang2019progress}.
 This may be explained by the poor performance, thus far, of clustering in high-dimensional space~\cite{zhang2013advancements}.
 
-Distance-based clustering relies on some distance measure to partition data into some number of clusters.
-Within this approach, the numbers or sizes of clusters are often predetermined: either user-specified, or chosen at random~\cite{wang2019progress}.
+Distance-based clustering relies on some distance measure to partition data into several clusters.
+Within this approach, the numbers or sizes of clusters are often predetermined: either user-specified, or randomly-chosen~\cite{wang2019progress}.
 Some examples of distance-based clustering algorithms are
 K-Means~\cite{macqueen1967some},
 PAM~\cite{kaufman2009finding},
@@ -40,27 +40,23 @@ CLARANS~\cite{ng1994efficient} and
 CLARA~\cite{kaufman2009finding}.
 
 Hierarchical clustering methods build a tree, where points are allocated into leaves~\cite{wang2019progress}.
-These trees can be created via bottom-up (agglomerative) or top-down (divisive)~\cite{agrawal1998automatic} clustering.
-One drawback of these methods is the high cost of all-pairs distance computations.
+These trees can be created via agglomerative or divisive~\cite{agrawal1998automatic} clustering.
+The high cost of all-pairs distance computations is often a drawback.
 Examples of hierarchical clustering algorithms include
 MST~\cite{zahn1971graph},
 CURE~\cite{guha1998cure}, and
 CHAMELEON~\cite{karypis1999hierarchical}.
 
 Grid-based clustering works via segmenting the entire volume into a discrete number of cells, and then scanning those cells to find regions of high density.
-Utilizing a grid structure for clustering means that these algorithms typically scale well to larger datasets.
+The grid structure typically lets these methods scale well to larger datasets.
 Some examples include
 STING~\cite{wang1997sting},
-Wavecluster~\cite{sheikholeslami2000wavecluster}, and
-CLIQUE~\cite{agrawal1998automatic}.
-In this paper, we compare against Clustering Based Local Outlier Factor (CBLOF)~\cite{he2003cblof}, and
+Wavecluster~\cite{sheikholeslami2000wavecluster},
+CLIQUE~\cite{agrawal1998automatic},
+Clustering Based Local Outlier Factor (CBLOF)~\cite{he2003cblof}, and
 Local Correlation Integral (LOCI)~\cite{papadimitriou2003loci}.
 
-
-\subsection{Density-based Approaches}
-\label{subsec:introduction:density-based-approaches}
-
-Density-based methods rely on finding regions of high point-density separated by regions of lower density.
+Density-based clustering methods rely on finding regions of high point-density separated by regions of lower density.
 These algorithms generally do not work well when data are sparse or uniformly distributed.
 Some examples include
 DBSCAN~\cite{ester1996density} and
@@ -78,15 +74,14 @@ In this paper, we compare against Connectivity-based Outlier Factor (COF)~\cite{
 \subsection{Distanced-based Approaches}
 \label{subsec:related-works:distanced-based-approaches}
 
-Distance-based methods use direct distance comparisons.
-These methods largely employ k-Nearest Neighbors as their substrate~\cite{wang2019progress}.
-They tend to use the following intuitions
+Distance-based methods use direct distance comparisons and largely rely on k-Nearest Neighbors as their substrate~\cite{wang2019progress}.
+They tend to use the following intuitions.
 First, points with fewer than $p$ other points within some distance $d$ are outliers;
 second, the $n$ points with the greatest distances to their $k^{th}-$nearest neighbor are outliers;
 and finally, the $n$ points with the greatest average distance to their $k$ nearest neighbors are outliers.
 In this paper, we compare against
-k-Nearest Neighbors (kNN)~\cite{ramaswamy2000efficient, sridhar2000knn, fabrizio2002knn}
-and Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
+k-Nearest Neighbors (kNN)~\cite{ramaswamy2000efficient, sridhar2000knn, fabrizio2002knn}, and
+Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 
 
 \subsection{Other Approaches}
