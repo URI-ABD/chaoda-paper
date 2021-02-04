@@ -16,6 +16,19 @@
 \usepackage{subfigure}
 \usepackage{amsmath}
 
+\usepackage{placeins}
+% \usepackage{algpseudocode}
+\usepackage{algorithm}
+
+% \algnewcommand\algorithmicforeach{\textbf{foreach}}
+% \algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
+
+\usepackage{hyperref}
+
+% Use the following line for the initial blind version submitted for review:
+\usepackage{icml2021}
+
 \begin{document}
 
 \section{Datasets}
@@ -211,8 +224,81 @@ wine & 129 & 13 & 10 & 7.7 \\
 \end{table*}
 
 
+\section{Complexity of CHAODA}
+\label{supplement:sec:complexity-chaoda}
+
+Here we provide short proofs for the time-complexity of the CHAODA algorithms.
+For each algorithm, we have
+a dataset $X$ with $n = |X|$ points and
+a graph $G(V, E)$ of clusters/vertices $V$ and edges $E$ between overlapping clusters.
+
+\subsection{Relative Cluster Cardinality}
+
+This algorithm performs a single linear pass over the vertices in the graph.
+The cardinalities of clusters are cached during the tree-building phase of clam.
+Each lookup from this cache costs $\mathcal{O}(1)$.
+For a graph $G(V, E)$ the time-complexity is trivially $\mathcal{O}(|V|)$.
+
+\subsection{Relative Component Cardianlity}
+
+This method first finds the components of the graph.
+This costs $\mathcal{O}(|E|)$ because we have to check each edge once.
+The cardinality of each component is cached when traversing the clusters to find find components.
+With this done, the algorithm performs a single linear pass over each component.
+This brings the total worst-case cost to $\mathcal{O}(|E| + |V|)$.
+
+\subsection{Graph Neighborhood}
+
+This algorithm performs a linear pass over the clsuters in the graph and first computes the eccentricity of each cluster.
+Finding the eccentricity of a vertex in a graph is worst-case $\mathcal{O}(|E|)$ when the graph consists of a single component.
+This brings the total cost up to $\mathcal{O}(|E| \cdot |V|)$.
+Next, the algorithm performs a traversal from each cluster.
+This adds a constant factor of $\mathcal{O}(|E|)$ to the cost, and can be ignores.
+The total time-complexity of this algorithm is thus $\mathcal{O}(|E| \cdot |V|)$.
+
+\subsection{Child-Parent Cardinality Ratio}
+
+While building the tree with CLAM, we cache the child-parent cardinality ratios of every cluster, because it proved useful for purposes other than anomaly deetection.
+This method performs a single linear pass over the clusters in the graph and looks-up the cached child-parent ratios as needed.
+The time-complexity is thus $\mathcal{O}(|V|)$.
+
+\subsection{Random Walks}
+
+This method is dominated by the computation of a transition matrix for each component in the graph.
+We set the transition probability from a cluster to a neighbor to be inversely proportional to the distance between their centers, normalized by all possible neighbors of the clsuter.
+In the worst-case, the graph contains only one component, so the time-complexity is $\mathcal{O}(|V|^2)$.
+The remainder of the algorithm performs a random with with a relatively large number of steps.
+We used $10 \cdot |V|$ steps in our implementation.
+Thus the time-complexity stays at $\mathcal{O}(|V|^2)$.
+
+In practice, $|V| \ll n$ and graphs only rarely consist of only one component.
+Thus, the average performance is much better than that suggested by the quadratic space time-complexity.
+
+\subsection{Stationary Probabilities}
+
+Just as with Random Walks, this method starts by computing a transition matrix for each component in the graph.
+We then successively square this matrix until it converges.
+The transition matrices from our graphs obey the criteria required for convergence as proven in~\cite{levin2017markov}.
+Matrix multiplication for square matrices costs $\mathcal{O}(|V|^{2.373})$ with the Coppersmith-Winograd algorithm~\cite{coppersmith1987matrix}.
+Thus the worst-case time complexity is the same as that for the matrix-multiplication algorithm employed.
+
+Also just as with Random Walks, because $|V| \ll n$ and graphs only rarely consist of only one component, the average-case performance is much better.
+
+\subsection{Normalization}
+
+Normalizing the outlier scores requires finding the mean and standard deviation of the raw scores, followed by a linear pass over the set of scores.
+Thus the time-complexity of this step is $\mathcal{O}(n)$.
+
+\subsection{Ensemble}
+
+Given the normalized scores from the individual methods, we combine the scores by voting among them in an ensemble.
+There is a small, constant, number of scores for each point; each score is from a different graph built using the meta-ml models.
+We simply take the mean of all scores for each point.
+Thus the time-complexity of voting among these scores is $\mathcal{O}(n)$ for the entire dataset.
+
+
 \section{UMAP Visualization}
-\label{supplement:sec:uamp-visualization}
+\label{supplement:sec:umap-visualization}
 
 % TODO: Add more images here and discuss UMAPS
 
@@ -223,12 +309,12 @@ Most anomalies are off to one side but there are several interspersed among the 
 
 \begin{figure*}
    \centering
-   \includegraphics[width=2in]{images/umaps/cardio-euclidean-umap2d.png}
-   \includegraphics[width=2in]{images/umaps/cardio-manhattan-umap2d.png}
-   \includegraphics[width=2in]{images/umaps/optdigits-euclidean-umap2d.png}
-   \includegraphics[width=2in]{images/umaps/optdigits-manhattan-umap2d.png}
-   \includegraphics[width=2in]{images/umaps/mnist-euclidean-umap2d.png}
-   \includegraphics[width=2in]{images/umaps/mnist-manhattan-umap2d.png}
+   \includegraphics[width=2.5in]{images/umaps/cardio-euclidean-umap2d.png}
+   \includegraphics[width=2.5in]{images/umaps/cardio-manhattan-umap2d.png}
+   \includegraphics[width=2.5in]{images/umaps/optdigits-euclidean-umap2d.png}
+   \includegraphics[width=2.5in]{images/umaps/optdigits-manhattan-umap2d.png}
+   \includegraphics[width=2.5in]{images/umaps/mnist-euclidean-umap2d.png}
+   \includegraphics[width=2.5in]{images/umaps/mnist-manhattan-umap2d.png}
    \caption{UMAP projections of Cardio (first row), Optdigits (second row), Mnist (third row) and Ionosphere (right).
    The distance metrics used are Euclidean (left column) and Manhattan (right column).
    Anomalies are in gray.
@@ -244,9 +330,9 @@ The inliers and outliers seem inseperable, and so all the methods perform poorly
 
 \begin{figure*}
    \centering
-   \includegraphics[width=2in]{images/umaps/pima-euclidean-umap2d.png}
-   \includegraphics[width=2in]{images/umaps/pima-manhattan-umap2d.png}
-   \caption{UMAP projections of Pima.}
+   \includegraphics[width=2.5in]{images/umaps/pima-euclidean-umap2d.png}
+   \includegraphics[width=2.5in]{images/umaps/pima-manhattan-umap2d.png}
+   \caption{UMAP projections of the Pima dataset}
    \label{supplement:fig:conclusions:umap-embeddings-2}
 \end{figure*}
 
@@ -495,5 +581,9 @@ VAE &               27.95 &          50.16 &              29.63 &              3
 \hline
 \end{tabular}
 \end{table*}
+
+
+\bibliographystyle{icml2021}
+\bibliography{references}
 
 \end{document}
