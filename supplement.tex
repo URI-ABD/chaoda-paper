@@ -31,11 +31,13 @@
 
 \begin{document}
 
+\renewcommand{\thetable}{S\arabic{table}}
+
 \section{Datasets}
 \label{supplement:sec:datasets}
 
 Here we describe the datasets we use for benchmarks.
-See Table S.\ref{supplement:table:datasets} for a summary of this information.
+See Table~\ref{supplement:table:datasets} for a summary of this information.
 
 The \textbf{annthyroid} dataset is derived from the ``Thyroid Disease'' dataset from the UCIMLR\@.
 The original data has 7200 instances with 15 categorical attributes and 6 real-valued attributes.
@@ -355,7 +357,7 @@ The inliers and outliers seem inseperable, and so all the methods perform poorly
 
 \subsection{Runtime performance on Test set of Datasets}
 
-Tables S.\ref{supplement:table:results:test-time-1} and S.\ref{supplement:table:results:test-time-2} report the running time, in seconds, of CHAODA and each competitor.
+Tables~\ref{supplement:table:results:test-time-1}~and~\ref{supplement:table:results:test-time-2} report the running time, in seconds, of CHAODA and each competitor.
 The fastest methods on each dataset are presented in bold face.
 
 
@@ -481,7 +483,7 @@ VAE &         30.38 &              30.58 &          5.67 &               30.41 &
 
 \subsection{AUC and Runtime performance on Train set of Datasets}
 
-Tables S.\ref{supplement:table:results:train-performance} and S.\ref{supplement:table:results:train-time} report the  the AUC perforamce and running time, respectively, of CHAODA and each competitor on the train set of datasets.
+Tables~\ref{supplement:table:results:train-performance}~and~\ref{supplement:table:results:train-time} report the  the AUC perforamce and running time, respectively, of CHAODA and each competitor on the train set of datasets.
 
 \begin{table*}[!t]
 \renewcommand{\arraystretch}{1.25}
