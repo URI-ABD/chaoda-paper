@@ -53,16 +53,16 @@ This is a 9-dimensional dataset containing 683 instances of which 239 represent 
 
 The \textbf{cardio} dataset is derived from the ``Cardiotocography'' dataset.
 The dataset is composed of measurements of fetal heart rate and uterine contraction features on cardiotocograms.
-The are each labelled ``normal'', ``suspect'', and ``pathologic'' by expert obstetricians.
+The are each labeled ``normal'', ``suspect'', and ``pathologic'' by expert obstetricians.
 For anomaly detection, the ``normal'' class forms the inliers, the ``suspect'' class is discarded, and the ``pathologic'' class is downsampled to 176 instances forming the outliers.
 This leaves us with 1831 instances with 21 attributes in the dataset.
 
 The \textbf{cover} dataset is derived from the ``Covertype'' dataset.
 The original dataset contains 581,012 instances with 54 attributes.
 The dataset is used to predict the type of forest cover solely from cartographic variables.
-The instances are labelled into seven different classes.
+The instances are labeled into seven different classes.
 For outlier detection, we use only the 10 quantitative attributes as the features.
-We treat class 2 (lodgepole pine) as the inliers, and class 4 (conttonwood/willow) as the outliers.
+We treat class 2 (lodgepole pine) as the inliers, and class 4 (cottonwood/willow) as the outliers.
 The remaining classes are discarded.
 This leaves us with a 10-dimensional dataset with 286,048 instances of which 2,747 are outliers.
 
@@ -88,13 +88,13 @@ The ``good'' class serves as the inliers and the ``bad'' class serves as the out
 
 The \textbf{lympho} dataset is derived from the ``Lymphography'' dataset.
 The data contain 148 instances with 18 attributes.
-The instances are labelled ``normal find'', ``metastases'', ``malign lymph'', and ``fibrosis''.
+The instances are labeled ``normal find'', ``metastases'', ``malign lymph'', and ``fibrosis''.
 The two minority classes only contain a total of six instances, and are combined to form the outliers.
 The remaining 142 instances form the inliers.
 
 The \textbf{mammography} dataset is derived from the original ``Mammography'' dataset provided by Aleksandar Lazarevic.
 Its goal is to use x-ray images of human breasts to find calcified tissue as an early sign of breast cancer.
-As such, the ``calcification'' class is considered as the outlier class while the ``non-clacification'' class is the inliers.
+As such, the ``calcification'' class is considered as the outlier class while the ``non-calcification'' class is the inliers.
 We have 11,183 instances with 6 attributes, of which 260 are ``calcifications.''
 
 The \textbf{mnist} dataset is derived from the classic ``MNIST'' dataset of handwritten digits.
@@ -242,18 +242,19 @@ This algorithm performs a single linear pass over the vertices in the graph.
 The cardinalities of clusters are cached during the tree-building phase of clam.
 Each lookup from this cache costs $\mathcal{O}(1)$.
 For a graph $G(V, E)$ the time-complexity is trivially $\mathcal{O}(|V|)$.
+Since each cluster stores its cardinality, the space complexity is also $\mathcal{O}(|V|)$.
 
-\subsection{Relative Component Cardianlity}
+\subsection{Relative Component Cardinality}
 
 This method first finds the components of the graph.
-This costs $\mathcal{O}(|E|)$ because we have to check each edge once.
-The cardinality of each component is cached when traversing the clusters to find find components.
+This costs $\mathcal{O}(|E|)$ time because we have to check each edge once.
+The cardinality of each component is cached when traversing the clusters to find components, thus the space complexity is $\mathcal{O}(|C|)$ where $C$ is the set of distinct connected components in the graph.
 With this done, the algorithm performs a single linear pass over each component.
 This brings the total worst-case cost to $\mathcal{O}(|E| + |V|)$.
 
 \subsection{Graph Neighborhood}
 
-This algorithm performs a linear pass over the clsuters in the graph and first computes the eccentricity of each cluster.
+This algorithm performs a linear pass over the clusters in the graph and first computes the eccentricity of each cluster.
 Finding the eccentricity of a vertex in a graph is worst-case $\mathcal{O}(|E|)$ when the graph consists of a single component.
 This brings the total cost up to $\mathcal{O}(|E| \cdot |V|)$.
 Next, the algorithm performs a traversal from each cluster.
@@ -262,14 +263,14 @@ The total time-complexity of this algorithm is thus $\mathcal{O}(|E| \cdot |V|)$
 
 \subsection{Child-Parent Cardinality Ratio}
 
-While building the tree with CLAM, we cache the child-parent cardinality ratios of every cluster, because it proved useful for purposes other than anomaly deetection.
+While building the tree with CLAM, we cache the child-parent cardinality ratios of every cluster, because it proved useful for purposes other than anomaly detection.
 This method performs a single linear pass over the clusters in the graph and looks-up the cached child-parent ratios as needed.
 The time-complexity is thus $\mathcal{O}(|V|)$.
 
 \subsection{Random Walks}
 
 This method is dominated by the computation of a transition matrix for each component in the graph.
-We set the transition probability from a cluster to a neighbor to be inversely proportional to the distance between their centers, normalized by all possible neighbors of the clsuter.
+We set the transition probability from a cluster to a neighbor to be inversely proportional to the distance between their centers, normalized by all possible neighbors of the cluster.
 In the worst-case, the graph contains only one component, so the time-complexity is $\mathcal{O}(|V|^2)$.
 The remainder of the algorithm performs a random with with a relatively large number of steps.
 We used $10 \cdot |V|$ steps in our implementation.
@@ -324,7 +325,7 @@ Most anomalies are off to one side but there are several interspersed among the 
    Anomalies are in gray.
    Note that for MNIST, the UMAP projection does not find much structure, though most of the anomalies congregate to one side.
    For Cardio, there is a single main component to the manifold, and anomalies tend to be at the edges of that manifold.
-   For OptDigits, thre are several distinct pieces to the manifold, perhaps corresponding to different digits.
+   For OptDigits, there are several distinct pieces to the manifold, perhaps corresponding to different digits.
    Most algorithms perform comparably on MNIST, while CHAODA outperforms others on Cardio and OptDigits.}
    \label{supplement:fig:conclusions:umap-embeddings-1}
 \end{figure*}
