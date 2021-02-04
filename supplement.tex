@@ -326,7 +326,7 @@ Most anomalies are off to one side but there are several interspersed among the 
    \includegraphics[width=2.5in]{images/umaps/optdigits-manhattan-umap2d.png}
    \includegraphics[width=2.5in]{images/umaps/mnist-euclidean-umap2d.png}
    \includegraphics[width=2.5in]{images/umaps/mnist-manhattan-umap2d.png}
-   \caption{UMAP projections of Cardio (first row), Optdigits (second row), Mnist (third row) and Ionosphere (right).
+   \caption{UMAP projections of Cardio (first row), Optdigits (second row) and Mnist (third row).
    The distance metrics used are Euclidean (left column) and Manhattan (right column).
    Anomalies are in gray.
    Note that for MNIST, the UMAP projection does not find much structure, though most of the anomalies congregate to one side.
@@ -343,7 +343,9 @@ The inliers and outliers seem inseperable, and so all the methods perform poorly
    \centering
    \includegraphics[width=2.5in]{images/umaps/pima-euclidean-umap2d.png}
    \includegraphics[width=2.5in]{images/umaps/pima-manhattan-umap2d.png}
-   \caption{UMAP projections of the Pima dataset}
+   \caption{UMAP projections of the Pima dataset.
+   All algorithms performed poorly on Pima.
+   This may be because the anomalies and the outliers seem inseperable in the projection.}
    \label{supplement:fig:conclusions:umap-embeddings-2}
 \end{figure*}
 
