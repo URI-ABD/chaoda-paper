@@ -259,7 +259,7 @@ Finding the eccentricity of a vertex in a graph is worst-case $\mathcal{O}(|E|)$
 This brings the total cost up to $\mathcal{O}(|E| \cdot |V|)$, with space complexity $\mathcal{O}(|V|+|E|)$.
 Next, the algorithm performs a traversal from each cluster.
 This adds a constant factor of $\mathcal{O}(|E|)$ to the time complexity and $\mathcal{O}(|V|)$ to the space complexity, which can be ignored.
-The total time-complexity of this algorithm is thus $\mathcal{O}(|E| \cdot |V|)$ and its space complexity is $\mathcal{O}(|V|+|E|)$ (because the graph must be stored).
+The total time-complexity of this algorithm is thus $\mathcal{O}(|E| \cdot |V|)$ and its space complexity is $\mathcal{O}(|V|)$ (because only the size of each graph-neighborhood needs to be stored).
 
 \subsection{Child-Parent Cardinality Ratio}
 
