@@ -255,11 +255,11 @@ This brings the total worst-case cost to $\mathcal{O}(|E| + |V|)$.
 \subsection{Graph Neighborhood}
 
 This algorithm performs a linear pass over the clusters in the graph and first computes the eccentricity of each cluster.
-Finding the eccentricity of a vertex in a graph is worst-case $\mathcal{O}(|E|)$ when the graph consists of a single component.
-This brings the total cost up to $\mathcal{O}(|E| \cdot |V|)$.
+Finding the eccentricity of a vertex in a graph is worst-case $\mathcal{O}(|E|)$ time when the graph consists of a single component.
+This brings the total cost up to $\mathcal{O}(|E| \cdot |V|)$, with space complexity $\mathcal{O}(|V|+|E|)$.
 Next, the algorithm performs a traversal from each cluster.
-This adds a constant factor of $\mathcal{O}(|E|)$ to the cost, and can be ignores.
-The total time-complexity of this algorithm is thus $\mathcal{O}(|E| \cdot |V|)$.
+This adds a constant factor of $\mathcal{O}(|E|)$ to the time complexity and $\mathcal{O}(|V|)$ to the space complexity, which can be ignored.
+The total time-complexity of this algorithm is thus $\mathcal{O}(|E| \cdot |V|)$ and its space complexity is $\mathcal{O}(|V|+|E|)$ (because the graph must be stored).
 
 \subsection{Child-Parent Cardinality Ratio}
 
