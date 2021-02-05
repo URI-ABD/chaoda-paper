@@ -236,9 +236,29 @@ For each algorithm, we have
 a dataset $X$ with $n = |X|$ points and
 a graph $G(V, E)$ of clusters/vertices $V$ and edges $E$ between overlapping clusters.
 
+
 \subsection{CLAM Clustering}
 
-TODO
+We use CLAM to build the cluster-tree and the induced graphs.
+The time complexity of clustering is the same as for clustering in CHESS~\cite{ishaq2019clustered}; i.e., expected $\mathcal{O}(nlogn)$ and worst-case $\mathcal{O}(n^2)$ where $n$ is the size of the dataset.
+
+The cost for inducing graphs depends on whether it is a layer-graph or an optimal graph.
+For both types of graphs, we first have to select the right clusters, and then find neighbors based on cluster overlap.
+
+We implemented CLAM in Python and the language does not have tail-call optimization for recursive functions.
+Therefore we implement partition to, instead of recursing until reaching leaves, iteratively increase the depth of the tree.
+During the course of this partition, we store a map from tree-depth to a set of clusters at that depth.
+Therefore, selecting all cluster at a given depth costs $\mathcal{O}(1)$ time and $\mathcal{O}(|V|)$ space where $V$ is the set of selected clusters.
+Selecting clusters for optimal-graphs is more expensive.
+First, we use a trained meta-ml model to predict the AUC contribution from each cluster in a tree; this costs $\mathcal{O}(n)$ time and $\mathcal{O}(n)$ space.
+Next, we sort the clusters by this predicted value; this costs $\mathcal{O}(nlogn)$ time and $\mathcal{O}(n)$ space.
+Finally, we perform a linear pass over the clusters to select the best for the graph, while discarding the ancestors and descendants of any cluster that has already been selected; this costs $\mathcal{O}(n)$ time and $\mathcal{O}(|V|)$ space.
+Therefore, the total cost of selecting clusters for optimal graphs is $\mathcal{O}(nlogn)$ time and $\mathcal{O}(n)$ space.
+
+Once the clusters have been selected for a graph, we have to find every pair of clusters with overlapping volumes.
+Na\"ively, this can be done with an all-pairs distance computation for a cost of $\mathcal{O}(|V|^2)$ and $\mathcal{O}(|V|^2)$.
+However, our implementation is superior to the na\"ive method although the proof is beyond the scope of this supplement.
+
 
 \subsection{Relative Cluster Cardinality}
 
