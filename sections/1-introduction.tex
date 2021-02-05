@@ -118,7 +118,7 @@ divisively clusters the data until each cluster contains only one datum.
 From this tree, CLAM can induce a graph by mapping clusters to vertices of the graph, and drawing an edge between any two vertices whose corresponding cluster volumes overlap (i.e.\ the sum of their radii is greater than the distance separating their centers).
 Clusters can be selected by a fixed depth, or at heterogeneous depths based on geometric properties, such as local fractal dimension, cluster cardinality, or cluster radius.
 We call graphs constrained to a uniform-depth layer \textit{layer graphs}.
-We call graphs from heterogenous depths \textit{optimal graphs}.
+We call graphs from heterogeneous depths \textit{optimal graphs}.
 
 Inducing an optimal graph across a variety of depths effectively maps a manifold with a variety of ``resolutions''.
 The intuition is that some regions of the manifold may be denser than others, thus, graphs induced from deeper clusters in those regions may be more informative.
@@ -136,4 +136,4 @@ CLAM, as we will demonstrate, largely resolves these issues.
 
 Na\"ively, distance-based approaches require either linear time in the size of the data set for each query,
 or quadratic time to build an index first.
-CLAM builds an index in expected $\mathcal{O}(n \lg n)$ time, and queries for outlier scores are sublinear in the size of the dataset.
+CLAM builds an index in expected $\mathcal{O}(n \lg n)$ time, and queries for outlier scores are sub-linear in the size of the dataset.

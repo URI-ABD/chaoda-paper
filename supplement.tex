@@ -135,7 +135,7 @@ Here, class 4 is discarded, class 1 is treated as the inliers and the remaining 
 This gives us 49,097 instances with 9 attributes, of which 3,511 are outliers.
 
 The \textbf{smtp} is also derived from the ``KDD Cup 1999'' dataset.
-It is preprocessed in the same way as the \textbf{http} dataset, except that the ``smtp'' service subset is used.
+It is pre-processed in the same way as the \textbf{http} dataset, except that the ``smtp'' service subset is used.
 This version of the dataset only contains 95,156 instances with 3 attributes, of which 30 instances are outliers.
 
 The \textbf{thyroid} dataset is also derived from the ``Thyroid Disease'' dataset.
@@ -300,11 +300,11 @@ In the worst-case, the graph contains only one component, so the time-complexity
 The remainder of the algorithm performs a random with with a relatively large number of steps.
 We used $10 \cdot |V|$ steps in our implementation.
 Thus the time-complexity stays at $\mathcal{O}(|V|^2)$.
-In terms of space, we need to store the transition matrix, and the visication count for each cluster.
+In terms of space, we need to store the transition matrix, and the visitation count for each cluster.
 Therefore the space complexity is $\mathcal{O}(|V|^2)$.
 
 In practice, $|V| \ll n$ and graphs only rarely consist of only one component.
-Thus, the average runtime performance is much better than that suggested by the quadratic space time-complexity.
+Thus, the average run-time performance is much better than that suggested by the quadratic space time-complexity.
 
 \subsection{Stationary Probabilities}
 
@@ -315,7 +315,7 @@ Matrix multiplication for square matrices costs $\mathcal{O}(|V|^{2.373})$ with 
 Thus the worst-case time complexity is the same as that for the matrix-multiplication algorithm employed.
 For space, we need only store a single $|V| \times |V|$ matrix, giving us a space complexity of $\mathcal{O}(|V|^2)$.
 
-Also just as with Random Walks, because $|V| \ll n$ and graphs only rarely consist of only one component, the average-case runtime performance is much better.
+Also just as with Random Walks, because $|V| \ll n$ and graphs only rarely consist of only one component, the average-case run-time performance is much better.
 
 \subsection{Normalization}
 
@@ -334,8 +334,6 @@ Since we need to store a score for each point, the space complexity is $\mathcal
 
 \section{UMAP Visualization}
 \label{supplement:sec:umap-visualization}
-
-% TODO: Add more images here and discuss UMAPS
 
 A visualization in Figure~\ref{supplement:fig:conclusions:umap-embeddings-1} using UMAP illustrates a handful of different examples;
 the anomalies in the Cardio and OptDigits datasets, where CHAODA outperforms other methods, appear to be at the edges of a complex manifold (though, clearly, the UMAP projection has distorted the manifold).
@@ -360,8 +358,8 @@ Most anomalies are off to one side but there are several interspersed among the 
    \label{supplement:fig:conclusions:umap-embeddings-1}
 \end{figure*}
 
-In Figure~\ref{supplement:fig:conclusions:umap-embeddings-2}, we show UMAP visulaizations of the Pima dataset.
-The inliers and outliers seem inseperable, and so all the methods perform poorly.
+In Figure~\ref{supplement:fig:conclusions:umap-embeddings-2}, we show UMAP visualizations of the Pima dataset.
+The inliers and outliers seem inseparable, and so all the methods perform poorly.
 
 \begin{figure*}
    \centering
@@ -369,7 +367,7 @@ The inliers and outliers seem inseperable, and so all the methods perform poorly
    \includegraphics[width=2.5in]{images/umaps/pima-manhattan-umap2d.png}
    \caption{UMAP projections of the Pima dataset.
    All algorithms performed poorly on Pima.
-   This may be because the anomalies and the outliers seem inseperable in the projection.}
+   This may be because the anomalies and the outliers seem inseparable in the projection.}
    \label{supplement:fig:conclusions:umap-embeddings-2}
 \end{figure*}
 
@@ -377,7 +375,7 @@ The inliers and outliers seem inseperable, and so all the methods perform poorly
 \section{Performance}
 \label{supplement:sec:performance}
 
-\subsection{Runtime performance on Test set of Datasets}
+\subsection{Run-time performance on Test set of Datasets}
 
 Tables~\ref{supplement:table:results:test-time-1}~and~\ref{supplement:table:results:test-time-2} report the running time, in seconds, of CHAODA and each competitor.
 The fastest methods on each dataset are presented in bold face.
@@ -505,7 +503,7 @@ VAE &         30.38 &              30.58 &          5.67 &               30.41 &
 
 \subsection{AUC and Runtime performance on Train set of Datasets}
 
-Tables~\ref{supplement:table:results:train-performance}~and~\ref{supplement:table:results:train-time} report the  the AUC perforamce and running time, respectively, of CHAODA and each competitor on the train set of datasets.
+Tables~\ref{supplement:table:results:train-performance}~and~\ref{supplement:table:results:train-time} report the  the AUC performance and running time, respectively, of CHAODA and each competitor on the train set of datasets.
 
 \begin{table*}[!t]
 \renewcommand{\arraystretch}{1.25}
