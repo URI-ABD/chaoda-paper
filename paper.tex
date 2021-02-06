@@ -1,7 +1,7 @@
 \documentclass{article}
 
 
-% \usepackage{arxiv} # uncomment for preprint
+\usepackage{arxiv} % uncomment for preprint
 
 \usepackage[utf8]{inputenc} % allow utf-8 input
 \usepackage[T1]{fontenc}    % use 8-bit T1 fonts
@@ -22,6 +22,7 @@
 \usepackage{placeins}
 % \usepackage{algpseudocode}
 \usepackage{algorithm}
+\usepackage{algorithmic}
 
 % \algnewcommand\algorithmicforeach{\textbf{foreach}}
 % \algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
@@ -33,41 +34,41 @@
 \newcommand{\theHalgorithm}{\arabic{algorithm}}
 
 % Use the following line for the initial blind version submitted for review:
-\usepackage{icml2021}
+% \usepackage{icml2021}
 
 
 
-% \title{Clustered Hierarchical Anomaly and Outlier Detection Algorithms}
+\title{Clustered Hierarchical Anomaly and Outlier Detection Algorithms}
 
 
 
-% \author{
-%     Najib Ishaq \\
-%     Department of Computer Science and Statistics\\
-%     University of Rhode Island\\
-%     Kingston, RI\\
-%     \texttt{najib\_ishaq@uri.edu} \\
-%     \And
-%     Thomas J. Howard III \\
-%     Department of Computer Science and Statistics\\
-%     University of Rhode Island\\
-%     Kingston, RI\\
-%     \texttt{thoward27@uri.edu} \\
-%     \AND
-%     Noah M. Daniels \\
-%     Department of Computer Science and Statistics\\
-%     University of Rhode Island\\
-%     Kingston, RI\\
-%     \texttt{noah\_daniels@uri.edu} \\
-% }
+\author{
+    Najib Ishaq \\
+    Department of Computer Science and Statistics\\
+    University of Rhode Island\\
+    Kingston, RI\\
+    \texttt{najib\_ishaq@uri.edu} \\
+    \And
+    Thomas J. Howard III \\
+    Department of Computer Science and Statistics\\
+    University of Rhode Island\\
+    Kingston, RI\\
+    \texttt{thoward27@uri.edu} \\
+    \AND
+    Noah M. Daniels \\
+    Department of Computer Science and Statistics\\
+    University of Rhode Island\\
+    Kingston, RI\\
+    \texttt{noah\_daniels@uri.edu} \\
+}
 
 \begin{document}
     % \maketitle
 
 % If accepted, instead use the following line for the camera-ready submission:
 %\usepackage[accepted]{icml2021}
-\twocolumn[
-\icmltitle{Clustered Hierarchical Anomaly and Outlier Detection Algorithms}    
+% \twocolumn[
+% \icmltitle{Clustered Hierarchical Anomaly and Outlier Detection Algorithms}    
 
 % It is OKAY to include author information, even for blind
 % submissions: the style file will automatically remove it for you
@@ -82,25 +83,25 @@
 % You can specify symbols, otherwise they are numbered in order.
 % Ideally, you should not use this facility. Affiliations will be numbered
 % in order of appearance and this is the preferred way.
-\icmlsetsymbol{equal}{*}
+% \icmlsetsymbol{equal}{*}
 
-\begin{icmlauthorlist}
-\icmlauthor{Najib Ishaq}{equal,uri}
-\icmlauthor{Thomas J. Howard III}{equal,uri}
-\icmlauthor{Noah M. Daniels}{uri}
-\end{icmlauthorlist}
+% \begin{icmlauthorlist}
+% \icmlauthor{Najib Ishaq}{equal,uri}
+% \icmlauthor{Thomas J. Howard III}{equal,uri}
+% \icmlauthor{Noah M. Daniels}{uri}
+% \end{icmlauthorlist}
 
-\icmlaffiliation{uri}{Department of Computer Science \& Statistics, University of Rhode Island, Kingston, Rhode Island, USA}
+% \icmlaffiliation{uri}{Department of Computer Science \& Statistics, University of Rhode Island, Kingston, Rhode Island, USA}
 
-\icmlcorrespondingauthor{Noah M. Daniels}{noah\_daniels@uri.edu}
+% \icmlcorrespondingauthor{Noah M. Daniels}{noah\_daniels@uri.edu}
 
-% You may provide any keywords that you
-% find helpful for describing your paper; these are used to populate
-% the "keywords" metadata in the PDF but will not be shown in the document
-\icmlkeywords{Anomaly Detection, Outlier Detection, Manifold Learning}
+% % You may provide any keywords that you
+% % find helpful for describing your paper; these are used to populate
+% % the "keywords" metadata in the PDF but will not be shown in the document
+% \icmlkeywords{Anomaly Detection, Outlier Detection, Manifold Learning}
 
-\vskip 0.3in
-]
+% \vskip 0.3in
+% ]
 
 % this must go after the closing bracket ] following \twocolumn[ ...
 
@@ -111,7 +112,7 @@
 % Remove it (just {}) if you do not need this facility.
 
 %\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
-\printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
+% \printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 
 
     \begin{abstract}
@@ -138,4 +139,6 @@
     \FloatBarrier
     \bibliographystyle{icml2021}
     \bibliography{references}
+    \newpage
+    \input{supplement.tex}
 \end{document}
