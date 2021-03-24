@@ -18,7 +18,7 @@
 % Uncomment the following line if you prefer a single-column format
 %\onecolumn
 We appreciate the opportunity to respond to reviewers.
-We also appreciate the constructive comments from the reviewers, particularly the suggestions by Reviewer 5 about the paper organization.
+We also appreciate the constructive comments from the reviewers, particularly the suggestions by Reviewer 5 about the paper organization and code docstrings.
 We have concerns about some of the reviews, in particular the one from Reviewer 3.
 We address these point-by-point, as well as describe changes to the manuscript based on these reviews.
 Reviewer 3 claimed that there was no theoretical analysis in the paper; this is simply not true.
@@ -37,15 +37,15 @@ Reviewer 3 claims ``This paper is difficult to understand in places because of t
 We are unsure how to reconcile these two reviews, and cannot find any typographical or grammatical errors in the manuscript.
 Reviewers 3 and 6 also claim that there are not enough details to reproduce the work, while Reviewers 4 and 5 claim that it is reproducible.
 Note that source code was provided, and all quantitative results in the paper can be reproduced by running one script.
-Thus, we feel that Reviewers 3 and 4 are in error here.
+Thus, we feel that Reviewers 3 and 6 are in error here.
 
 Reviewer 4 points out that ``It is well known that the stationary distribution for random walks on an undirected graph has a closed form'' but this is incorrect when the edge weights are not uniform.
 Thus, we cannot use this closed form on the CLAM graph.
 \emph{We have added language to this effect in Section X of the manuscript.}
 
-Reviewer 4 also states ``But the bigger question is why is this a good scoring rule. A cluster having low degree could arise for many reasons: maybe the points are truly isolated, or maybe the distribution and multi-modal, and a cluster happens to be far away from everything else. 
-This brings me to a general weakness of the paper: there is a lot of mathematical notions mentioned that are not really put to use in any concrete sense (fractal-dimension, the idea of manifold learning). In contrast, there are several places that need to be fleshed out formally, where the paper does not do that, most notably the question of how the clustering is found''
-\emph{We have added some language to try to clarify how and why fractal dimension is used, and connect the manifold mapping to this reviewer's concern about how the graph is used}.
+Reviewer 4 also states ``A cluster having low degree could arise for many reasons: maybe the points are truly isolated, or maybe the distribution and multi-modal, and a cluster happens to be far away from everything else. 
+This brings me to a general weakness of the paper: there is a lot of mathematical notions mentioned that are not really put to use in any concrete sense (fractal-dimension, the idea of manifold learning). In contrast, there are several places that need to be fleshed out formally...''
+\emph{We have added language to clarify how and why fractal dimension is used, and connect the manifold mapping to this reviewer's concern about how the graph is used}.
 
 Reviewer 4 states ``the paper needs to be more precise here: what is the AUC, can you formally state what is the learning problem that you are aiming to solve here? In what sense is a clustering of one dataset generalizable to another? Is there a danger that what one learns for a specific family of datasets is not generalizable to other datasets?''
 This is a totally valid concern, and we believe it is important to address.
