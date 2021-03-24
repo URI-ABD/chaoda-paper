@@ -17,6 +17,25 @@
 \begin{document}
 % Uncomment the following line if you prefer a single-column format
 %\onecolumn
+We appreciate the opportunity to respond to reviewers.
+We have concerns about some of the reviews, in particular the one from Reviewer #3.
+We address these point-by-point, as well as describe changes to the manuscript based on these reviews.
+Reviewer 3 claimed that there was no theoretical analysis in the paper; this is simply not true.
+We give complexity bounds foor CLAM and CHAODA in Section 2.1.
+Reviewer 3 also claimed that we learned hyperparameters on a training dataset, but that this is not possible as the problem is unsupervised.
+However, this conflates two things: for all datasets under evaluation, ground truth is known.
+Of course, only for the training datasets do we use this ground truth (labels of anomalous or outlier datapoints) to learn what we believe to be generalizable geometric properties of manifolds, which we then evaluate on the test datasets.
+\emph{We have added language to Section X of the manuscript in order to clarify this point}.
+Reviewer 3 claims there is no novelty, because the clustering is na\"ive and the scoring methods are simple heuristics.
+We disagree that this lacks novelty; there is clearly great power in a clustering approach that efficiently maps out a manifold in high-dimensional space, such that even such simple methods outperform competing methods.
+Reviewer 3 criticized the clarity of writing, in particular suggesting some ways to reorganize the manuscript.
+Reviewer 5, in their highly positive review, also suggested some reorganization.
+\emph{We have added a summary paragraph to the method description.}
+Reviewer 3 claims ``This paper is difficult to understand in places because of typos, lack of organization, or another flaws. The paper would need significant/major improvement in writing,'' while Reviewer 5 says ``The clarity of the paper and additional codes is also generally good. The paper contains few grammatical errors and is presented in a logical sequence.''
+We are unsure how to reconcile these two reviews, and cannot find any typographical or grammatical errors in the manuscript.
+Reviewers 3 and 6 also claim that there are not enough details to reproduce the work, while Reviewers 4 and 5 claim that it is reproducible.
+Note that source code was provided, and all quantitative results in the paper can be reproduced by running one script.
+Thus, we feel that Reviewers 3 and 4 are in error here.
 
 \lipsum
 \lipsum
