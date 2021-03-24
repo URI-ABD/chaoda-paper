@@ -22,22 +22,13 @@ We also appreciate the constructive comments from the reviewers, particularly th
 We have concerns about some of the reviews, in particular the one from Reviewer 3.
 We address these point-by-point, as well as describe changes to the manuscript based on these reviews.
 Reviewer 3 claimed that there was no theoretical analysis in the paper; this is simply not true.
-We give complexity bounds foor CLAM and CHAODA in Section 2.1.
+We give complexity bounds for CLAM and CHAODA in Section 2.1.
 Reviewer 3 also claimed that we learned hyperparameters on a training dataset, but that this is not possible as the problem is unsupervised.
 However, this conflates two things: for all datasets under evaluation, ground truth is known.
 Of course, only for the training datasets do we use this ground truth (labels of anomalous or outlier datapoints) to learn what we believe to be generalizable geometric properties of manifolds, which we then evaluate on the test datasets.
 \emph{We have added language to Section X of the manuscript in order to clarify this point}.
 Reviewer 3 claims there is no novelty, because the clustering is na\"ive and the scoring methods are simple heuristics.
 We disagree that this lacks novelty; there is clearly great power in a clustering approach that efficiently maps out a manifold in high-dimensional space, such that even such simple methods outperform competing methods.
-
-Reviewer 3 criticized the clarity of writing, in particular suggesting some ways to reorganize the manuscript.
-Reviewer 5, in their highly positive review, also suggested some reorganization.
-\emph{We have added a summary paragraph to the method description.}
-Reviewer 3 claims ``This paper is difficult to understand in places because of typos, lack of organization, or another flaws. The paper would need significant/major improvement in writing,'' while Reviewer 5 says ``The clarity of the paper and additional codes is also generally good. The paper contains few grammatical errors and is presented in a logical sequence.''
-We are unsure how to reconcile these two reviews, and cannot find any typographical or grammatical errors in the manuscript.
-Reviewers 3 and 6 also claim that there are not enough details to reproduce the work, while Reviewers 4 and 5 claim that it is reproducible.
-Note that source code was provided, and all quantitative results can be reproduced by running one script.
-Thus, we feel that Reviewers 3 and 6 are in error here.
 
 Reviewer 4 points out that ``It is well known that the stationary distribution for random walks on an undirected graph has a closed form'' but this is incorrect when the edge weights are not uniform.
 Thus, we cannot use this closed form on the CLAM graph.
@@ -47,8 +38,18 @@ Reviewer 4 also states ``A cluster having low degree could arise for many reason
 This brings me to a general weakness of the paper: there is a lot of mathematical notions mentioned that are not really put to use in any concrete sense (fractal-dimension, the idea of manifold learning). In contrast, there are several places that need to be fleshed out formally...''
 \emph{We have added language to clarify how and why fractal dimension is used, and connect the manifold mapping to this reviewer's concern about how the graph is used}.
 Reviewer 4 states ``the paper needs to be more precise here: what is the AUC, can you formally state what is the learning problem that you are aiming to solve here? In what sense is a clustering of one dataset generalizable to another? Is there a danger that what one learns for a specific family of datasets is not generalizable to other datasets?''
+Reviewer 4 also requested under specific focus that ``Can you please expand on the ``learning to cluster'' aspect of your work? What AUC is being computed and how?''
 This is a valid concern, and we believe it is important to address.
 \emph{We have attempted to clarify exactly how AUC is measured, what the learning problem is, and the risks regarding generalization}.
+
+Reviewer 3 criticized the clarity of writing, in particular suggesting some ways to reorganize the manuscript.
+Reviewer 5, in their highly positive review, also suggested some reorganization.
+\emph{We have added a summary paragraph to the method description.}
+Reviewer 3 claims ``This paper is difficult to understand in places because of typos, lack of organization, or another flaws. The paper would need significant/major improvement in writing,'' while in constrast Reviewer 5 says ``The clarity of the paper and additional codes is also generally good. The paper contains few grammatical errors and is presented in a logical sequence.''
+We are unsure how to reconcile these two reviews, and cannot find any typographical or grammatical errors in the manuscript.
+Reviewers 3 and 6 also claim that there are not enough details to reproduce the work, while Reviewers 4 and 5 claim that it is reproducible.
+Note that source code was provided, and all quantitative results can be reproduced by running one script.
+We apologize for the lack of clarity, and ask Reviewers 3 and 6 to please look at the supplementary material including source code.
 
 Reviewer 6 correctly notes that the clustering method (CLAM) appears to be an adaptation of Ishaq, et al. 2019; this is true as stated in the manuscript.
 However, there are significant differences from the 2019 paper.
