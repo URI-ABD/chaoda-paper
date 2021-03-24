@@ -33,9 +33,8 @@ We disagree that this lacks novelty; there is clearly great power in a clusterin
 Reviewer 4 points out that ``It is well known that the stationary distribution for random walks on an undirected graph has a closed form'' but this is incorrect when the edge weights are not uniform.
 Thus, we cannot use this closed form on the CLAM graph.
 \emph{We have added language to this effect in Section X of the manuscript.}
-
 Reviewer 4 also states ``A cluster having low degree could arise for many reasons: maybe the points are truly isolated, or maybe the distribution and multi-modal, and a cluster happens to be far away from everything else. 
-This brings me to a general weakness of the paper: there is a lot of mathematical notions mentioned that are not really put to use in any concrete sense (fractal-dimension, the idea of manifold learning). In contrast, there are several places that need to be fleshed out formally...''
+This brings me to a general weakness of the paper: there is a lot of mathematical notions mentioned that are not really put to use in any concrete sense (fractal-dimension, the idea of manifold learning)...''
 \emph{We have added language to clarify how and why fractal dimension is used, and connect the manifold mapping to this reviewer's concern about how the graph is used}.
 Reviewer 4 states ``the paper needs to be more precise here: what is the AUC, can you formally state what is the learning problem that you are aiming to solve here? In what sense is a clustering of one dataset generalizable to another? Is there a danger that what one learns for a specific family of datasets is not generalizable to other datasets?''
 Reviewer 4 also requested under specific focus that ``Can you please expand on the ``learning to cluster'' aspect of your work? What AUC is being computed and how?''
@@ -57,8 +56,8 @@ In particular, CLAM learns an optimal stopping depth from training datasets, and
 Furthermore, \textbf{CLAM learns a graph} from the cluster tree, and it is this graph, induced from the nonuniform depth just discussed, that is the true novelty of CLAM, and allows CHAODA to be built on top of CLAM.
 \emph{We have added additional language to the manuscript to further highlight the differences}.
 Reviewer 6 requests that we compare with REPEN, DAGMM, and others.
-However, REPEN is a \textbf{supervised} method, so a fair comparison is not possible.
-\emph{We have added additional datasets to our comparison as suggested in the review article mentioned}.
+However, the REPEN source code on Github does not work as provided, while the DAGMM source code requires custom-tuning based on the dimensionality of the data, and we could not get it to run.
+\emph{We have added additional datasets to our comparison as suggested in the review article mentioned, as well as a comparison to RDP, from Wang, et al. 2019}.
 However, at the time of submission to ICML, that review article \textbf{was not yet published}; it was only published in March, 2021.
 Thus, it seems unfair to request comparison to work that was unpublished at the time of submission.
 Reviewer 6 also claims that an ablation study is needed.
