@@ -281,7 +281,7 @@ We compute the transition probability matrix of each component of a graph that c
 We then compute successive squares of this matrix.
 This process will eventually converge as long as the graph is connected and aperiodic~\cite{levin2017markov}; we find this convergent matrix.
 We consider the sum of the values along a row to be inversely related to the anomalousness of the respective cluster.
-The algorithm is defined in Algorithm~\ref{alg:sp}; it describes the stationary probabilities for an \emph{unweighted} representation of the graph.
+The algorithm is defined in Algorithm~\ref{alg:sp}; it describes the stationary probabilities for an \emph{unweighted} representation of the graph, distinguishing it from the random walk method.
 %% NAJIB IS THIS CORRECT?
 This algorithm is dominated by the computation of a separate matrix for each component in the graph.
 Its worst-case time complexity is $\mathcal{O}(|V|^2)$, but is often better in practice.
@@ -305,8 +305,23 @@ Its worst-case time complexity is $\mathcal{O}(|V|^2)$, but is often better in p
 \end{algorithm}
 
 
-\subsection{Normalization}
-\label{subsec:methods:normalization}
+\subsection{Ensemble}
+\label{subsec:methods:ensemble}
+
+Given a dataset and a list of distance functions for the dataset, we start by building a CLAM tree for each distance function on the dataset.
+We extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
+Given the set of models learned from the training datasets described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster, normalized by cardinality.
+The highest ranked clusters from each tree are then used to build a graph.
+This gives us one graph for each combination of individual algorithm, meta-ML model, and distance function used.
+We used the six individual algorithms described in~\ref{subsec:methods:individual-algorithms}, three means (arithmetic, geometric, and harmonic), two meta-ML models (linear regression and regression trees), and two distance metrics ($L1$-norm and $L2$-norm);
+thus, we have upto $72$ graphs for each dataset.
+
+Each graph is then used with its corresponding individual algorithm to calculate an outlier score for each point in the dataset.
+These outlier scores are then combined into an ensemble by simply taking the mean of all the scores for each point.
+We present the AUC scores from this ensemble in Section~\ref{sec:results}.
+
+\subsubsection{Normalization}
+\label{subsubsec:methods:normalization}
 
 The individual algorithms described in~\ref{subsec:methods:individual-algorithms} produce outlier scores for each cluster, rather than for each point.
 We remedy this by assigning to each point the score of the cluster to which it belongs.
@@ -331,21 +346,6 @@ We include sigmoid and min-max normalization as options in our implementation.
     \ENDFOR
 \end{algorithmic}
 \end{algorithm}
-
-\subsection{Ensemble}
-\label{subsec:methods:ensemble}
-
-Given a dataset and a list of distance functions for the dataset, we start by building a CLAM tree for each distance function on the dataset.
-We extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
-Given the set of models learned from the training datasets described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster, normalized by cardinality.
-The highest ranked clusters from each tree are then used to build a graph.
-This gives us one graph for each combination of individual algorithm, meta-ML model, and distance function used.
-We used the six individual algorithms described in~\ref{subsec:methods:individual-algorithms}, three means (arithmetic, geometric, and harmonic), two meta-ML models (linear regression and regression trees), and two distance metrics ($L1$-norm and $L2$-norm);
-thus, we have upto $72$ graphs for each dataset.
-
-Each graph is then used with its corresponding individual algorithm to calculate an outlier score for each point in the dataset.
-These outlier scores are then combined into an ensemble by simply taking the mean of all the scores for each point.
-We present the AUC scores from this ensemble in Section~\ref{sec:results}.
 
 \subsubsection{A Note on Runtime Performance}
 
