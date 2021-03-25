@@ -26,7 +26,7 @@ In addition, a purely mathematical formulation of every algorithm provided would
 Reviewer 3 also claimed that we learned hyperparameters on a training dataset, but that this is not possible as the problem is unsupervised.
 However, this conflates two things: for all datasets under evaluation, ground truth is known.
 Of course, only for the training datasets do we use this ground truth (labels of anomalous or outlier datapoints) to learn what we believe to be generalizable geometric properties of manifolds, which we then evaluate on the test datasets.
-\emph{We have added language to Section 2.2 of the manuscript in order to clarify this point}.
+\emph{We have added clarifying language to Section 2.2}.
 Reviewers 3 and 6 claim there is no novelty, because the ``clustering is na\"ive and the scoring methods are simple heuristics,'' and that ``the clustering method (CLAM) appears to be an adaptation of Ishaq, et al. 2019'';
 however, there are significant differences from the 2019 paper.
 In particular, CLAM learns an optimal stopping depth from training datasets, and this depth is not uniform; indeed, it is not a depth so much as a combination of geometric properties (including local fractal dimension) that \textbf{on the training sets} optimized anomaly detection performance. CHESS, the approach from the 2019 paper, merely clustered down to a pre-specified depth, as its goal was to build an index for search.
@@ -35,8 +35,7 @@ We disagree that this lacks novelty; there is clearly great power in a clusterin
 \emph{We have added language to Section 2 that clarifies what we believe to be novel.}
 Reviewer 4 points out that ``[t]he stationary distribution for random walks on an undirected graph has a closed form'' but this is not true when the edge weights are not uniform.
 Thus, we cannot use this closed form on the CLAM graph.
-We realize we did not make it clear that we were relying on edge weights for random walks here.
-\emph{We have added language to this effect in Section 2.3.5 of the manuscript.}
+\emph{We have added language to this effect re: non-uniform edge weights in Section 2.3.5.}
 Reviewer 4 also states ``A cluster having low degree could arise for many reasons: maybe the points are truly isolated, or maybe the distribution and multi-modal, and a cluster happens to be far away from everything else. 
 This brings me to a general weakness of the paper: there is a lot of mathematical notions mentioned that are not really put to use in any concrete sense (fractal-dimension, the idea of manifold learning)...''
 \emph{We have added language to clarify how and why fractal dimension is used, and connect the manifold mapping to this reviewer's concern about how the graph is used, in the overview paragraph in Section 2 as well as Section 2.1.1}.
@@ -46,7 +45,7 @@ Reviewer 4 also requested under specific focus that ``Can you please expand on t
 Reviewer 3 criticized the clarity of writing, in particular suggesting some ways to reorganize the manuscript.
 Reviewer 5, in their highly positive review, also suggested some reorganization.
 \emph{We have added an introductory paragraph to Section 2.}
-Reviewer 3 claims ``This paper is difficult to understand in places because of typos, lack of organization, or another flaws. The paper would need significant/major improvement in writing,'' while Reviewer 5 says ``The clarity of the paper and additional codes is also generally good. The paper contains few grammatical errors and is presented in a logical sequence.''
+Reviewer 3 claims ``This paper is difficult to understand in places because of typos, lack of organization, [...].'' while Reviewer 5 says ``The clarity of the paper and additional codes is also generally good. The paper contains few grammatical errors and is presented in a logical sequence.''
 We are unsure how to reconcile these two reviews, and cannot find any typographical or grammatical errors in the manuscript.
 Reviewers 3 and 6 also claim that there are not enough details to reproduce the work, while Reviewers 4 and 5 claim that it is reproducible.
 \textbf{Note that source code was provided, and all quantitative results can be reproduced by running one script.}
@@ -54,7 +53,7 @@ We apologize for the lack of clarity, and ask Reviewers 3 and 6 to please look a
 Reviewer 6 requests that we compare with REPEN, DAGMM, and others.
 However, the REPEN source code on Github does not run, while the DAGMM implementation on Github is unofficial and not from the paper authors, and we could not get it to work.
 \emph{We have added additional datasets to our comparison as suggested in the review article mentioned, as well as a comparison to RDP, from Wang, et al. 2019}.
-However, at the time of submission to ICML, that review article \textbf{was not yet published}; it was only published in March, 2021.
+However, at the time of submission to ICML, the Pang, et al. review article \textbf{was not yet published}; it was only published in March, 2021.
 Thus, it seems unfair to request comparison to work that was unpublished at the time of submission.
 Reviewer 6 also claims that an ablation study is needed.
 We disagree; an ablation study is only relevant to a deep-learning approach where layers of the network can be removed to gauge efficacy.
