@@ -308,6 +308,8 @@ Its worst-case time complexity is $\mathcal{O}(|V|^2)$, but is often better in p
 \subsection{Ensemble}
 \label{subsec:methods:ensemble}
 
+% TODO talk about inductive bias
+
 Given a dataset and a list of distance functions for the dataset, we start by building a CLAM tree for each distance function on the dataset.
 We extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
 Given the set of models learned from the training datasets described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster, normalized by cardinality.
