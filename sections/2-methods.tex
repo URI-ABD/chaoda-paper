@@ -5,6 +5,7 @@
 Here we provide a brief overview of the several methods described in this manuscript.
 First, we rely on CLAM (Clustered Learning of Approximate Manifolds) as a fairly na\"ive clustering method; CLAM derives from CHESS~\cite{ishaq2019clustered} but introduces significant novelty: while CHESS only clustered to a pre-specified depth for the \emph{sole} purpose of search, CLAM uses a similar clustering on several training sets not included in testing to learn data properties for which anomaly detection will perform well across those datasets.
 Unlike CHESS, CLAM does not use a specific depth to halt clustering; instead, it tracks properties including local fractal dimension, cluster cardinality, and moving averages thereof, based upon a training dataset. 
+% TODO NOAH give intution for these here.
 The stopping criteria are described in Section~\ref{subsubsec:methods:clam:clustering}.
 Importantly and novelly, these stopping criteria are not uniform for a given dataset; they are adaptive with differing properties of different regions of the manifold, and may exist at different depths of the tree (see Figure~\ref{fig:methods:graph-generation}).
 Also novelly, a graph is induced from the overlap among clusters at this set of depths (see Section~\ref{subsec:methods:induced-graphs}, and this graph informs two of the six anomaly-detection algorithms that CLAM enables (see Section~\ref{subsec:methods:individual-algorithms}).
@@ -131,6 +132,8 @@ The process is as follows.
 
 We generate CLAM trees for each training dataset.
 We generate the initial training data by considering layer-graphs induced from these trees.
+%TODO NAJIB fix this, it's much simpler now. 
+% explain it as a feature vector of length 6
 For each such graph, we calculate the arithmetic, geometric, and harmonic means of the parent-child cardinality ratio, radius ratio, and local fractal dimension ratio;
 along with the exponential moving averages of these ratios, as described in Section~\ref{subsubsec:methods:clam:clustering}.
 Each set of means forms a 6-dimensional feature vector, giving us three feature vectors for each graph.
