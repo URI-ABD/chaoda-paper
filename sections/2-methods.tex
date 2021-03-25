@@ -1,5 +1,17 @@
 \section{Methods}
 \label{sec:methods}
+\label{subsec:methods:overview}
+
+Here we provide a brief overview of the several methods described in this manuscript.
+First, we rely on CLAM (Clustered Learning of Approximate Manifolds) as a fairly na\"ive clustering method; CLAM derives from CHESS~\cite{ishaq2019clustered} but introduces significant novelty: while CHESS only clustered to a pre-specified depth, CLAM uses training sets not included in testing to learn a data properties for which anomaly detection will perform well across several datasets.
+CLAM does not use a specific depth to halt clustering; instead, it tracks properties including local fractal dimension, cluster cardinality, and moving averages thereof, based upon a training dataset. 
+The stopping criteria are described in Section~\ref{subsubsec:methods:clam:clustering}.
+Importantly and novelly, these stopping criteria are not uniform for a given dataset; they are adaptive with differing properties of different regions of the manifold, and may exist at different depths of the tree (see Figure~\ref{fig:methods:graph-generation}).
+Also novelly, a graph is induced from the overlap among clusters at this set of depths (see Section~\ref{subsec:methods:induced-graphs}, and this graph informs two of the six anomaly-detection algorithms that CLAM enables (see Section~\ref{subsec:methods:individual-algorithms}).
+CLAM relies on an ensemble-learning approach based on six simple heuristics; the ensemble-learning approach is described in Section~\ref{subsec:methods:ensemble}.
+These distinct heuristics attempt to encompass distinct notions of what make a datapoint anomalous: is it truly isolated, or is the distribution of datapoints multi-modal, or is it very low-dimensional despite being embedded in a high-dimensional space?
+
+In all, CLAM builds on a clustering algorithm developed for a different purpose (accelerated approximate search) and uses a novel graph-inference approach to enable several anomaly-detection heuristics that are effective in practice.
 
 
 \subsection{CLAM}
@@ -49,7 +61,18 @@ These clusters have several interesting and important properties for us to consi
 These include the \textit{cardinality}, the number of points in a cluster;
 \textit{center}, the geometric median of points contained in a cluster;
 \textit{radius}, the distance to the farthest point from the center;
-and \textit{local fractal dimension}, as described in~\cite{ishaq2019clustered}.
+and \textit{local fractal dimension},
+as given by:
+
+\begin{gather}
+    \log_2\bigg(\frac{|B_D(q, r_1)|}{|B_D(q, r_2)|}\bigg)
+    \label{fractal-dimension}
+\end{gather}
+
+where $B_D(q,r)$ is the set of points contained in a ball on the dataset $D$ of radius $r$ centered on a point $q$; here, fractal dimension is computed for a radius $r_1$ and a smaller radius $r_2=\frac{r_1}{2}$.~\cite{ishaq2019clustered}
+Thus, this measure captures the ``spread'' of datapoints on the manifold in comparison to the (typically much larger) embedding space, motivated by the notion that CLAM's learned graph will adapt its ``resolution'' to different regions of the manifold.
+
+
 We can also consider individual \textit{parent-child ratios} of cardinality, radius, and local fractal dimension, as well as the \textit{exponential moving averages} of those parent-child ratios along a branch of the tree.
 Each of these properties is computed during the process of clustering and cached as metadata for each cluster.
 In particular, we use the parent-child ratios and the exponential moving averages of those ratios to generalize our method from a small set of datasets to a large, distinct set of datasets.
@@ -90,10 +113,14 @@ Instead, we must intelligently select those clusters that build a graph which pe
 
 Area under the curve (AUC) of the receiver operating characteristic (ROC) is often used to measure the performance of anomaly detectors;
 we wish to choose clusters that are expected to maximize this measure.
-We do this by learning a function that takes a cluster and predicts its contribution to the AUC if that cluster were selected for the graph.
+We use the definition of AUC of the ROC based on CHAODA being an \emph{unsupervised} model where ground truth can be examined post-hoc from the datasets; a score is given to every datapoint, and the AUC is computed in the usual fashion~\cite{fawcett2006introduction}.
+The ground-truth labels are only evaluated in training for the training datasets; their consideration for the test datasets is purely used for post-hoc accuracy calculations.
+
+We find the ``right graphs'' by learning a function that takes a cluster and predicts its contribution to the AUC if that cluster were selected for the graph, with the invariant that no cluster can be selected along with any of its descendents.
 Any function $f: Cluster \mapsto \mathbb{R}^+$ will suffice.
 This is essentially transfer learning: we will learn such functions from a set of datasets \emph{completely distinct from} the set of datasets we use for benchmarking.
 We are not learning any dataset-specific parameters, but instead the general geometric and topological properties common among datasets.
+We are effectively learning a set of criteria that can enable selection of a useful depth (perhaps not truly optimal), varying along the cluster tree, with regards to anomaly detection.
 
 We choose a linear regression model and a regression tree model to fill this role.
 Such models require training data.
@@ -224,6 +251,10 @@ The least visited clusters are the most anomalous, and the most visited clusters
 The algorithm is defined in Algorithm~\ref{alg:rw}.
 This algorithm is dominated by the computation of the transition matrix for the graph.
 Its worst-case time complexity is $\mathcal{O}(|V|^2)$, but is often better because the transition matrix is computed separately for each component in the graph.
+Importantly, and distinct from the algorithm described in \ref{subsubsec:methods:individual-algorithms:sp}, this approach uses the distance between two cluster centers to determine the random walk, so a closed-form convergent solution cannot be used.
+
+%% NAJIB I don't think the algorithm description reflected the edge weights!
+%% I have tweaked it; please check.
 
 \begin{algorithm}[h]
     \caption{Random Walks}
@@ -234,7 +265,7 @@ Its worst-case time complexity is $\mathcal{O}(|V|^2)$, but is often better beca
     \FOR {cluster $c \in G$}
         \STATE $c' \gets c$
         \FOR{$i=1$ {\bfseries to} $10 \cdot |V|$}
-            \STATE $c' \gets n(d),$ a random neighbor of $d$
+            \STATE $c' \gets n(d),$ a random neighbor of $d$ chosen with probability inversely proportional to the distance between d and n(d)
             \STATE increment $v[c']$
         \ENDFOR
     \ENDFOR
@@ -245,11 +276,13 @@ Its worst-case time complexity is $\mathcal{O}(|V|^2)$, but is often better beca
 \end{algorithm}
 
 \subsubsection{Stationary Probabilities}
+\label{subsubsec:methods:individual-algorithms:sp}
 We compute the transition probability matrix of each component of a graph that contains at least two clusters.
 We then compute successive squares of this matrix.
 This process will eventually converge as long as the graph is connected and aperiodic~\cite{levin2017markov}; we find this convergent matrix.
 We consider the sum of the values along a row to be inversely related to the anomalousness of the respective cluster.
-The algorithm is defined in Algorithm~\ref{alg:sp}.
+The algorithm is defined in Algorithm~\ref{alg:sp}; it describes the stationary probabilities for an \emph{unweighted} representation of the graph.
+%% NAJIB IS THIS CORRECT?
 This algorithm is dominated by the computation of a separate matrix for each component in the graph.
 Its worst-case time complexity is $\mathcal{O}(|V|^2)$, but is often better in practice.
 
