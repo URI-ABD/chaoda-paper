@@ -111,6 +111,7 @@ The heart of the problem with CHAODA is building the right graph(s) to represent
 One could try using every possible combination of clusters to form every possible graph but this leads to combinatorial explosion.
 Instead, we must intelligently select those clusters that build a graph which performs well for anomaly detection.
 
+% NAJIB check this over please
 Area under the curve (AUC) of the receiver operating characteristic (ROC) is often used to measure the performance of anomaly detectors;
 we wish to choose clusters that are expected to maximize this measure.
 We use the definition of AUC of the ROC based on CHAODA being an \emph{unsupervised} model where ground truth can be examined post-hoc from the datasets; a score is given to every datapoint, and the AUC is computed in the usual fashion~\cite{fawcett2006introduction}.
@@ -153,11 +154,14 @@ the decision functions from the fitted models are then used to make predictions 
 \subsection{Individual Algorithms}
 \label{subsec:methods:individual-algorithms}
 
+% TODO change six to five when it's not a lie
 Here we describe six simple methods for anomaly detection, each of which uses a graph of clusters from CLAM to calculate an anomalousness score for each datapoint.
 For each algorithm, $scores$ is a dictionary of clusters and their outlier scores,
 $V$ is the set of clusters in a graph,
 $E$ is the set of edges in a graph, and
 the cardinality of a cluster $c$ is denoted by $|c|$, the number of points in that cluster.
+The key to an effective ensemble method is that each component algorithm contributes a unique inductive bias~\cite{}.
+For each algorithm described below, we note the intuition behind its contribution to the ensemble.
 
 \subsubsection{Relative Cluster Cardinality}
 We measure the anomalousness of a point by the cardinality of the cluster that the point belongs to relative to the cardinalities of the other clusters.
@@ -308,7 +312,7 @@ Its worst-case time complexity is $\mathcal{O}(|V|^2)$, but is often better in p
 \subsection{Ensemble}
 \label{subsec:methods:ensemble}
 
-% TODO talk about inductive bias
+% TODO talk about inductive bias (NOAH)
 
 Given a dataset and a list of distance functions for the dataset, we start by building a CLAM tree for each distance function on the dataset.
 We extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
