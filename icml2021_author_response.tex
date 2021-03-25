@@ -51,7 +51,10 @@ Reviewers 3 and 6 also claim that there are not enough details to reproduce the 
 \textbf{Note that source code was provided, and all quantitative results can be reproduced by running one script.}
 We apologize for the lack of clarity, and ask Reviewers 3 and 6 to please look at the supplementary material \textbf{including source code, which will be available on GitHub if the manuscript is accepted}.
 Reviewer 6 requests that we compare with REPEN, DAGMM, and others.
-However, the REPEN source code on Github does not run, while the DAGMM implementation on Github is unofficial and not from the paper authors, and we could not get it to work.
+However, the REPEN source code on Github does not run because the authors provided no information about how to reproduce the environment they used, while the DAGMM implementation on Github is unofficial and not from the paper authors, and DAGMM is fundamentally a weakly-supervised algorithm, so not a fair comparison.
+% if suggested datasets are used and mix cat & num features, point this out
+% TODO r6 thanks for pointing out that we are using A & O interchangeably,
+% TODO point out that we have addressed why we use this clustering approach
 \emph{We have added additional datasets to our comparison as suggested in the review article mentioned, as well as a comparison to RDP, from Wang, et al. 2019}.
 However, at the time of submission to ICML, the Pang, et al. review article \textbf{was not yet published}; it was only published in March, 2021.
 Thus, it seems unfair to request comparison to work that was unpublished at the time of submission.

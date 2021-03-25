@@ -12,6 +12,7 @@ Detecting anomalies in such a landscape is not easy.
 Imagine trying to identify if a point within the sphere of crumpled paper were anomalous, identifying whether or not the point sits on the sheet or within a gap of the lower-dimensional manifold presents a challenge.
 
 Anomalies (data that do not belong to a distribution) and outliers (data which represent the extrema of a distribution) are found in datasets for a variety of reasons.
+In this manuscript, we treat anomalies and outliers interchangeably.
 Errors in the measurement of data cause anomalous records to be stored,
 novel instances of data emerge over time,
 or normal behavior may evolve towards the outliers.
@@ -104,6 +105,9 @@ Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 
 \subsection{CHAODA}
 \label{subsec:introduction:chaoda}
+
+% TODO NOAH explicitly point out that while other clustering approaches could be used, the novelty in CLAM is its potential genericity over all distance metrics, coupled with a built-in calculation (during clustering, and preserved for future use) of geometric and topological properties that are useful to the CHAODA algorithms.
+% Also, time complexity of clustering is O(n lg n) while most others are O(n^2)
 
 We introduce a novel technique, Clustered Learning of Approximate Manifolds (CLAM).
 This approach uses divisive hierarchical clustering to build a map of a manifold in a Banach space~\cite{banach1929fonctionnelles} defined by a distance metric.
