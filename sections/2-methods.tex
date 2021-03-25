@@ -3,15 +3,15 @@
 \label{subsec:methods:overview}
 
 Here we provide a brief overview of the several methods described in this manuscript.
-First, we rely on CLAM (Clustered Learning of Approximate Manifolds) as a fairly na\"ive clustering method; CLAM derives from CHESS~\cite{ishaq2019clustered} but introduces significant novelty: while CHESS only clustered to a pre-specified depth, CLAM uses training sets not included in testing to learn a data properties for which anomaly detection will perform well across several datasets.
-CLAM does not use a specific depth to halt clustering; instead, it tracks properties including local fractal dimension, cluster cardinality, and moving averages thereof, based upon a training dataset. 
+First, we rely on CLAM (Clustered Learning of Approximate Manifolds) as a fairly na\"ive clustering method; CLAM derives from CHESS~\cite{ishaq2019clustered} but introduces significant novelty: while CHESS only clustered to a pre-specified depth for the \emph{sole} purpose of search, CLAM uses a similar clustering on several training sets not included in testing to learn data properties for which anomaly detection will perform well across those datasets.
+Unlike CHESS, CLAM does not use a specific depth to halt clustering; instead, it tracks properties including local fractal dimension, cluster cardinality, and moving averages thereof, based upon a training dataset. 
 The stopping criteria are described in Section~\ref{subsubsec:methods:clam:clustering}.
 Importantly and novelly, these stopping criteria are not uniform for a given dataset; they are adaptive with differing properties of different regions of the manifold, and may exist at different depths of the tree (see Figure~\ref{fig:methods:graph-generation}).
 Also novelly, a graph is induced from the overlap among clusters at this set of depths (see Section~\ref{subsec:methods:induced-graphs}, and this graph informs two of the six anomaly-detection algorithms that CLAM enables (see Section~\ref{subsec:methods:individual-algorithms}).
 CLAM relies on an ensemble-learning approach based on six simple heuristics; the ensemble-learning approach is described in Section~\ref{subsec:methods:ensemble}.
 These distinct heuristics attempt to encompass distinct notions of what make a datapoint anomalous: is it truly isolated, or is the distribution of datapoints multi-modal, or is it very low-dimensional despite being embedded in a high-dimensional space?
 
-In all, CLAM builds on a clustering algorithm developed for a different purpose (accelerated approximate search) and uses a novel graph-inference approach to enable several anomaly-detection heuristics that are effective in practice.
+In all, CLAM builds on a clustering algorithm originally developed for a different purpose (accelerated approximate search) and uses a novel graph-inference approach to enable several anomaly-detection heuristics that are effective in practice.
 
 
 \subsection{CLAM}
