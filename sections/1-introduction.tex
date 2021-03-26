@@ -106,15 +106,14 @@ Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 \subsection{CHAODA}
 \label{subsec:introduction:chaoda}
 
-% TODO NOAH explicitly point out that while other clustering approaches could be used, the novelty in CLAM is its potential genericity over all distance metrics, coupled with a built-in calculation (during clustering, and preserved for future use) of geometric and topological properties that are useful to the CHAODA algorithms.
-% Also, time complexity of clustering is O(n lg n) while most others are O(n^2)
-
 We introduce a novel technique, Clustered Learning of Approximate Manifolds (CLAM).
 This approach uses divisive hierarchical clustering to build a map of a manifold in a Banach space~\cite{banach1929fonctionnelles} defined by a distance metric.
 The space may also be defined by a distance \textit{function} that does not obey the triangle inequality, though we have not explored what difficulties this might introduce.
 As the term \emph{manifold learning} has largely become synonymous with dimension reduction for purposes of visualization, we propose \emph{manifold mapping} to refer to approaches that map out properties of the manifold in the original embedding space.
 Once the manifold has been mapped, it can be used as input for a myriad of anomaly and outlier detection algorithms.
 We introduce an ensemble of six such algorithms implemented on CLAM: CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms).
+While in principle we could have used any hierarchical clustering algorithm, the novelty in CLAM is its potential genericity over all distance metrics, coupled with a built-in memoized calculation of geometric and topological properties that are useful to the CHAODA algorithms.
+Also, the time complexity of CLAM clustering is $\mathcal{O}(n \lg n)$, competitive with state-of-the-art hierarchical clustering approaches.
 
 The manifold mapping component is motivated by a hierarchical clustering approach, CHESS~\cite{ishaq2019clustered}, designed to accelerate approximate search on large high-dimensional datasets.
 While CHESS clustered to a specific depth to accelerate search, CLAM
@@ -123,6 +122,7 @@ From this tree, CLAM can induce a graph by mapping clusters to vertices of the g
 Clusters can be selected by a fixed depth, or at heterogeneous depths based on geometric properties, such as local fractal dimension, cluster cardinality, or cluster radius.
 We call graphs constrained to a uniform-depth layer \textit{layer graphs}.
 We call graphs from heterogeneous depths \textit{optimal graphs}.
+
 
 Inducing an optimal graph across a variety of depths effectively maps a manifold with a variety of ``resolutions''.
 The intuition is that some regions of the manifold may be denser than others, thus, graphs induced from deeper clusters in those regions may be more informative.
