@@ -45,17 +45,21 @@ Reviewer 4 also requested under specific focus that ``Can you please expand on t
 Reviewer 3 criticized the clarity of writing, in particular suggesting some ways to reorganize the manuscript.
 Reviewer 5, in their highly positive review, also suggested some reorganization.
 \emph{We have added an introductory paragraph to Section 2, as well as noted Reviewer 5's observation that CHAODA represents an actualization of the manifold hypothesis.}
-Reviewer 3 claims ``This paper is difficult to understand in places because of typos, lack of organization, [...].'' while Reviewer 5 says ``The clarity of the paper and additional codes is also generally good. The paper contains few grammatical errors and is presented in a logical sequence.''
+Reviewer 3 criticizes the paper for containing typos and grammatical errors, while Reviewer 5 says ``The clarity of the paper and additional codes is also generally good. The paper contains few grammatical errors and is presented in a logical sequence.''
 We are unsure how to reconcile these two reviews, and cannot find any typographical or grammatical errors in the manuscript.
 Reviewers 3 and 6 also claim that there are not enough details to reproduce the work, while Reviewers 4 and 5 claim that it is reproducible.
 \textbf{Note that source code was provided, and all quantitative results can be reproduced by running one script.}
 We apologize for the lack of clarity, and ask Reviewers 3 and 6 to please look at the supplementary material \textbf{including source code submitted with the manuscript, which will be available on GitHub if the manuscript is accepted}.
 Reviewer 6 requests that we compare with REPEN, DAGMM, and others.
 However, the REPEN source code on Github does not run because the authors provided no information about how to reproduce the environment they used, while the DAGMM implementation on Github is unofficial and not from the paper authors, and DAGMM is fundamentally a weakly-supervised algorithm, so not a fair comparison.
-% if suggested datasets are used and mix cat & num features, point this out
-% TODO r6 thanks for pointing out that we are using A & O interchangeably,
-% TODO point out that we have addressed why we use this clustering approach
-\emph{We have added additional datasets to our comparison as suggested in the review article mentioned, as well as a comparison to RDP, from Wang, et al. 2019}.
+Reviewer 6 points out that we are using Anomaly and Outlier distinctly in the introduction, and interchangeably later.
+\emph{We thank Reviewer 6 for this observation, and have added an explanation to the Introduction.}
+Reviewer 6 states ``the work is poorly motivated. it is unclear that why the presented hierarchical clustering method should be used.''
+\emph{We have added language to Section 2 explaining this and other motivations.}
+Reviewer 6 also suggests we test on datasets mentioned in a review article.
+Running all the methods we compare to on additional datasets will require two weeks of computation time; thus, it was not feasible in the one week given to respond to reviewers.
+Additionally, many of these datasets contain a mix of categorical and numerical features, and do not represent a Banach space, so CLAM cannot currently cluster them.
+\emph{Some additional comparisons are running and will be included in the camera-ready if the paper is accepted}.
 However, at the time of submission to ICML, the Pang, et al. review article \textbf{was not yet published}; it was only published in March, 2021.
 Thus, it seems unfair to request comparison to work that was unpublished at the time of submission.
 Reviewer 6 also claims that an ablation study is needed.
