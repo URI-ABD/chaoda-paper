@@ -256,7 +256,7 @@ Finally, we perform a linear pass over the clusters to select the best for the g
 Therefore, the total cost of selecting clusters for optimal graphs is $\mathcal{O}(nlogn)$ time and $\mathcal{O}(n)$ space.
 
 Once the clusters have been selected for a graph, we have to find every pair of clusters with overlapping volumes.
-Na\"ively, this can be done with an all-pairs distance computation for a cost of $\mathcal{O}(|V|^2)$ and $\mathcal{O}(|V|^2)$.
+Na\"ively, this can be done with an all-pairs distance computation for a cost of $\mathcal{O}(|V|^2)$ for time and space.
 However, our implementation is superior to the na\"ive method although the proof is beyond the scope of this supplement.
 
 
@@ -292,36 +292,46 @@ This method performs a single linear pass over the clusters in the graph and loo
 The time-complexity is thus $\mathcal{O}(|V|)$.
 Since the ratios are cached with their respective clusters, the space complexity is $\mathcal{O}(|V|)$.
 
-\subsection{Random Walks}
-
-This method is dominated by the computation of a transition matrix for each component in the graph.
-We set the transition probability from a cluster to a neighbor to be inversely proportional to the distance between their centers, normalized by all possible neighbors of the cluster.
-In the worst-case, the graph contains only one component, so the time-complexity is $\mathcal{O}(|V|^2)$.
-The remainder of the algorithm performs a random with with a relatively large number of steps.
-We used $10 \cdot |V|$ steps in our implementation.
-Thus the time-complexity stays at $\mathcal{O}(|V|^2)$.
-In terms of space, we need to store the transition matrix, and the visitation count for each cluster.
-Therefore the space complexity is $\mathcal{O}(|V|^2)$.
-
-In practice, $|V| \ll n$ and graphs only rarely consist of only one component.
-Thus, the average run-time performance is much better than that suggested by the quadratic space time-complexity.
-
 \subsection{Stationary Probabilities}
 
-Just as with Random Walks, this method starts by computing a transition matrix for each component in the graph.
-We then successively square this matrix until it converges.
+This method starts by computing a transition matrix for each component in the graph.
+We set the transition probability from a cluster to a neighbor to be inversely proportional to the distance between their centers, normalized by all possible neighbors of the cluster.
+We successively square this matrix until it converges.
 The transition matrices from our graphs obey the criteria required for convergence as proven in~\cite{levin2017markov}.
 Matrix multiplication for square matrices costs $\mathcal{O}(|V|^{2.373})$ with the Coppersmith-Winograd algorithm~\cite{coppersmith1987matrix}.
 Thus the worst-case time complexity is the same as that for the matrix-multiplication algorithm employed.
 For space, we need only store a single $|V| \times |V|$ matrix, giving us a space complexity of $\mathcal{O}(|V|^2)$.
 
-Also just as with Random Walks, because $|V| \ll n$ and graphs only rarely consist of only one component, the average-case run-time performance is much better.
+In practice, $|V| \ll n$ and graphs only rarely consist of only one component.
+Thus, the average run-time performance is much better than that suggested by the quadratic space time-complexity.
+
+\subsection{Vertex Degree}
+
+Since we already have a graph with vertices and edges, calculating the degree of each vertex only costs $\mathcal{O}(1)$ time.
+Thus, the complexity of this algorithm is $\mathcal{O}(|V|)$.
 
 \subsection{Normalization}
 
 Normalizing the outlier scores requires finding the mean and standard deviation of the raw scores, followed by a linear pass over the set of scores.
 Thus the time-complexity of this step is $\mathcal{O}(n)$.
 Since we need to store a score for each point, the space complexity is $\mathcal{O}(n)$.
+
+The algorithm is presented in Algorithm~\ref{alg:normalization}.
+
+\begin{algorithm}[h]
+    \caption{Gaussian Normalization}
+    \label{alg:normalization}
+\begin{algorithmic}[1]
+    \REQUIRE $X$, a dataset
+    \REQUIRE $S$, a set of outlier scores for each point in $X$
+    \STATE $erf: x \mapsto \frac{2}{\sqrt{\pi}} \int_{0}^{x} e^{-u^2} \,du $
+    \STATE $\mu \gets mean(S)$
+    \STATE $\sigma \gets std(S)$
+    \FOR {point $p \in X$}
+        \STATE $S[p] \gets \frac{1}{2} \Big( 1 + erf \big(\frac{S[p] - \mu}{\sigma \cdot \sqrt{2}}\big) \Big) $
+    \ENDFOR
+\end{algorithmic}
+\end{algorithm}
 
 \subsection{Ensemble}
 
@@ -504,6 +514,11 @@ VAE &         30.38 &              30.58 &          5.67 &               30.41 &
 \subsection{AUC and Runtime performance on Train set of Datasets}
 
 Tables~\ref{supplement:table:results:train-performance}~and~\ref{supplement:table:results:train-time} report the  the AUC performance and running time, respectively, of CHAODA and each competitor on the train set of datasets.
+
+\subsection{Performance of Individual CHAODA Algorithms}
+The ensemble of CHAODA algorithms is discussed extensively in the main paper, but we did not have room to discuss or present the performance of the individual algorithms.
+Due to the large numbers of graphs generated for the ensemble and with each method being applied to each graph, we cannot provide these intermediate results as a table in this document.
+We instead provide a .csv file which will be available for download.
 
 \begin{table*}[!t]
 \renewcommand{\arraystretch}{1.25}

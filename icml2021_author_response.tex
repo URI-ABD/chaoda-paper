@@ -17,56 +17,55 @@
 \begin{document}
 % Uncomment the following line if you prefer a single-column format
 \onecolumn
-We appreciate the opportunity to respond to reviewers and their constructive comments, particularly the suggestions by Reviewer 5 about organization and code docstrings.
-We have concerns about some of the reviews, in particular the one from Reviewer 3.
+We appreciate the opportunity to respond to reviewers and their constructive comments, particularly the suggestions by \textbf{Reviewer 5} about organization and code docstrings.
+We have concerns about some of the reviews, in particular the one from \textbf{Reviewer 3}.
 We address these point-by-point, as well as describe changes to the manuscript based on these reviews.
-Reviewer 3 claimed that there was no theoretical analysis in the paper; we disagree.
-We give complexity bounds for CLAM and CHAODA in Section 2.1.
+\textbf{Reviewer 3} claimed that there was no theoretical analysis in the paper.
+\emph{We give complexity bounds for CLAM and CHAODA in Section 2.1.}
 In addition, a purely mathematical formulation of every algorithm provided would not fit within the length constraints imposed by ICML.
-Reviewer 3 also claimed that we "learned hyperparameters on a training dataset, but that this is not possible as the problem is unsupervised".
+\textbf{Reviewer 3} also claimed that we ``learned hyperparameters on a training dataset, but that this is not possible as the problem is unsupervised''.
 However, this conflates two things: for all datasets under evaluation, ground truth is known.
 Only for the training set of datasets do we use this ground truth to learn what we believe to be generalizable properties of manifolds.
 We then evaluate these learned properties on the test set of datasets.
 \emph{We have added clarifying language to Section 2.2}.
-Reviewers 3 and 6 claim there is no novelty, because the ``clustering is na\"ive and the scoring methods are simple heuristics,'' and that ``the clustering method (CLAM) appears to be an adaptation of Ishaq, et al. 2019'';
+\textbf{Reviewers 3 and 6} claim there is no novelty, because the ``clustering is na\"ive and the scoring methods are simple heuristics,'' and that ``the clustering method (CLAM) appears to be an adaptation of Ishaq, et al. 2019'';
 however, there are significant differences from CHESS.
 CHESS was developed for the purpose of accelerated search, while CLAM and CHAODA enable manifold mapping, intelligent cluster selection for inducing graphs, and anomaly detection using those graphs.
 The truly novel contributions of CHAODA lie in the cluster selection and the combination of graph-theoretic anomaly detection algorithms that often outperform state-of-the-art methods.
 \emph{We have added language to Section 2 that clarifies what we believe to be novel.}
-Reviewer 4 points out that ``[t]he stationary distribution for random walks on an undirected graph has a closed form'' but this is not true when the edge weights are not uniform.
+\textbf{Reviewer 4} points out that ``[t]he stationary distribution for random walks on an undirected graph has a closed form'' but this is not true when the edge weights are not uniform.
 Thus, we cannot use this closed form on the CLAM graph.
 \emph{We have added language to this effect re: non-uniform edge weights in Section 2.3.5.}
-Reviewer 4 is still correct in noting that our Random Walks and Stationary Probabilities methods are really getting at the same thing.
+\textbf{Reviewer 4} is still correct in noting that our Random Walks and Stationary Probabilities methods are really getting at the same thing.
 Recognizing this, we have replaced the Random Walks method with one taking inspiration from their note on vertex degree.
-Reviewer 4 also states ``there are a lot of mathematical notions mentioned that are not really put to use in any concrete sense (fractal-dimension, the idea of manifold learning)...''
+\textbf{Reviewer 4} also states ``there are a lot of mathematical notions mentioned that are not really put to use in any concrete sense (fractal-dimension, the idea of manifold learning)...''
 \emph{We have added language in Sections 2 and 2.1.1 to clarify how and why fractal dimension is used, and connect the manifold mapping to this reviewer's concern about how the graph is used}.
-Reviewer 4 states ``the paper needs to be more precise here: what is the AUC, [...] Is there a danger that what one learns for a specific family of datasets is not generalizable to other datasets?''
-Reviewer 4 also requested under specific focus that ``Can you please expand on the ``learning to cluster'' aspect of your work? What AUC is being computed and how?''
+\textbf{Reviewer 4} states ``the paper needs to be more precise here: what is the AUC, [...] Is there a danger that what one learns for a specific family of datasets is not generalizable to other datasets?''
+\textbf{Reviewer 4} also requested under specific focus that ``Can you please expand on the ``learning to cluster'' aspect of your work? What AUC is being computed and how?''
 \emph{We have attempted to clarify exactly how AUC is measured, what the learning problem is, and the risks regarding generalization, in Section 2.2}.
-Reviewer 3 criticized the clarity of writing, in particular suggesting some ways to reorganize the manuscript.
-Reviewer 5, in their highly positive review, also suggested some reorganization.
-\emph{We have added an introductory paragraph to Section 2, as well as noted Reviewer 5's observation that CHAODA represents an actualization of the manifold hypothesis.}
-Reviewer 3 criticizes the paper for containing typos and grammatical errors, while Reviewer 5 says ``The clarity of the paper and additional codes is also generally good. The paper contains few grammatical errors and is presented in a logical sequence.''
+\textbf{Reviewer 3} criticized the clarity of writing, in particular suggesting some ways to reorganize the manuscript.
+\textbf{Reviewer 5}, in their highly positive review, also suggested some reorganization.
+\emph{We have added an introductory paragraph to Section 2, as well as noted \textbf{Reviewer 5}'s observation that CHAODA represents an actualization of the manifold hypothesis.}
+\textbf{Reviewer 3} criticizes the paper for containing typos and grammatical errors, while \textbf{Reviewer 5} says ``The clarity of the paper and additional codes is also generally good. The paper contains few grammatical errors and is presented in a logical sequence.''
 We are unsure how to reconcile these two reviews, and cannot find any typographical or grammatical errors in the manuscript.
-Reviewers 3 and 6 also claim that there are not enough details to reproduce the work, while Reviewers 4 and 5 claim that it is reproducible.
+\textbf{Reviewers 3 and 6} also claim that there are not enough details to reproduce the work, while \textbf{Reviewers 4 and 5} claim that it is reproducible.
 \textbf{Note that source code was provided, and all quantitative results can be reproduced by running one script.
 We also include all information necessary to reproduce the python environment we used for developing and testing our code}.
-We apologize for the lack of clarity, and ask Reviewers 3 and 6 to please look at the supplementary material \textbf{including source code}.
-Reviewer 6 requests that we compare with REPEN, DAGMM, and others.
+We apologize for the lack of clarity, and ask \textbf{Reviewers 3 and 6} to please look at the supplementary material \textbf{including source code}.
+\textbf{Reviewer 6} requests that we compare with REPEN, DAGMM, and others.
 However, the REPEN source code on Github does not run because the authors provided no information about how to reproduce the environment they used, while DAGMM is fundamentally a weakly-supervised algorithm, so not a fair comparison.
-Reviewer 6 points out that we are using the terms Anomaly and Outlier distinctly in the introduction, and interchangeably later.
-\emph{We thank Reviewer 6 for this observation, and have amended the Introduction.}
-Reviewer 6 states ``the work is poorly motivated. it is unclear that why the presented hierarchical clustering method should be used.''
+\textbf{Reviewer 6} points out that we are using the terms Anomaly and Outlier distinctly in the introduction, and interchangeably later.
+\emph{We thank \textbf{Reviewer 6} for this observation, and have amended the Introduction.}
+\textbf{Reviewer 6} states ``the work is poorly motivated. it is unclear that why the presented hierarchical clustering method should be used.''
 \emph{We have added language to Section 2 explaining this and other motivations.}
-Reviewer 6 also suggests we test on datasets mentioned in a review article.
+\textbf{Reviewer 6} also suggests we test on datasets mentioned in a review article, but this article \textbf{was only published in March, 2021}, after our submission.
 Running all competing methods on these additional datasets will require several weeks of computation time.
 \emph{Additional comparisons are running and will be included in the camera-ready if the paper is accepted}.
-However, at the time of submission to ICML, the Pang, et al. review article \textbf{was not yet published}; it was only published in March, 2021.
-Thus, it seems unfair to request comparison to work that was unpublished at the time of submission.
-Reviewer 6 also claims that an ablation study is needed.
+\emph{We have added a new Section 1.5 on deep-learning methods}.
+\textbf{Reviewer 6} also claims that an ablation study is needed.
 We disagree; an ablation study is only relevant to a deep-learning approach where layers of the network can be removed to gauge efficacy.
 However, CHAODA cannot run if any of the steps in Section 2 is removed.
 It is true that we could evaluate the performance of the individual components of CHAODA independently, which might be analogous to an ablation study.
-\emph{We have added individual performance of the components, along with properties of the graphs used, as a csv file. Due to the number of components to the ensembles for each dataset and the number of datasets, there is not enough space to include these intermediate results in a different format}.
+\emph{We have added individual performance of the components, along with properties of the graphs used, as a csv file. There is not enough space to include these intermediate results in a different format}.
 
 \end{document}

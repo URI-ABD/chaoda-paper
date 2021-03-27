@@ -335,21 +335,6 @@ Therefore, we cannot directly compare scores across methods, which we need to be
 Thus, we normalize the scores to the range $[0, 1]$, using gaussian normalization~\cite{kriegel2011interpreting}.
 We include sigmoid and min-max normalization as options in our implementation.
 
-% \begin{algorithm}[h]
-%     \caption{Gaussian Normalization}
-%     \label{alg:normalization}
-% \begin{algorithmic}[1]
-%     \REQUIRE $X$, a dataset
-%     \REQUIRE $S$, a set of outlier scores for each point in $X$
-%     \STATE $erf: x \mapsto \frac{2}{\sqrt{\pi}} \int_{0}^{x} e^{-u^2} \,du $
-%     \STATE $\mu \gets mean(S)$
-%     \STATE $\sigma \gets std(S)$
-%     \FOR {point $p \in X$}
-%         \STATE $S[p] \gets \frac{1}{2} \Big( 1 + erf \big(\frac{S[p] - \mu}{\sigma \cdot \sqrt{2}}\big) \Big) $
-%     \ENDFOR
-% \end{algorithmic}
-% \end{algorithm}
-
 
 \subsection{Datasets}
 \label{subsec:methods:datasets}
