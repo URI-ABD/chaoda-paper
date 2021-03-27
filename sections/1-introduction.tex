@@ -87,6 +87,13 @@ We compare against
 k-Nearest Neighbors (kNN)~\cite{ramaswamy2000efficient, sridhar2000knn, fabrizio2002knn} and
 Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 
+\subsection{Deep Learning Approaches}
+\label{subsec:related-works:deep-learning-approaches}
+With the recent explosion in Deep Learning, several new methods for anomaly detection have been introduced~\cite{pang2021deep}.
+While most such approaches are supervised or weakly-supervised, such as DAGMM~\cite{zong2018deep}, there have been some advances in unsupervised methods.
+These unsupervised approaches typically use autoencoders~\cite{chen2017outlier}, such as RANDNET~\cite{chandola2009anomaly}, or generative-adversarial-networks, such as MOGAAL and SOGAAL~\cite{liu2019generative}.
+We compare against MOGAAL, SOGAAL, and two autoencoders from~\cite{chen2017outlier}.
+
 
 \subsection{Other Approaches}
 \label{subsec:introduction:other-appraoches}
@@ -102,8 +109,6 @@ Lightweight Online Detector of Anomalies (LODA)~\cite{pevny2016loda},
 Minimum Covariance Determinant (MCD)~\cite{rousseeuw1999mcd,hardin2004mcd}, and
 Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 
-% TODO: Najib and Noah. Do we need a subsection for deep-learning based approaches?
-% Perhaps to cite that Pang review?
 
 \subsection{CHAODA}
 \label{subsec:introduction:chaoda}
