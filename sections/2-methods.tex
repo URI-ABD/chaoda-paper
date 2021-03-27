@@ -157,7 +157,6 @@ Since the ratios used to train and predict from these meta-ml models are agnosti
 \subsection{Individual Algorithms}
 \label{subsec:methods:individual-algorithms}
 
-% TODO six still?
 Here we describe six simple methods for anomaly detection, each of which uses a graph of clusters from CLAM to calculate an anomalousness score for each datapoint.
 For each algorithm, $scores$ is a dictionary of clusters and their outlier scores,
 $V$ is the set of clusters in a graph,
@@ -258,15 +257,15 @@ We compute the transition probability matrix of each component of the graph that
 These probabilities are stochastic over the edge weights for each cluster.
 We then compute successive squares of this matrix.
 This process will eventually converge as long as the graph is connected and aperiodic~\cite{levin2017markov}; we find this convergent matrix.
-% BTW, the intuition is simple: two infinite random walks from any two vertices will eventually collide; from that point onward, their walks are identical in the expectation.
 Consider the sum of the values along a row in the convergent matrix.
-This is expected fraction of time that the cluster will be visited by a long random walk over the graph component.  % no citation needed for this. Well understood.
+This is expected fraction of time that the cluster will be visited by a long random walk over the graph component.
 We can consider this sum to be inversely related to the anomalousness of the corresponding cluster.
 The algorithm is defined in Algorithm~\ref{alg:sp}.
 This algorithm is dominated by successive powering of a square matrix for each component.
 Its worst-case time complexity is $\mathcal{O}(|V|^{2.3728596})$ given by the matrix multiplication algorithm from~\cite{alman2021refined}.
 In practice, however, this algorithm performs much better because the induced graphs are often composed of several small components rather than one large component.
 % TODO are we not also doing this for unweighted edges?
+% No because the closed form for that is vertex-degree as Reviewer 4 said.
 
 \begin{algorithm}[h]
     \caption{Stationary Probabilities}
@@ -313,7 +312,6 @@ We extract the parent-child ratios and the exponential moving averages of those 
 Given the set of meta-ml models learned from the training datasets as described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster.
 The highest ranked clusters from each tree are then used to build a graph.
 This gives us one graph for each combination of, meta-ML model, and distance function used.
-% TODO six still?
 We apply each of the six methods desc in~\ref{subsec:methods:individual-algorithms} on each such graph.
 With two meta-ML models (linear regression and regression trees) and two distance metrics ($L1$-norm and $L2$-norm), we have $24$ anomaly scores for each point in the dataset.
 These scores are then combined into an ensemble by simply taking the mean of all scores for each point.

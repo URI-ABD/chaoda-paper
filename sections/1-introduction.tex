@@ -111,7 +111,6 @@ This approach uses divisive hierarchical clustering to build a map of a manifold
 The space may also be defined by a distance \textit{function} that does not obey the triangle inequality, though we have not explored what difficulties this might introduce.
 As the term \emph{manifold learning} has largely become synonymous with dimension reduction for purposes of visualization, we propose \emph{manifold mapping} to refer to approaches that map out properties of the manifold in the original embedding space.
 Once the manifold has been mapped, it can be used as input for a myriad of anomaly and outlier detection algorithms.
-% TODO is it still six?
 We introduce an ensemble of six such algorithms implemented on CLAM: CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms).
 While in principle we could have used any hierarchical clustering algorithm, the novelty in CLAM is its potential genericity over all distance metrics, coupled with a built-in memoized calculation of geometric and topological properties that are useful to the CHAODA algorithms.
 Also, the time complexity of CLAM clustering is $\mathcal{O}(n \lg n)$, competitive with state-of-the-art hierarchical clustering approaches.
