@@ -193,6 +193,7 @@ every pair of nodes in the same component has a path connecting them.
 Consider the relative cardinalities of each component in much the same way as we considered the relative cardinalities of clusters in the relative cluster cardinality method.
 Points in clusters (vertices) in smaller components are considered more anomalous than those in larger components,
 and points in clusters in the same component are considered equally anomalous.
+The intuition here, as distinct from the previous algorithm, is to capture larger-scale structural information based on disjoint connected components from the CLAM graph.
 The algorithm is defined in Algorithm~\ref{alg:rcc}.
 This algorithm first finds the components of the graph, so its time complexity is $\mathcal{O}(|E| + |V|)$.
 
@@ -212,6 +213,7 @@ Given the graph with clusters and edges, we consider the number of clusters reac
 We call this number the \textit{graph-neighborhood} of the starting cluster.
 With $k$ small compared to the diameter of the graph, we consider the relative sizes of graph-neighborhoods of the clusters.
 Points in clusters with small graph-neighborhoods are considered more anomalous than points in clusters with large graph-neighborhoods.
+The intuition here is to capture information about the connectivity of the graph in the region around each cluster.
 The algorithm is defined in Algorithm~\ref{alg:gns}.
 This algorithm is dominated by computing the eccentricity of each cluster, so its time complexity is $\mathcal{O}(|E| \cdot |V|)$.
 
@@ -234,9 +236,10 @@ This algorithm is dominated by computing the eccentricity of each cluster, so it
 \subsubsection{Child-Parent Cardinality Ratio}
 \label{subsubsec:methods:individual-algorithms:cpcr}
 As described in Section~\ref{subsubsec:methods:clam:clustering}, the partition algorithm used in clustering splits a cluster into two children.
-If a child cluster contains only a small fraction of its parent's points (i.e., it only has a minority), then we consider the points in that first child cluster to be more anomalous.
+If a child cluster contains only a small fraction of its parent's points (i.e., it only has a minority), then we consider the points in that child cluster to be more anomalous.
 These child-parent cardinality ratios are accumulated for each point down its branch in the tree, terminating when the child cluster is a vertex in the induced graph.
 Points with a low value of these accumulated ratios are considered more anomalous than points with a higher value.
+This algorithm is inspired by iForest~\cite{tony2008iforest}, and captures information from the cluster tree directly, in addition to the CLAM graph.
 The algorithm is defined in Algorithm~\ref{alg:cpcr}.
 Unlike other CHAODA algorithms, this one accumulates parent scores into the children.
 The time complexity of calculating the ratios is $\mathcal{O}(|V|)$ at clustering time, which is amortized over scoring the points;
@@ -264,12 +267,11 @@ This process will eventually converge as long as the graph is connected and aper
 Consider the sum of the values along a row in the convergent matrix.
 This is expected fraction of time that the cluster will be visited by a long random walk over the graph component.
 We can consider this sum to be inversely related to the anomalousness of the corresponding cluster.
+The intuition here is that less-reachable clusters are more likely to represent anomalous points.
 The algorithm is defined in Algorithm~\ref{alg:sp}.
 This algorithm is dominated by successive powering of a square matrix for each component.
 Its worst-case time complexity is $\mathcal{O}(|V|^{2.3728596})$ given by the matrix multiplication algorithm from~\cite{alman2021refined}.
 In practice, however, this algorithm performs much better because the induced graphs are often composed of several small components rather than one large component.
-% TODO are we not also doing this for unweighted edges?
-% No because the closed form for that is vertex-degree as Reviewer 4 said.
 
 \begin{algorithm}[h]
     \caption{Stationary Probabilities}
@@ -293,6 +295,8 @@ In practice, however, this algorithm performs much better because the induced gr
 \label{subsubsec:methods:individual-algorithms:rvd}
 For each cluster in the induced graph, consider the vertex degree, i.e. the number of edges connecting to that vertex, for each cluster in an induced graph.
 We consider the points in a cluster with a high degree to be less anomalous than points in a cluster with low degree.
+This is essentially a version of the previous algorithm that ignores edge weights, and may have different biases with regard to the sampling density of the dataset.
+The time complexity is $\mathcal{O}(|V|)$.
 
 \begin{algorithm}[h]
     \caption{Relative Vertex Degree}
@@ -308,8 +312,6 @@ We consider the points in a cluster with a high degree to be less anomalous than
 
 \subsection{Ensemble}
 \label{subsec:methods:ensemble}
-
-% TODO talk about inductive bias (NOAH) once all algorithms are in place (waiting on Najib)
 
 Given a dataset and a list of distance functions for the dataset, we start by building a CLAM tree for each distance function on the dataset.
 We extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
@@ -359,8 +361,9 @@ CHAODA-fast exhibits comparable performance to CHAODA, so we set CHAODA-fast as 
 \subsection{Datasets}
 \label{subsec:methods:datasets}
 
-We sourced 24 datasets from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}, for training CHAODA and testing its performance.
+We sourced 24 datasets containing only numerical features from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}, for training CHAODA and testing its performance.
 All of these datasets were adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and were standardized by ODDS for benchmarks on anomaly and outlier detection.
+We note that CHAODA is able to handle entirely-categorical datasets, but is not yet able to handle mixed datasets.
 
 Of these 24 datasets, we selected six at random for training CHAODA: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
 The remaining datasets were used to benchmark the performance of CHAODA\@.
@@ -368,9 +371,9 @@ We benchmarked CHAODA 30 times with the same split of test and training datasets
 We provide more details on the datasets, including size, dimensionality, and fraction of outliers, in the Supplement.
 All benchmarks were conducted on a 28-core Intel Xeon E5-2690 v4 2.60GHz, 512GB RAM and CentOS 7 Linux with kernel 3.10.0-1127.13.1.el7.x86\_64 \#1 SMP and Python 3.6.8.
 
-% TODO: NAJIB AND NOAH. Go over this paragraph and fix/add to talk about why certain other datasets are excluded.
+
 Note that CHAODA is an unsupervised algorithm.
 As such, we compare only against other unsupervised algorithms.
 We compared against $18$ unsupervised algorithms collected in the pyOD suite~\cite{zhao2019pyod} and Scikit-Learn~\cite{pedregosa2011scikit}, as well as RS-Hash~\cite{sathe2016subspace}.
-A supervised version of CHAODA is possible future work which we will compare against supervised methods such as REPEN~\cite{pang2018learning}.
-% NAJIB AND NOAH: REPEN is NOT supervised
+A supervised version of CHAODA is possible future work which will open up comparisons against supervised or weakly-supervised methods such as DAGMM~\cite{zong2018deep}.
+
