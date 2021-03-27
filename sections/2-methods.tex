@@ -317,7 +317,7 @@ Given a dataset and a list of distance functions for the dataset, we start by bu
 We extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
 Given the set of meta-ml models learned from the training datasets as described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster.
 The highest ranked clusters from each tree are then used to build a graph.
-This gives us one graph for each combination of, meta-ML model, and distance function used.
+This gives us one graph for each combination of meta-ML model and distance function used.
 We apply each of the six methods desc in~\ref{subsec:methods:individual-algorithms} on each such graph.
 With two meta-ML models (linear regression and regression trees) and two distance metrics ($L1$-norm and $L2$-norm), we have $24$ anomaly scores for each point in the dataset.
 These scores are then combined into an ensemble by simply taking the mean of all scores for each point.
@@ -332,23 +332,23 @@ We present the AUC-ROC from this ensemble in Section~\ref{sec:results}.
 Our individual methods produce scores with a wide range of values.
 The only common feature among these scores is that low scores correspond to inliers and high scores correspond to outliers.
 Therefore, we cannot directly compare scores across methods, which we need to be able to do for a functional ensemble.
-Thus, we normalize the scores to the range $[0, 1]$, using gaussian normalization~\cite{kriegel2011interpreting} as defined in Algorithm~\ref{alg:normalization}.
+Thus, we normalize the scores to the range $[0, 1]$, using gaussian normalization~\cite{kriegel2011interpreting}.
 We include sigmoid and min-max normalization as options in our implementation.
 
-\begin{algorithm}[h]
-    \caption{Gaussian Normalization}
-    \label{alg:normalization}
-\begin{algorithmic}[1]
-    \REQUIRE $X$, a dataset
-    \REQUIRE $S$, a set of outlier scores for each point in $X$
-    \STATE $erf: x \mapsto \frac{2}{\sqrt{\pi}} \int_{0}^{x} e^{-u^2} \,du $
-    \STATE $\mu \gets mean(S)$
-    \STATE $\sigma \gets std(S)$
-    \FOR {point $p \in X$}
-        \STATE $S[p] \gets \frac{1}{2} \Big( 1 + erf \big(\frac{S[p] - \mu}{\sigma \cdot \sqrt{2}}\big) \Big) $
-    \ENDFOR
-\end{algorithmic}
-\end{algorithm}
+% \begin{algorithm}[h]
+%     \caption{Gaussian Normalization}
+%     \label{alg:normalization}
+% \begin{algorithmic}[1]
+%     \REQUIRE $X$, a dataset
+%     \REQUIRE $S$, a set of outlier scores for each point in $X$
+%     \STATE $erf: x \mapsto \frac{2}{\sqrt{\pi}} \int_{0}^{x} e^{-u^2} \,du $
+%     \STATE $\mu \gets mean(S)$
+%     \STATE $\sigma \gets std(S)$
+%     \FOR {point $p \in X$}
+%         \STATE $S[p] \gets \frac{1}{2} \Big( 1 + erf \big(\frac{S[p] - \mu}{\sigma \cdot \sqrt{2}}\big) \Big) $
+%     \ENDFOR
+% \end{algorithmic}
+% \end{algorithm}
 
 
 \subsection{Datasets}
@@ -358,12 +358,10 @@ We sourced 24 datasets containing only numerical features from Outlier Detection
 All of these datasets were adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and were standardized by ODDS for benchmarks on anomaly and outlier detection.
 Note that CHAODA is able to handle entirely-categorical datasets, but not mixed datasets.
 
-Of these 24 datasets, we selected six at random for training CHAODA: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
-The remaining datasets were used to benchmark the performance of CHAODA\@.
-We benchmarked CHAODA 30 times with the same split of test and training datasets, with different random seeds for CLAM clustering and CHAODA meta-ml models.
-We provide more details on the datasets, including size, dimensionality, and fraction of outliers, in the Supplement.
-During testing, we noticed that even though we often see $|V| \ll n $, some methods from~\ref{subsec:methods:individual-algorithms} were prohibitive.
-We remedy this by only running them, i.e.\ graph neighborhood size, and stationary probabilities, when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
+We randomly select six datasets to train CHAODA: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
+We benchmarked CHAODA 30 times on the test datasets, with different random seeds.
+We provide more details on the datasets in the Supplement.
+During testing, we noticed that even though we often see $|V| \ll n $, the graph neighborhood size and stationary probabilities methods from~\ref{subsec:methods:individual-algorithms} were prohibitive, so we only run them when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
 We present these results in Table~\ref{table:results:test-performance} under the CHAODA-fast and CHAODA rows.
 CHAODA-fast exhibits comparable performance to CHAODA, so we set CHAODA-fast as the default in our implementation.
 All benchmarks were conducted on a 28-core Intel Xeon E5-2690 v4 2.60GHz, 512GB RAM and CentOS 7 Linux with kernel 3.10.0-1127.13.1.el7.x86\_64 \#1 SMP and Python 3.6.8.
