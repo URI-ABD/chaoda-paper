@@ -8,6 +8,7 @@ In future work, new ideas for additional algorithms that contribute novel induct
 
 CLAM uses the geometric and topological properties such as fractal dimension of the data to build a map of the low-dimensional manifold that the data occupy.
 CLAM is inspired by the clustering algorithm from CHESS~\cite{ishaq2019clustered} but differs by the introduction a novel graph-induction approach and a notion of optimal depths, learned via a form of ``meta-machine-learning'' and transfer learning.
+While the standard approach in machine learning is to split a single dataset into many folds, CLAM and CHAODA are unusual in that they learn geometric and topological properties for inducing a graph from a \emph{set} of training datasets, and \emph{transfer} that knowledge to entirely different datasets.
 CLAM's selection of ``poles'' (i.e. a pair of well-separated points) for partitioning clusters is also more efficient than CHESS.
 Whereas CHESS was developed specifically for accelerating search,
 CHAODA uses this manifold-mapping framework to discover properties of the manifold for anomaly and outlier detection.

@@ -9,14 +9,14 @@ If the data happen to be uniformly distributed, one can conceive of simple mecha
 However, real-world data are rarely distributed uniformly.
 Instead, data often obey the ``manifold hypothesis''~\cite{fefferman2016testing}, occupying a low-dimensional manifold in a high-dimensional embedding space, similar to how a 2-d sheet of paper, once crumpled, occupies a 3-dimensional space.
 Detecting anomalies in such a landscape is not easy.
-Imagine trying to identify if a point within the sphere of crumpled paper were anomalous, identifying whether or not the point sits on the sheet or within a gap of the lower-dimensional manifold presents a challenge.
+Imagine trying to identify if a point within the sphere of crumpled paper were anomalous; identifying whether or not the point sits on the sheet or within a gap of the lower-dimensional manifold presents a challenge.
 
 Anomalies (data that do not belong to a distribution) and outliers (data which represent the extrema of a distribution) are found in datasets for a variety of reasons.
 In this manuscript, we treat anomalies and outliers interchangeably.
-Errors in the measurement of data cause anomalous records to be stored,
+Errors in the measurement of data create anomalous records,
 novel instances of data emerge over time,
 or normal behavior may evolve towards the outliers.
-Moreover, even if data collection is executed perfectly and shifts in behavior are accounted for, there is still the risk of adversarial attacks on machine-learning algorithms causing undesired behavior~\cite{elsayed2018adversarial}.
+Moreover, even if data collection is executed perfectly and shifts in behavior are accounted for, there is still the risk of adversarial attacks causing undesired behavior~\cite{elsayed2018adversarial}.
 
 Modern algorithms designed to detect anomalous behavior fail for a variety of reasons, in particular when anomalies live close to, but not on, a complex manifold in high-dimensional space.
 Our approach is designed to map these complex manifolds.
@@ -91,8 +91,8 @@ Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 \label{subsec:related-works:deep-learning-approaches}
 With the recent explosion in Deep Learning, several new methods for anomaly detection have been introduced~\cite{pang2021deep}.
 While most such approaches are supervised or weakly-supervised, such as DAGMM~\cite{zong2018deep}, there have been some advances in unsupervised methods.
-These unsupervised approaches typically use autoencoders~\cite{chen2017outlier}, such as RANDNET~\cite{chandola2009anomaly}, or generative-adversarial-networks, such as MOGAAL and SOGAAL~\cite{liu2019generative}.
-We compare against MOGAAL, SOGAAL, and two autoencoders from~\cite{chen2017outlier}.
+These typically use autoencoders~\cite{chen2017outlier}, such as RandNet~\cite{chandola2009anomaly}, or generative-adversarial-networks, such as MO-GAAL and SO-GAAL~\cite{liu2019generative}.
+We compare against MO-GAAL, SO-GAAL, and two autoencoders from~\cite{chen2017outlier}.
 
 
 \subsection{Other Approaches}
@@ -110,7 +110,7 @@ Minimum Covariance Determinant (MCD)~\cite{rousseeuw1999mcd,hardin2004mcd}, and
 Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 
 
-\subsection{CHAODA}
+\subsection{Our Approach}
 \label{subsec:introduction:chaoda}
 
 We introduce a novel technique, Clustered Learning of Approximate Manifolds (CLAM).

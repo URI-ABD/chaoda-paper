@@ -10,8 +10,8 @@ Clustering too deeply will lead to locally uniform-density clusters of \emph{hig
 We seek to find the optimal balance such that the clusters discover the structure of the manifold.
 The stopping criteria are described in Section~\ref{subsubsec:methods:clam:clustering}.
 Importantly and novelly, these stopping criteria are not uniform for a given dataset; they are adaptive with differing properties of different regions of the manifold, and may exist at different depths of the tree (see Figure~\ref{fig:methods:graph-generation}).
-Also novelly, a graph is induced from the overlap among clusters at this set of depths (see Section~\ref{subsec:methods:induced-graphs}, and this graph informs the anomaly-detection algorithms that CLAM enables (see Section~\ref{subsec:methods:individual-algorithms}).
-CLAM relies on an ensemble-learning approach based on six simple heuristics; the ensemble-learning approach is described in Section~\ref{subsec:methods:ensemble}.
+Also novelly, a graph is induced from the overlap among clusters at this set of depths (see Section~\ref{subsec:methods:induced-graphs}, and this graph informs the CHAODA anomaly-detection algorithms that CLAM enables (see Section~\ref{subsec:methods:individual-algorithms}).
+CHAODA relies on an ensemble-learning approach based on six simple heuristics; the ensemble-learning approach is described in Section~\ref{subsec:methods:ensemble}.
 These distinct heuristics attempt to encompass distinct notions of what make a datapoint anomalous: is it truly isolated, or is the distribution of datapoints multi-modal, or is it very low-dimensional despite being embedded in a high-dimensional space?
 
 In all, CLAM builds on a clustering algorithm originally developed for a different purpose (accelerated approximate search) and uses a novel graph-inference approach to enable several anomaly-detection heuristics that are effective in practice.
@@ -21,23 +21,23 @@ In all, CLAM builds on a clustering algorithm originally developed for a differe
 \label{subsec:methods:clam}
 
 We present a manifold-mapping algorithm called CLAM (Clustered Learning of Approximate Manifolds).
-As input, we need a dataset and a distance function for that dataset.
+CLAM requires a dataset and a distance function.
 A dataset is a collection of $n$-points embedded in a $D$-dimensional Banach space, $\textbf{X} = \{x_1 \dots x_n\}, x_i \in \mathbb{R}^D$.
 A Distance Function takes two points in the dataset and deterministically produces a non-negative real number, $f : (\mathbb{R}^D, \mathbb{R}^D) \mapsto \mathbb{R}^+$.
 The distance must be such that $f(x, x) = 0$ and $f(x, y) = f(y, x)$ $\forall x, y \in X$.
-The distance function may or may not obey the triangle-inequality.
+The distance function may or may not obey the triangle inequality.
 In this paper we used $L1$-norm and $L2$-norm, which are metrics;
-however, CLAM and CHAODA are general over any distance function that obeys the aforementioned properties.
+however, CLAM and CHAODA are general over any distance function that obeys these properties.
 We provide proofs of the complexity of each algorithm in the Supplement.
 
 \subsubsection{Clustering}
 \label{subsubsec:methods:clam:clustering}
 
-We start by building a divisive-hierarchical clustering of the data based on a pair of well separated points from a random sampling of $\sqrt k$ points from the $k$ points in a given cluster from the tree.
+We start by building a divisive hierarchical clustering of the data based on a pair of well-separated points from a random sampling of $\sqrt k$ points from the $k$ points in a given cluster from the tree.
 This achieves clustering in expected $\mathcal{O}(n \lg n)$ time.
-The CLAM clustering algorithm is defined in Algorithm~\ref{alg:clam-partition}.
+CLAM clustering is defined in Algorithm~\ref{alg:clam-partition}.
 The procedure is inspired from~\cite{ishaq2019clustered}, although we have improved upon their partition method.
-The root-cluster contains all points in the dataset and clusters are recursively partitioned until each leaf-cluster contains only one point.
+The root cluster contains all points and clusters are recursively partitioned until each leaf cluster contains only one point.
 % We can't cite our work as "us" during the review process
 
 \begin{algorithm} % enter the algorithm environment
@@ -69,35 +69,32 @@ and \textit{local fractal dimension},
 as given by:
 
 \begin{gather}
-    \log_2\bigg(\frac{|B_D(q, r_1)|}{|B_D(q, r_2)|}\bigg)
+    \log_2\bigg(\frac{|B_D(c, r)|}{|B_D(c, \frac{r}{2})|}\bigg)
     \label{fractal-dimension}
 \end{gather}
 
-where $B_D(q,r)$ is the set of points contained in a ball on the dataset $D$ of radius $r$ centered on a point $q$; here, fractal dimension is computed for a radius $r_1$ and a smaller radius $r_2=\frac{r_1}{2}$.~\cite{ishaq2019clustered}
+where $B_D(c,r)$ is the set of points contained in a ball on the dataset $D$ of radius $r$ centered on a point $c$~\cite{ishaq2019clustered}.
 Thus, this measure captures the ``spread'' of datapoints on the manifold in comparison to the (typically much larger) embedding space, motivated by the notion that CLAM's learned graph will adapt its ``resolution'' to different regions of the manifold.
 
 We can also consider individual \textit{parent-child ratios} of cardinality, radius, and local fractal dimension, as well as the \textit{exponential moving averages} of those parent-child ratios along a branch of the tree.
 In particular, we use the parent-child ratios and the exponential moving averages of those ratios to generalize our method from a small set of training datasets to a large, distinct set of testing datasets.
 
-Note that while other hierarchical cluster algorithms may be viable substitutes here, they would require additional work to allow for the calculation of these ratios.
-With CLAM, we have baked these calculations into the clustering process at negligible extra computational cost.
-We then cache these ratios as metadata for each cluster, thus enabling easy usage while inducing graphs and performing anomaly detection.
-
 \subsubsection{Graphs}
 \label{subsubsec:methods:clam:graphs}
 Clusters that are close in the embedding space sometimes have overlapping volumes; i.e.,\ the distance between their centers is less than or equal to the sum of their radii.
 We define a graph $G=(V,E)$ with the selected clusters in one-to-one correspondence to vertices and with an edge between two vertices if and only if their clusters overlap.
-While it is fairly standard in literature to define graphs using this geometric property of overlapping volumes, the real trick is in selecting the right clusters to build useful graphs.
-This selection process, presented in Section~\ref{subsec:methods:induced-graphs}, is among the major novel contributions of CHAODA.
+While it is fairly standard in the literature to define graphs using this geometric property of overlapping volumes, the challenge is in selecting the right clusters to build useful graphs.
+This selection process, presented in Section~\ref{subsec:methods:induced-graphs}, is among the major novel contributions of CLAM and CHAODA.
 
-Figure~\ref{fig:methods:graph-generation} illustrates how a graph can be induced by clusters as well as their overlaps at different tree depths.
-Interestingly, the clusters are not necessarily hyperspheres, but rather polytopes akin to a high-dimensional analog of a Voronoi diagram~\cite{voronoi1908nouvelles}.
+Figure~\ref{fig:methods:graph-generation} illustrates how CLAM induces a graph from non-uniform depths in a cluster tree.
+Interestingly, the clusters are not necessarily hyperspheres, but polytopes akin to a high-dimensional Voronoi diagram~\cite{voronoi1908nouvelles}.
 
 For our purposes, a graph exhibits an important invariant.
 The clusters corresponding to vertices in the graph collectively contain every point in the dataset.
 In addition, each point in the dataset is in exactly one cluster in the graph.
 A corollary to this invariant is that a graph will never contain two vertices such that one vertex corresponds to an ancestor or descendant cluster of another vertex.
 A graph can be built from clusters at a fixed depth in the cluster-tree (a layer-graph), or from clusters from multiple different depths in the tree (an optimal-graph).
+This graph need not be fully connected, and in practice often contains many small, disjoint connected components.
 In this work we consider the cardinality of a graph to be \textit{vertex cardinality}; i.e.,\ the number of vertices (clusters) in the graph.
 
 \subsubsection{The Manifold}
@@ -105,7 +102,7 @@ In this work we consider the cardinality of a graph to be \textit{vertex cardina
 According to the ``manifold hypothesis''~\cite{fefferman2016testing}, datasets collected from constrained generating processes that are embedded in a high-dimensional space typically only occupy a low-dimensional manifold in that space.
 The graphs discussed thus far map this low-dimensional manifold in the original embedding space.
 Different graphs do this at different levels of local or global resolution.
-Our aim is to build a graph, where different resolutions may be necessary for different regions of the manifold.
+Our aim is to build a graph where different resolutions may be necessary for different regions of the manifold.
 We can then apply several anomaly detection algorithms to these graphs.
 
 We describe a set of algorithms in Section~\ref{subsec:methods:individual-algorithms}.
@@ -124,10 +121,10 @@ Instead, we must intelligently select those clusters that build a graph which wi
 Area under the curve (AUC) of the receiver operating characteristic (ROC) is often used to measure the performance of anomaly detectors;
 we wish to choose clusters that are expected to maximize this measure.
 We use the definition of AUC-ROC based on CHAODA being an \emph{unsupervised} model where ground truth can be examined post-hoc from the datasets; a score is given to every point, and the AUC is computed in the usual fashion~\cite{fawcett2006introduction}.
-The ground-truth labels are only used during training for the training set of datasets;
-The ground-truth for the test set of datasets is used purely for post-hoc performance calculations.
+The ground-truth labels are only used during training for the training set of datasets, while the ground-truth for the test set of datasets is used purely for post-hoc performance calculations.
+Thus, CHAODA is supervised only in the sense of learning where to build a graph on training datasets, but unsupervised on any new (e.g. test) datasets.
 
-We find the ``right graphs'' by learning a function that takes the parent-child ratios of cardinality, radius and local-fractal-dimension and the exponential moving averages (from the root to the cluster) of these ratios for a cluster and predicts the contribution to AUC-ROC of selecting that cluster for the graph.
+We find the ``right graphs'' by learning a function that takes the parent-child ratios of cardinality, radius and local fractal dimension and the exponential moving averages (from the root to the cluster) of these ratios for a cluster and predicts the contribution to AUC-ROC of selecting that cluster for the graph.
 We thus need to learn a function of the form $f: \mathbb{R}^6 \mapsto \mathbb{R}^+$ that takes these six ratios learn the AUC from the scores assigned to points in the corresponding cluster.
 By using these parent-child ratios and exponential moving averages thereof, we gain some agnosticity to dataset-specific properties and instead learn geometric and topological properties that generalize over datasets in Banach Spaces that obey the Manifold Hypothesis.
 This is essentially transfer learning: we will learn such functions from a set of datasets \emph{completely distinct from} the set of datasets we use for benchmarking.
@@ -136,8 +133,9 @@ We are effectively learning a set of criteria that can enable selection of a use
 We choose a linear regression model and a regression tree model to fill this role.
 Such models require training data.
 To generate this data, we take a random sample from the datasets described in Section~\ref{subsec:methods:datasets}, choosing six datasets at random with between 1,000 and 100,000 points.
-We generate a clustering for each dataset, and start by inducing several uniform-depth graphs from the tree.
-We apply each individual algorithm described in Section~\ref{subsec:methods:individual-algorithms} to each such graph and, using the ground-truth for the dataset, we calculate the AUC for the subset of points in each cluster and use that AUC as the training target for our meta-ml models.
+We generate a clustering for each dataset, and start by inducing several uniform-depth (layer) graphs from the tree.
+We apply each individual algorithm described in Section~\ref{subsec:methods:individual-algorithms} to each such graph and, using the labels, we calculate the AUC over the subset of points in each cluster.
+We use that AUC as the training target for our meta-ml models.
 The corresponding feature vector is, as stated earlier, the six-element vector of the parent-child ratios and their exponential moving averages.
 This concludes the first epoch of training and gives us a set of trained meta-ml models.
 For each subsequent epoch of training, we use the meta-ml models from the previous epoch to rank the clusters in each tree (corresponding to each training dataset) and select graphs that perform better, as measured by AUC-ROC, for anomaly detection.
@@ -161,13 +159,12 @@ Since the ratios used to train and predict from these meta-ml models are agnosti
 \subsection{Individual Algorithms}
 \label{subsec:methods:individual-algorithms}
 
-Here we describe six simple methods for anomaly detection, each of which uses a graph of clusters from CLAM to calculate an anomalousness score for each datapoint.
-For each algorithm, $scores$ is a dictionary of clusters and their outlier scores,
-$V$ is the set of clusters in a graph,
-$E$ is the set of edges in a graph, and
-the cardinality of a cluster $c$ is denoted by $|c|$, the number of points in that cluster.
 The key to an effective ensemble method is that each component algorithm contributes a unique inductive bias~\cite{chen2017outlier}.
-For each algorithm described below, we note the intuition behind its contribution to the ensemble.
+Here we describe six simple algorithms for anomaly detection, each using a CLAM graph to calculate an anomalousness score for each datapoint.
+For each algorithm, we note the intuition behind its contribution to the ensemble.
+In the following, $scores$ is a dictionary of clusters and their outlier scores,
+$V$ and $E$ are the sets of clusters and edges in a graph, respectively, and $|c|$ is
+the cardinality of a cluster $c$, the number of points in that cluster.
 
 \subsubsection{Relative Cluster Cardinality}
 We measure the anomalousness of a point by the cardinality of the cluster that the point belongs to relative to the cardinalities of the other clusters.
@@ -265,11 +262,10 @@ These probabilities are stochastic over the edge weights for each cluster.
 We then compute successive squares of this matrix.
 This process will eventually converge as long as the graph is connected and aperiodic~\cite{levin2017markov}; we find this convergent matrix.
 Consider the sum of the values along a row in the convergent matrix.
-This is expected fraction of time that the cluster will be visited by a long random walk over the graph component.
+This is the expected proportion of visits to that cluster during a long random walk over the graph component.
 We can consider this sum to be inversely related to the anomalousness of the corresponding cluster.
 The intuition here is that less-reachable clusters are more likely to represent anomalous points.
 The algorithm is defined in Algorithm~\ref{alg:sp}.
-This algorithm is dominated by successive powering of a square matrix for each component.
 Its worst-case time complexity is $\mathcal{O}(|V|^{2.3728596})$ given by the matrix multiplication algorithm from~\cite{alman2021refined}.
 In practice, however, this algorithm performs much better because the induced graphs are often composed of several small components rather than one large component.
 
@@ -318,13 +314,10 @@ We extract the parent-child ratios and the exponential moving averages of those 
 Given the set of meta-ml models learned from the training datasets as described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster.
 The highest ranked clusters from each tree are then used to build a graph.
 This gives us one graph for each combination of meta-ML model and distance function used.
-We apply each of the six methods desc in~\ref{subsec:methods:individual-algorithms} on each such graph.
+We apply each of the six methods described in~\ref{subsec:methods:individual-algorithms} on each such graph.
 With two meta-ML models (linear regression and regression trees) and two distance metrics ($L1$-norm and $L2$-norm), we have $24$ anomaly scores for each point in the dataset.
 These scores are then combined into an ensemble by simply taking the mean of all scores for each point.
 We present the AUC-ROC from this ensemble in Section~\ref{sec:results}.
-
-\subsubsection{Normalization}
-\label{subsubsec:methods:normalization}
 
 % The individual algorithms described in~\ref{subsec:methods:individual-algorithms} produce outlier scores for each cluster, rather than for each point.
 % We remedy this by assigning to each point the score of the cluster to which it belongs.
