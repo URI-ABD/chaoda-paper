@@ -14,7 +14,7 @@ Runtime performance is presented in the Supplement due to space constraints.
 Note that we implemented CLAM and CHAODA entirely in Python.
 While we used the provided wrappers for each method we compared against, those methods are often implemented in C/C++.
 Therefore, the comparison of wall-clock time is not truly fair to CHAODA.
-A reimplementation in a high-performance language, such as Rust, would be worthwhile.
+An implementation in a high-performance language, such as Rust, would be worthwhile.
 
 
 \begin{table*}[!t]
@@ -126,3 +126,4 @@ Where we were unable to find a working implementation, we include here the perfo
 RS-Hash~\cite{sathe2016subspace} reported AUCs of $0.92$ on Cardio, $1.00$ on Lympho, $0.99$ on Musk, and $0.76$ on OptDigits.
 This beats CHAODA on Cardio, ties on Lympho and Musk, and is outperformed by CHAODA on OptDigits.
 We considered Clustering with Outlier Removal~\cite{liu2019clustering} but we could not find a working implementation and the authors did not report AUC scores, instead only reporting F-measure.
+% TODO: NAJIB AND NOAH: Other excluded algorithms
