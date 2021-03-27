@@ -1,16 +1,16 @@
 \section{Discussion}
 \label{sec:discussion}
 
-% TODO mention reviewer re: acks in camera ready
+% TODO mention reviewer re: acknowledgements in camera ready
 We have presented CHAODA, an ensemble of six algorithms that use the map of the underlying manifold produced by CLAM\@.
-% TODO change six to five when it's not a lie
 The six individual algorithms are simple to implement on top of CLAM and, when combined into an ensemble, often outperform state-of-the-art methods.
 In future work, new ideas for additional algorithms that contribute novel inductive biases can be easily incorporated into CHAODA.
 
-CLAM uses the geometric and topological properties of fractal dimension and metric entropy of the data to build a map of the low-dimensional manifold that the data occupy.
+CLAM uses the geometric and topological properties such as fractal dimension of the data to build a map of the low-dimensional manifold that the data occupy.
 CLAM is inspired by the clustering algorithm from CHESS~\cite{ishaq2019clustered} but differs by the introduction a novel graph-induction approach and a notion of optimal depths, learned via a form of ``meta-machine-learning'' and transfer learning.
 CLAM's selection of ``poles'' for partitioning clusters is also more efficient than CHESS.
-CHAODA builds on this manifold-mapping framework for anomaly and outlier detection.
+Whereas CHESS was developed specifically for accelerating search,
+CHAODA uses this manifold-mapping framework for anomaly and outlier detection.
 Intuitively, we expect CHAODA to perform particularly well when the data lie on an ``interesting'' manifold, and to perform merely average when the data derive from an easily-described distribution (or ``boring'' manifold).
 Just as CHESS demonstrated an acceleration of search when the data exhibited \emph{low fractal dimension} and \emph{low metric entropy}, with CHAODA, we see that AUC scores are vastly improved when the data exhibit these properties and often competitive when the data do not exhibit these properties.
 We believe that CLAM is free of hyperparameters; the weights learned from the meta-ML step could vary, but we learned them once on a distinct training set.
@@ -30,10 +30,10 @@ The choice of distance function could significantly impact anomaly-detection per
 In this case, domain knowledge is likely the best way to determine the distance function of choice.
 Future work should explore a more diverse collection of domain-appropriate distance functions, such as Wasserstein distance on images, Levenshtein edit distance on strings, and Jaccard distance on the maximal common subgraph of molecular structures.
 Currently, CLAM only functions on a Banach space defined by a distance metric.
-This poses a limitation with respect to datasets that have homogenous feature sets, such as a combination of continuous and categorical variables.
+This poses a limitation with respect to datasets that have heterogenous features, such as a combination of continuous and categorical variables.
 Future work should explore linear combinations of normalized distance functions to overcome this limitation.
 
-CHAODA is demonstrably highly effective on high-dimensional datasets, and so may be applied to neural networks.
-Using CLAM to map a dataset where each datum represents the activations of a neural network from an input to the neural network, we would expect to detect malicious inputs to neural networks based on the intuition that malicious inputs produce atypical activation patterns.
+CHAODA is demonstrably highly effective on large high-dimensional datasets, and so may be applied to neural networks.
+Using CLAM to map a dataset where each datum represents the activation-pattern of a neural network from an input to the neural network, we would expect to detect malicious inputs to neural networks based on the intuition that malicious inputs produce atypical activation patterns.
 
-In conclusion, we have demonstrated that by mapping the manifolds occupied by data, CLAM reveals structure that allows CHAODA to outperform other state-of-the-art approaches to anomaly detection, representing an actualization of the manifold hypothesis.
+In conclusion, we have demonstrated that by mapping the manifolds occupied by data, CLAM reveals geometric and topological structure that allows CHAODA to outperform other state-of-the-art approaches to anomaly detection, representing an actualization of the manifold hypothesis.
