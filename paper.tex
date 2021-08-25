@@ -1,4 +1,13 @@
-\documentclass{article}
+\documentclass[conference,compsoc]{IEEEtran}
+
+\ifCLASSOPTIONcompsoc
+  % IEEE Computer Society needs nocompress option
+  % requires cite.sty v4.0 or later (November 2003)
+  \usepackage[nocompress]{cite}
+\else
+  % normal IEEE
+  \usepackage{cite}
+\fi
 
 
 % \usepackage{arxiv} # uncomment for preprint
@@ -15,13 +24,25 @@
 \usepackage{graphicx}
 \usepackage{subfigure}
 \usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
 
+% Note that the amsmath package sets \interdisplaylinepenalty to 10000
+% thus preventing page breaks from occurring within multiline equations. Use:
+\interdisplaylinepenalty=2500
+% after loading amsmath to restore such page breaks as IEEEtran.cls normally
+% does. amsmath.sty is already installed on most LaTeX systems. The latest
+% version and documentation can be obtained at:
+% http://www.ctan.org/pkg/amsmath
+
 \usepackage{placeins}
 % \usepackage{algpseudocode}
-\usepackage{algorithm}
+
 
 % \algnewcommand\algorithmicforeach{\textbf{foreach}}
 % \algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
@@ -32,86 +53,49 @@
 % Attempt to make hyperref and algorithmic work together better:
 \newcommand{\theHalgorithm}{\arabic{algorithm}}
 
-% Use the following line for the initial blind version submitted for review:
-\usepackage{icml2021}
 
 
 
-% \title{Clustered Hierarchical Anomaly and Outlier Detection Algorithms}
-
-
-
-% \author{
-%     Najib Ishaq \\
-%     Department of Computer Science and Statistics\\
-%     University of Rhode Island\\
-%     Kingston, RI\\
-%     \texttt{najib\_ishaq@uri.edu} \\
-%     \And
-%     Thomas J. Howard III \\
-%     Department of Computer Science and Statistics\\
-%     University of Rhode Island\\
-%     Kingston, RI\\
-%     \texttt{thoward27@uri.edu} \\
-%     \AND
-%     Noah M. Daniels \\
-%     Department of Computer Science and Statistics\\
-%     University of Rhode Island\\
-%     Kingston, RI\\
-%     \texttt{noah\_daniels@uri.edu} \\
-% }
 
 \begin{document}
-    % \maketitle
+%
+% paper title
+% Titles are generally capitalized except for words such as a, an, and, as,
+% at, but, by, for, in, nor, of, on, or, the, to and up, which are usually
+% not capitalized unless they are the first or last word of the title.
+% Linebreaks \\ can be used within to get better formatting as desired.
+% Do not put math or special symbols in the title.
+\title{Clustered Hierarchical Anomaly and Outlier Detection Algorithms}
 
-% If accepted, instead use the following line for the camera-ready submission:
-%\usepackage[accepted]{icml2021}
-\twocolumn[
-\icmltitle{Clustered Hierarchical Anomaly and Outlier Detection Algorithms}    
+% author names and affiliations
+% use a multiple column layout for up to three different
+% affiliations
+\author{
+\IEEEauthorblockN{Najib Ishaq}
+\IEEEauthorblockA{Computer Science and Statistics\\
+University of Rhode Island\\
+Kingston, RI 02881\\
+najib\_ishaq@zoho.com}
+\and
+\IEEEauthorblockN{Thomas J. Howard III}
+\IEEEauthorblockA{Computer Science and Statistics\\
+University of Rhode Island\\
+Kingston, RI 02881\\
+thoward27@uri.edu}
+\and
+\IEEEauthorblockN{Noah M. Daniels}
+\IEEEauthorblockA{Computer Science and Statistics\\
+University of Rhode Island\\
+Kingston, RI 02881\\
+noah\_daniels@uri.edu}}
 
-% It is OKAY to include author information, even for blind
-% submissions: the style file will automatically remove it for you
-% unless you've provided the [accepted] option to the icml2021
-% package.
-
-% List of affiliations: The first argument should be a (short)
-% identifier you will use later to specify author affiliations
-% Academic affiliations should list Department, University, City, Region, Country
-% Industry affiliations should list Company, City, Region, Country
-
-% You can specify symbols, otherwise they are numbered in order.
-% Ideally, you should not use this facility. Affiliations will be numbered
-% in order of appearance and this is the preferred way.
-\icmlsetsymbol{equal}{*}
-
-\begin{icmlauthorlist}
-\icmlauthor{Najib Ishaq}{equal,uri}
-\icmlauthor{Thomas J. Howard III}{equal,uri}
-\icmlauthor{Noah M. Daniels}{uri}
-\end{icmlauthorlist}
-
-\icmlaffiliation{uri}{Department of Computer Science \& Statistics, University of Rhode Island, Kingston, Rhode Island, USA}
-
-\icmlcorrespondingauthor{Noah M. Daniels}{noah\_daniels@uri.edu}
-
-% You may provide any keywords that you
-% find helpful for describing your paper; these are used to populate
-% the "keywords" metadata in the PDF but will not be shown in the document
-\icmlkeywords{Anomaly Detection, Outlier Detection, Manifold Learning}
-
-\vskip 0.3in
-]
-
+\IEEEoverridecommandlockouts
+\IEEEpubid{\makebox[\columnwidth]{978-1-5386-5541-2/18/\$31.00~\copyright2018 IEEE \hfill} \hspace{\columnsep}\makebox[\columnwidth]{ }}
+% make the title area
+\maketitle
+\IEEEpubidadjcol
 % this must go after the closing bracket ] following \twocolumn[ ...
 
-% This command actually creates the footnote in the first column
-% listing the affiliations and the copyright notice.
-% The command takes one argument, which is text to display at the start of the footnote.
-% The \icmlEqualContribution command is standard text for equal contribution.
-% Remove it (just {}) if you do not need this facility.
-
-%\printAffiliationsAndNotice{}  % leave blank if no need to mention equal contribution
-\printAffiliationsAndNotice{\icmlEqualContribution} % otherwise use the standard text.
 
 
     \begin{abstract}
@@ -126,6 +110,8 @@
         CHAODA outperforms other approaches on 14 of the remaining 18 datasets.
     \end{abstract}
 
+\IEEEpeerreviewmaketitle
+
     \input{sections/1-introduction.tex}
     \input{sections/2-methods.tex}
     \input{sections/3-results.tex}
@@ -136,6 +122,6 @@
 
     % \afterpage{\clearpage}
     \FloatBarrier
-    \bibliographystyle{icml2021}
+    \bibliographystyle{IEEEtran}
     \bibliography{references}
 \end{document}
