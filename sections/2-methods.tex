@@ -337,58 +337,71 @@ Its time complexity is $\mathcal{O}(|V|)$.
 \end{algorithm}
 
 
-% Cluster Selection via Meta-ML
-% Training
-% The Ensemble
-% Datasets and Comparisons
+\subsection{Cluster Selection for Graphs}
+\label{subsec:methods:cluster-selection-for-graphs}
+TODO
+
+\subsection{Training Meta-ML Models}
+\label{subsec:methods:training-meta-ml-models}
+TODO
 
 
-\subsection{Ensemble}
-\label{subsec:methods:ensemble}
-
-Given a dataset and a list of distance functions for the dataset, we start by building a CLAM tree for each distance function on the dataset.
-We extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
-Given the set of meta-ml models learned from the training datasets as described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster.
-The highest ranked clusters from each tree are then used to build a graph.
-This gives us one graph for each combination of meta-ML model and distance function used.
-We apply each of the six methods described in~\ref{subsec:methods:individual-algorithms} on each such graph.
-With two meta-ML models (linear regression and regression trees) and two distance metrics ($L1$-norm and $L2$-norm), we have $24$ anomaly scores for each point in the dataset.
-These scores are then combined into an ensemble by simply taking the mean of all scores for each point.
-We present the AUC-ROC from this ensemble in Section~\ref{sec:results}.
-
-% The individual algorithms described in~\ref{subsec:methods:individual-algorithms} produce outlier scores for each cluster, rather than for each point.
-% We remedy this by assigning to each point the score of the cluster to which it belongs.
-% Since our graphs guarantee that each point is in exactly one cluster and that every point from the dataset is accounted for, this assigns an outlier score to each point in a dataset.
-Our individual methods produce scores with a wide range of values.
-The only common feature among these scores is that low scores correspond to inliers and high scores correspond to outliers.
-Therefore, we cannot directly compare scores across methods, which we need to be able to do for a functional ensemble.
-Thus, we normalize the scores to the range $[0, 1]$, using gaussian normalization~\cite{kriegel2011interpreting}.
-We include sigmoid and min-max normalization as options in our implementation.
+\subsection{The Ensemble}
+\label{subsec:methods:the-ensemble}
+TODO
 
 
-\subsection{Datasets}
-\label{subsec:methods:datasets}
-
-We sourced 24 datasets containing only numerical features from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}.
-All of these datasets were adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and were standardized by ODDS for benchmarks on anomaly and outlier detection.
-Note that CHAODA is able to handle entirely-categorical datasets, but not mixed datasets.
-
-We randomly select six datasets to train CHAODA: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
-We benchmarked CHAODA 30 times on the test datasets, with different random seeds.
-We provide more details on the datasets in the Supplement.
-During testing, we noticed that even though we often see $|V| \ll n $, the graph neighborhood size and stationary probabilities methods from~\ref{subsec:methods:individual-algorithms} were prohibitive, so we only run them when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
-We present these results in Table~\ref{table:results:test-performance} under the CHAODA-fast and CHAODA rows.
-CHAODA-fast exhibits comparable performance to CHAODA, so we set CHAODA-fast as the default in our implementation.
-All benchmarks were conducted on a 28-core Intel Xeon E5-2690 v4 2.60GHz, 512GB RAM and CentOS 7 Linux with kernel 3.10.0-1127.13.1.el7.x86\_64 \#1 SMP and Python 3.6.8.
-
-CHAODA, being an unsupervised algorithm, is only compared against other unsupervised algorithms.
-We compared against $18$ unsupervised algorithms collected in the pyOD suite~\cite{zhao2019pyod} and Scikit-Learn~\cite{pedregosa2011scikit}, as well as RS-Hash~\cite{sathe2016subspace}.
-A supervised version of CHAODA is possible future work which will open up comparisons against supervised or weakly-supervised methods such as DAGMM~\cite{zong2018deep}.
+\subsection{Datasets and Comparisons}
+\label{subsec:methods:datasets-and-comparisons}
+TODO
 
 
-\subsection{Notes}
-\label{subsec:methods:notes}
+% \subsection{Ensemble}
+% \label{subsec:methods:ensemble}
 
-% From intro:our-approach
-The space may also be defined by a distance \textit{function} that does not obey the triangle inequality, though we have not explored what difficulties this might introduce.
+% Given a dataset and a list of distance functions for the dataset, we start by building a CLAM tree for each distance function on the dataset.
+% We extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
+% Given the set of meta-ml models learned from the training datasets as described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster.
+% The highest ranked clusters from each tree are then used to build a graph.
+% This gives us one graph for each combination of meta-ML model and distance function used.
+% We apply each of the six methods described in~\ref{subsec:methods:individual-algorithms} on each such graph.
+% With two meta-ML models (linear regression and regression trees) and two distance metrics ($L1$-norm and $L2$-norm), we have $24$ anomaly scores for each point in the dataset.
+% These scores are then combined into an ensemble by simply taking the mean of all scores for each point.
+% We present the AUC-ROC from this ensemble in Section~\ref{sec:results}.
+
+% % The individual algorithms described in~\ref{subsec:methods:individual-algorithms} produce outlier scores for each cluster, rather than for each point.
+% % We remedy this by assigning to each point the score of the cluster to which it belongs.
+% % Since our graphs guarantee that each point is in exactly one cluster and that every point from the dataset is accounted for, this assigns an outlier score to each point in a dataset.
+% Our individual methods produce scores with a wide range of values.
+% The only common feature among these scores is that low scores correspond to inliers and high scores correspond to outliers.
+% Therefore, we cannot directly compare scores across methods, which we need to be able to do for a functional ensemble.
+% Thus, we normalize the scores to the range $[0, 1]$, using gaussian normalization~\cite{kriegel2011interpreting}.
+% We include sigmoid and min-max normalization as options in our implementation.
+
+
+% \subsection{Datasets}
+% \label{subsec:methods:datasets}
+
+% We sourced 24 datasets containing only numerical features from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}.
+% All of these datasets were adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and were standardized by ODDS for benchmarks on anomaly and outlier detection.
+% Note that CHAODA is able to handle entirely-categorical datasets, but not mixed datasets.
+
+% We randomly select six datasets to train CHAODA: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
+% We benchmarked CHAODA 30 times on the test datasets, with different random seeds.
+% We provide more details on the datasets in the Supplement.
+% During testing, we noticed that even though we often see $|V| \ll n $, the graph neighborhood size and stationary probabilities methods from~\ref{subsec:methods:individual-algorithms} were prohibitive, so we only run them when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
+% We present these results in Table~\ref{table:results:test-performance} under the CHAODA-fast and CHAODA rows.
+% CHAODA-fast exhibits comparable performance to CHAODA, so we set CHAODA-fast as the default in our implementation.
+% All benchmarks were conducted on a 28-core Intel Xeon E5-2690 v4 2.60GHz, 512GB RAM and CentOS 7 Linux with kernel 3.10.0-1127.13.1.el7.x86\_64 \#1 SMP and Python 3.6.8.
+
+% CHAODA, being an unsupervised algorithm, is only compared against other unsupervised algorithms.
+% We compared against $18$ unsupervised algorithms collected in the pyOD suite~\cite{zhao2019pyod} and Scikit-Learn~\cite{pedregosa2011scikit}, as well as RS-Hash~\cite{sathe2016subspace}.
+% A supervised version of CHAODA is possible future work which will open up comparisons against supervised or weakly-supervised methods such as DAGMM~\cite{zong2018deep}.
+
+
+% \subsection{Notes}
+% \label{subsec:methods:notes}
+
+% % From intro:our-approach
+% The space may also be defined by a distance \textit{function} that does not obey the triangle inequality, though we have not explored what difficulties this might introduce.
 
