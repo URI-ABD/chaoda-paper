@@ -2,16 +2,6 @@
 \label{sec:methods}
 
 % Overview
-% Dataset and Distance Function
-% Clustering
-% Graphs
-% Individual Algorithms
-% Cluster Selection via Meta-ML
-% Training
-% The Ensemble
-% Datasets
-
-% Overview
 Here we provide an overview of the rest of this manuscript.
 We start with a dataset and a distance metric (refer subsection).
 CLAM applies hierarchical clustering to build a tree for this dataset (refer subsection).
@@ -178,23 +168,34 @@ This also assures that \textit{graph population} is equal to the cardinality of 
 \subsection{Individual Algorithms}
 \label{subsec:methods:individual-algorithms}
 
-The key to an effective ensemble method is that each component algorithm contributes a unique inductive bias~\cite{chen2017outlier}.
-Here we describe six simple algorithms for anomaly detection, each using a CLAM graph to calculate an anomalousness score for each datum.
-For each algorithm, we note the intuition behind its contribution to the ensemble.
-In the following, $scores$ is a dictionary of clusters and their outlier scores,
-$V$ and $E$ are the sets of clusters and edges in a graph, respectively, and $|c|$ is
-the cardinality of a cluster $c$, the number of points in that cluster.
+Having induced several graphs to characterize a manifold, we need to come up with some methods to extract information about the anomalousness of clusters in those graphs.
+Here we describe six simple algorithms for anomaly detection, each using a CLAM graph to calculate an anomalousness score for each cluster and datum.
+With the key to an effective ensemble method being that each component algorithm contribute a unique inductive bias~\cite{chen2017outlier}, we also note the intuition behind their contributions to the ensemble.
 
+In the following,
+$V$ and $E$ are the sets of clusters and edges, respectively, in a graph,
+$|c|$ is the cardinality of a cluster $c$,
+and $|C|$ is the cardinality of a component $C$.
+Each algorithm assigns an anomalousness score to each cluster.
+Each point is then assigned the anomalousness score of the cluster it belongs to.
+These scores are internally consistent for each individual algorithm, i.e.\ low scores indicate inliers and high scores indicate outliers.
+However, different algorithms assign scores in wide, and often different, ranges of values.
+We use gaussian normalization constrain the raw scores to a $[0, 1]$ range.
+This lets us combine scores into an ensemble (refer subsection).
+See (cite normalization paper) for a more thorough discussion of anomaly-score normalization in ensemble methods.
 
 \subsubsection{Relative Cluster Cardinality}
-We measure the anomalousness of a point by the cardinality of the cluster that the point belongs to relative to the cardinalities of the other clusters.
-Points in the same cluster are considered equally anomalous and points in clusters with lower cardinalities are considered more anomalous than points in clusters with higher cardinalities.
-The algorithm is defined in Algorithm~\ref{alg:rclc}.
-The time complexity is $\mathcal{O}(|V|)$.
+\label{subsubsec:methods:individual-algorithms:relative-cluster-cardinality}
+We measure the anomalousness of point by the cardinality of the cluster that the point belongs to relative to the cardinalities of the other clusters in the graph.
+Points in the same cluster are considered equally anomalous.
+Points in clusters with lower cardinalities are considered more anomalous than points in clusters with higher cardinalities.
+
+The intuition here is that points in clusters with higher cardinalities are all close to each other and are, thus, likely to be inliers, i.e.\ not anomalous.
+The algorithm is defined in Algorithm~\ref{alg:relative-cluster-cardinality} and its time complexity is $\mathcal{O}(|V|)$ because it requires a single pass over the clusters in a graph.
 
 \begin{algorithm}[h]
     \caption{Relative Cluster Cardinality}
-    \label{alg:rclc}
+    \label{alg:relative-cluster-cardinality}
 \begin{algorithmic}[1]
     \REQUIRE $G$, a graph
     \FOR {cluster $c \in G$}
@@ -205,19 +206,21 @@ The time complexity is $\mathcal{O}(|V|)$.
 
 
 \subsubsection{Relative Component Cardinality}
+\label{subsubsec:methods:individual-algorithms:relative-component-cardinality}
 We use the usual definition of connected components:
 no two nodes from different components have an edge between them, and
 every pair of nodes in the same component has a path connecting them.
-Consider the relative cardinalities of each component in much the same way as we considered the relative cardinalities of clusters in the relative cluster cardinality method.
-Points in clusters (vertices) in smaller components are considered more anomalous than those in larger components,
-and points in clusters in the same component are considered equally anomalous.
-The intuition here, as distinct from the previous algorithm, is to capture larger-scale structural information based on disjoint connected components from the CLAM graph.
-The algorithm is defined in Algorithm~\ref{alg:rcc}.
-This algorithm first finds the components of the graph, so its time complexity is $\mathcal{O}(|E| + |V|)$.
+Consider the relative cardinalities of each component in much the same way as in the previous algorithm.
+Points in clusters in smaller components are considered more anomalous than those in clusters in larger components.
+Points in clusters in the same component are considered equally anomalous.
+
+The intuition here, as distinct from the previous algorithm, is to capture larger-scale structural information based on disjoint connected components from the graph.
+The algorithm is defined in Algorithm~\ref{alg:relative-component-cardinality}.
+The time complexity is $\mathcal{O}(|E| + |V|)$ because we first need to find the components of the graph, using a single pass over the edges, and then score each cluster in the graph, using a single pass over those clusters.
 
 \begin{algorithm}[h]
     \caption{Relative Component Cardinality}
-    \label{alg:rcc}
+    \label{alg:relative-component-cardinality}
 \begin{algorithmic}[1]
     \REQUIRE $G$, a graph
     \FOR {component $C \in G$}
@@ -227,18 +230,20 @@ This algorithm first finds the components of the graph, so its time complexity i
 \end{algorithm}
 
 
-\subsubsection{Graph Neighborhood}
-Given the graph with clusters and edges, we consider the number of clusters reachable from a starting cluster within a given graph distance $k$.
-We call this number the \textit{graph-neighborhood} of the starting cluster.
-With $k$ small compared to the diameter of the graph, we consider the relative sizes of graph-neighborhoods of the clusters.
-Points in clusters with small graph-neighborhoods are considered more anomalous than points in clusters with large graph-neighborhoods.
+\subsubsection{Graph Neighborhood Size}
+\label{subsubsec:methods:individual-algorithms:graph-neighborhood-size}
+Given the graph, we consider the number of clusters reachable from a starting cluster within a given graph distance $k$, i.e.\ within $k$ hops along edges.
+We call this number the \textit{graph-neighborhood size} of the starting cluster.
+With $k$ small compared to the diameter of the graph, we consider the relative graph-neighborhood-sizes of the clusters.
+Clusters with small graph-neighborhoods are considered more anomalous than clusters with large graph-neighborhoods.
+
 The intuition here is to capture information about the connectivity of the graph in the region around each cluster.
-The algorithm is defined in Algorithm~\ref{alg:gns}.
-This algorithm is dominated by computing the eccentricity of each cluster, so its time complexity is $\mathcal{O}(|E| \cdot |V|)$.
+The algorithm is defined in Algorithm~\ref{alg:graph-neighborhood-size}.
+Its time complexity is $\mathcal{O}(|E| \cdot |V|)$ because we need to compute the eccentricity of each cluster.
 
 \begin{algorithm}[h]
     \caption{Graph Neighborhood}
-    \label{alg:gns}
+    \label{alg:graph-neighborhood-size}
 \begin{algorithmic}[1]
     \REQUIRE $G$, a graph
     \REQUIRE $f \in \mathbb{R}$ in the range $(0,1]$ ($0.25$ by default).
@@ -254,20 +259,20 @@ This algorithm is dominated by computing the eccentricity of each cluster, so it
 
 
 \subsubsection{Child-Parent Cardinality Ratio}
-\label{subsubsec:methods:individual-algorithms:cpcr}
-As described in Section~\ref{subsubsec:methods:clam:clustering}, the partition algorithm used in clustering splits a cluster into two children.
-If a child cluster contains only a small fraction of its parent's points (i.e., it only has a minority), then we consider the points in that child cluster to be more anomalous.
-These child-parent cardinality ratios are accumulated for each point down its branch in the tree, terminating when the child cluster is a vertex in the induced graph.
-Points with a low value of these accumulated ratios are considered more anomalous than points with a higher value.
-This algorithm is inspired by iForest~\cite{tony2008iforest}, and captures information from the cluster tree directly, in addition to the CLAM graph.
-The algorithm is defined in Algorithm~\ref{alg:cpcr}.
-Unlike other CHAODA algorithms, this one accumulates parent scores into the children.
-The time complexity of calculating the ratios is $\mathcal{O}(|V|)$ at clustering time, which is amortized over scoring the points;
-the time complexity of scoring each individual point is $\mathcal{O}(1)$.
+\label{subsubsec:methods:individual-algorithms:child-parent-cardinality-ratio}
+As described in Section~\ref{subsec:methods:clustering}, the partition algorithm used in clustering splits a cluster into two children.
+If a child-cluster contains only a small fraction of its parent's points, then we consider that child-cluster to be more anomalous.
+These child-parent cardinality ratios are accumulated along each branch in the tree, terminating when the child-cluster is among those selected in the graph.
+Clusters with a low value of these accumulated ratios are considered more anomalous than clusters with a higher value.
+
+This algorithm was inspired by iForest~\cite{tony2008iforest}, and captures information from the tree and from the graph.
+It is defined in Algorithm~\ref{alg:child-parent-cardinality-ratio}.
+Unlike the other individual algorithms, this one accumulates parent scores into the children.
+The time complexity of this algorithm is $\mathcal{O}(|V|)$ because these ratios are memoized during the clustering process.
 
 \begin{algorithm}[h]
     \caption{Child-Parent Cardinality Ratio}
-    \label{alg:cpcr}
+    \label{alg:child-parent-cardinality-ratio}
 \begin{algorithmic}[1]
     \REQUIRE $G$, a graph
     \FOR {cluster $c \in G$}
@@ -279,23 +284,24 @@ the time complexity of scoring each individual point is $\mathcal{O}(1)$.
 
 
 \subsubsection{Stationary Probabilities}
-\label{subsubsec:methods:individual-algorithms:sp}
-We take an induced graph and assign each edge a weight inversely proportional to the distance between the centers of the two clusters that form that edge.
+\label{subsubsec:methods:individual-algorithms:stationary-probabilities}
+We take an induced graph and assign each edge a weight inversely proportional to the distance between the centers of the two clusters that connect to form that edge.
 We compute the transition probability matrix of each component of the graph that contains at least two clusters.
 These probabilities are stochastic over the edge weights for each cluster.
-We then compute successive squares of this matrix.
-This process will eventually converge as long as the graph is connected and aperiodic~\cite{levin2017markov}; we find this convergent matrix.
+This process of successively squaring this matrix will converge so long as the graph is connected~\cite{levin2017markov}.
+We follow this process for each component in the graph and find the convergent matrix.
 Consider the sum of the values along a row in the convergent matrix.
 This is the expected proportion of visits to that cluster during a long random walk over the graph component.
-We can consider this sum to be inversely related to the anomalousness of the corresponding cluster.
-The intuition here is that less-reachable clusters are more likely to represent anomalous points.
-The algorithm is defined in Algorithm~\ref{alg:sp}.
+We consider this sum to be inversely related to the anomalousness of the corresponding cluster.
+
+The intuition here is that clusters that are more difficult to reach during an infinite random walk are more likely to contain anomalous points.
+The algorithm is defined in Algorithm~\ref{alg:stationary-probabilities}.
 Its worst-case time complexity is $\mathcal{O}(|V|^{2.3728596})$ given by the matrix multiplication algorithm from~\cite{alman2021refined}.
-In practice, however, this algorithm performs much better because the induced graphs are often composed of several small components rather than one large component.
+In practice, however, this algorithm has much better performance because the induced graphs are often composed of several small components rather than one, or a few, large component(s).
 
 \begin{algorithm}[h]
     \caption{Stationary Probabilities}
-    \label{alg:sp}
+    \label{alg:stationary-probabilities}
 \begin{algorithmic}[1]
     \REQUIRE $G$, a graph
     \FOR {component $C \in G$}
@@ -313,15 +319,15 @@ In practice, however, this algorithm performs much better because the induced gr
 
 
 \subsubsection{Relative Vertex Degree}
-\label{subsubsec:methods:individual-algorithms:rvd}
-For each cluster in the induced graph, consider the vertex degree, i.e. the number of edges connecting to that vertex, for each cluster in an induced graph.
-We consider the points in a cluster with a high degree to be less anomalous than points in a cluster with low degree.
+\label{subsubsec:methods:individual-algorithms:relative-vertex-degree}
+For each cluster in the induced graph, consider its vertex degree, i.e. the number of edges connecting to that cluster.
+We consider a cluster with a high degree to be less anomalous than a cluster with low degree.
 This is essentially a version of the previous algorithm that ignores edge weights, and may have different biases with regard to the sampling density of the dataset.
-The time complexity is $\mathcal{O}(|V|)$.
+Its time complexity is $\mathcal{O}(|V|)$.
 
 \begin{algorithm}[h]
     \caption{Relative Vertex Degree}
-    \label{alg:rvd}
+    \label{alg:relative-vertex-degree}
 \begin{algorithmic}[1]
     \REQUIRE $G$, a graph
     \FOR {cluster $c \in G$}
