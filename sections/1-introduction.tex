@@ -117,10 +117,9 @@ Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 \label{subsec:introduction:chaoda}
 
 With the term \emph{manifold learning} being largely synonymous with dimension reduction, we propose \emph{manifold mapping} to refer to approaches that study the the geometric and topological properties of manifolds in their original embedding spaces.
-We introduce a novel technique, Clustered Learning of Approximate Manifolds (CLAM) for datasets in Banach space~\cite{banach1929fonctionnelles} defined by a distance metric.
-CLAM presupposes the Manifold Hypothesis and uses a divisive hierarchical clustering to build a map of the manifold occupied by the dataset.
-CLAM then uses this manifold as input to a myriad of anomaly detection algorithms.
-We introduce CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms), an ensemble based on six such algorithms implemented using CLAM.
+We introduce a novel technique, Clustered Learning of Approximate Manifolds (CLAM) for datasets in a Banach space~\cite{banach1929fonctionnelles} defined by a distance metric.
+CLAM presupposes the manifold hypothesis and uses a divisive hierarchical clustering to build a map of the manifold occupied by the dataset.
+CLAM then provides this manifold as input to a collection of anomaly detection algorithms, which we call CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms).
 
 CLAM extends CHESS~\cite{ishaq2019clustered} by adding memoized calculations of several geometric and topological properties of clusters that are useful to CHAODA, and does so in expected $\mathcal{O}(n \lg n)$ time.
 While, in principle, we could have used any hierarchical clustering algorithm, these memoized calculations are not provided for by other clustering algorithms.
@@ -135,8 +134,8 @@ CLAM, however, divisively clusters the data until each cluster contains only one
 Using the cluster-tree, CLAM induces graphs by mapping specific clusters to vertices of a graph, and drawing an edge between any two vertices whose corresponding clusters have overlapping volumes (i.e.\ the sum of their radii is greater than the distance between their centers).
 Clusters can be selected from a fixed depth, or from heterogeneous depths based on properties such as their local fractal dimension, cardinality, radius, etc.
 We can consider clusters at lower depths in the tree to be, in some sense, ``lower resolution'' than those at greater depths.
-Inducing a graph across a variety of depths effectively maps a manifold with a variety of ``resolutions'', the intuition being that some regions of the manifold may have a higher point-density than others and, thus, graphs induced from clusters deeper in the tree may be more informative for those regions.
+Inducing a graph across a variety of depths effectively maps a manifold with a variety of ``resolutions'', the intuition being that some regions of the manifold may have a higher density of points than others and, thus, graphs induced from clusters deeper in the tree may be more informative for those regions.
 
-Having mapped a manifold using the clustering and having induced graphs from the clusters, we can start to analyze several properties of the clusters in the graphs.
+Having mapped a manifold by clustering and inducing graphs, we can start to analyze several properties of the clusters in the graphs.
 For example; what are the relative cardinalities of the clusters in the graph, how connected are the clusters, how often is each cluster visited by a random walk?
 CHAODA uses answers to such questions, among others, to build an ensemble approach to anomaly detection.
