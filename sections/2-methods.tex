@@ -1,5 +1,8 @@
 \section{Methods}
 \label{sec:methods}
+
+
+\subsection{Overview}
 \label{subsec:methods:overview}
 
 Here we provide a brief overview of the several methods described in this manuscript.
@@ -15,8 +18,6 @@ CHAODA relies on an ensemble-learning approach based on six simple heuristics; t
 These distinct heuristics attempt to encompass distinct notions of what make a datapoint anomalous: is it truly isolated, or is the distribution of datapoints multi-modal, or is it very low-dimensional despite being embedded in a high-dimensional space?
 
 In all, CLAM builds on a clustering algorithm originally developed for a different purpose (accelerated approximate search) and uses a novel graph-inference approach to enable several anomaly-detection heuristics that are effective in practice.
-
-
 
 \begin{figure*}[ht!]
     \centering
@@ -39,6 +40,7 @@ The distance function may or may not obey the triangle inequality.
 In this paper we used $L1$-norm and $L2$-norm, which are metrics;
 however, CLAM and CHAODA are general over any distance function that obeys these properties.
 We provide proofs of the complexity of each algorithm in the Supplement.
+
 
 \subsubsection{Clustering}
 \label{subsubsec:methods:clam:clustering}
@@ -89,8 +91,10 @@ Thus, this measure captures the ``spread'' of datapoints on the manifold in comp
 We can also consider individual \textit{parent-child ratios} of cardinality, radius, and local fractal dimension, as well as the \textit{exponential moving averages} of those parent-child ratios along a branch of the tree.
 In particular, we use the parent-child ratios and the exponential moving averages of those ratios to generalize our method from a small set of training datasets to a large, distinct set of testing datasets.
 
+
 \subsubsection{Graphs}
 \label{subsubsec:methods:clam:graphs}
+
 Clusters that are close in the embedding space sometimes have overlapping volumes; i.e.,\ the distance between their centers is less than or equal to the sum of their radii.
 We define a graph $G=(V,E)$ with the selected clusters in one-to-one correspondence to vertices and with an edge between two vertices if and only if their clusters overlap.
 While it is fairly standard in the literature to define graphs using this geometric property of overlapping volumes, the challenge is in selecting the right clusters to build useful graphs.
@@ -106,6 +110,7 @@ A corollary to this invariant is that a graph will never contain two vertices su
 A graph can be built from clusters at a fixed depth in the cluster-tree (a layer-graph), or from clusters from multiple different depths in the tree (an optimal-graph).
 This graph need not be fully connected, and in practice often contains many small, disjoint connected components.
 In this work we consider the cardinality of a graph to be \textit{vertex cardinality}; i.e.,\ the number of vertices (clusters) in the graph.
+
 
 \subsubsection{The Manifold}
 \label{subsubsec:methods:clam:the-manifold}
@@ -176,6 +181,7 @@ In the following, $scores$ is a dictionary of clusters and their outlier scores,
 $V$ and $E$ are the sets of clusters and edges in a graph, respectively, and $|c|$ is
 the cardinality of a cluster $c$, the number of points in that cluster.
 
+
 \subsubsection{Relative Cluster Cardinality}
 We measure the anomalousness of a point by the cardinality of the cluster that the point belongs to relative to the cardinalities of the other clusters.
 Points in the same cluster are considered equally anomalous and points in clusters with lower cardinalities are considered more anomalous than points in clusters with higher cardinalities.
@@ -192,6 +198,7 @@ The time complexity is $\mathcal{O}(|V|)$.
     \ENDFOR
 \end{algorithmic}
 \end{algorithm}
+
 
 \subsubsection{Relative Component Cardinality}
 We use the usual definition of connected components:
@@ -214,6 +221,7 @@ This algorithm first finds the components of the graph, so its time complexity i
     \ENDFOR
 \end{algorithmic}
 \end{algorithm}
+
 
 \subsubsection{Graph Neighborhood}
 Given the graph with clusters and edges, we consider the number of clusters reachable from a starting cluster within a given graph distance $k$.
@@ -240,6 +248,7 @@ This algorithm is dominated by computing the eccentricity of each cluster, so it
 \end{algorithmic}
 \end{algorithm}
 
+
 \subsubsection{Child-Parent Cardinality Ratio}
 \label{subsubsec:methods:individual-algorithms:cpcr}
 As described in Section~\ref{subsubsec:methods:clam:clustering}, the partition algorithm used in clustering splits a cluster into two children.
@@ -263,6 +272,7 @@ the time complexity of scoring each individual point is $\mathcal{O}(1)$.
     \ENDFOR
 \end{algorithmic}
 \end{algorithm}
+
 
 \subsubsection{Stationary Probabilities}
 \label{subsubsec:methods:individual-algorithms:sp}
@@ -296,6 +306,7 @@ In practice, however, this algorithm performs much better because the induced gr
     \ENDFOR
 \end{algorithmic}
 \end{algorithm}
+
 
 \subsubsection{Relative Vertex Degree}
 \label{subsubsec:methods:individual-algorithms:rvd}
@@ -354,8 +365,6 @@ We present these results in Table~\ref{table:results:test-performance} under the
 CHAODA-fast exhibits comparable performance to CHAODA, so we set CHAODA-fast as the default in our implementation.
 All benchmarks were conducted on a 28-core Intel Xeon E5-2690 v4 2.60GHz, 512GB RAM and CentOS 7 Linux with kernel 3.10.0-1127.13.1.el7.x86\_64 \#1 SMP and Python 3.6.8.
 
-
 CHAODA, being an unsupervised algorithm, is only compared against other unsupervised algorithms.
 We compared against $18$ unsupervised algorithms collected in the pyOD suite~\cite{zhao2019pyod} and Scikit-Learn~\cite{pedregosa2011scikit}, as well as RS-Hash~\cite{sathe2016subspace}.
 A supervised version of CHAODA is possible future work which will open up comparisons against supervised or weakly-supervised methods such as DAGMM~\cite{zong2018deep}.
-
