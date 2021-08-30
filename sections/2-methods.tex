@@ -185,7 +185,7 @@ These scores are internally consistent for each individual algorithm, i.e.\ low 
 However, different algorithms assign scores in wide, and often different, ranges of values.
 We use gaussian normalization to constrain the raw scores to a $[0, 1]$ range.
 This lets us combine scores into an ensemble (see Section~\ref{subsec:methods:the-ensemble}).
-See~\cite{kriegel2011interpreting} for a more thorough discussion of anomaly-score normalization in ensemble methods.
+See~\cite{kriegel2011interpreting} for a thorough discussion of anomaly-score normalization in ensemble methods.
 
 \subsubsection{Relative Cluster Cardinality}
 \label{subsubsec:methods:individual-algorithms:relative-cluster-cardinality}
@@ -294,13 +294,42 @@ Formally, $\forall c \in G, \score(c) = -\deg(c)$.
 Its time complexity is $\mathcal{O}(|V|)$.
 
 
-\subsection{Cluster Selection for Graphs}
-\label{subsec:methods:cluster-selection-for-graphs}
-TODO
-
 \subsection{Training Meta-ML Models}
 \label{subsec:methods:training-meta-ml-models}
 TODO
+
+
+\subsection{Cluster Selection for Graphs}
+\label{subsec:methods:cluster-selection-for-graphs}
+
+The heart of the problem with CHAODA is in selecting the "right" clusters that would build a graph that provides a useful representation of the underlying manifold.
+One could try every possible combination of clusters to build graphs but this quickly leads to combinatorial explosion.
+Instead, CHAODA focuses on intelligently selecting clusters for a graph which is expected to perform well for anomaly detection.
+Area under the curve (AUC) of the receiver operating characteristic (ROC) is often used to benchmark anomaly detectors.
+CHAODA selects clusters to optimize for this measure.
+
+Specifically, we train a number of meta-ml models (see Section~\ref{subsec:methods:training-meta-ml-models} for details) and, from each model, we extract a function of the form $g : c \rightarrow \mathbb{R}$.
+This function assigns high values to clusters which would increase ROC-AUC and low values to clusters which would decrease ROC-AUC.
+As described in Algorithm~\ref{alg:cluster-selection}, the selection process begins by sorting, in non-increasing order, all clusters in the tree by the value assigned by $g$.
+This sorting represents a ranking of clusters for expected anomaly detection performance.
+We iteratively select the best cluster from the ranking and with each selection, we remove the ancestors and descendants of the selected cluster for the list of rankings.
+Once the list of ranking is exhausted, we have selected the clusters to build an \textit{optimal graph}.
+
+\begin{algorithm}[h]
+    \caption{Cluster Selection}
+    \label{alg:cluster-selection}
+\begin{algorithmic}[1]
+    \REQUIRE $T$, a cluster-tree
+    \REQUIRE $g : c \rightarrow \mathbb{R}$ a ranking function
+    \STATE $G \gets$ an empty graph
+    \STATE $h \gets$ a list of all clusters $c \in T$ sorted by $g(c)$
+    \REPEAT
+        \STATE $c \gets$ pop\_first($h$)
+        \STATE Add $c$ to $G$
+        \STATE Remove all ancestors and descendants of $c$ from $h$
+    \UNTIL $h$ is empty
+\end{algorithmic}
+\end{algorithm}
 
 
 \subsection{The Ensemble}
