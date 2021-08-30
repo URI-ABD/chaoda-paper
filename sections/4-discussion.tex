@@ -44,7 +44,7 @@ In real-world usage, one might wish to assign anomaly scores to incoming, stream
 This is a simple extension: given some corpus of data (some of which may or may not be anomalous), build a CLAM tree and the induced graph, and assign anomaly scores from the CHAODA algorithms as we have demonstrated.
 Then, as each new datum arrives, simply fit it into the CLAM tree ($\mathcal{O}(\lg n)$ time) into an existing cluster and assign it the anomaly score for that cluster.
 If an incoming datum is too far from any cluster (further than any existing datum at that depth from its cluster center) then it can initialize a new cluster, which would have a high anomaly score.
-Thus, in general, CHAODA requires $\mathcal{O}(\lg n)$ to assign an anomaly score to a new datum.
+Thus, in general, CHAODA requires $\mathcal{O}(\lg n)$ time to assign an anomaly score to a new datum.
 
 % TODO new whole paragraph discussing suitability to large, HD datasets.
 
