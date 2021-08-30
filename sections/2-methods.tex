@@ -14,6 +14,18 @@ CHAODA applies its constituent algorithms to these graphs, and combines the indi
 See Figure~\ref{fig:methods:chaoda-workflow} for a high-level illustration.
 
 
+\begin{figure*}[ht!]
+    \centering
+    \includegraphics[width=6in]{images/chaoda-workflow.pdf}
+    \caption{\textbf{Overview of the CHAODA workflow.}
+        Beginning with a dataset and a distance metric, CLAM builds a cluster tree and induces several graphs from this tree; for the sake of simplicity, we illustrate only one such graph here.
+        Each of CHAODA's constituent algorithms provides distinct anomaly scores on its graph.
+        These scores are normalized and aggregated into a final score for each cluster, and by extension, each datum.
+        In this figure, we have simplified the scores to a ternary color scheme; actual scores are real-valued between 0 and 1.
+        Note that each algorithm provides its own scoring, but there may be similarities such as between vertex degree and stationary distribution.}
+    \label{fig:methods:chaoda-workflow}
+\end{figure*}
+
 \subsection{Dataset and Distance Function}
 \label{subsec:methods:dataset-and-distance-function}
 
@@ -79,29 +91,10 @@ as given by:
 
 where $B_X(c,r)$ is the set of points contained in a ball of radius $r$ on the dataset $X$ centered on a point $c$~\cite{ishaq2019clustered}.
 Thus, local fractal dimension captures the ``spread'' of points on the manifold in comparison to the (typically much larger) embedding space.
-This is motivated by the idea that the induced graphs will learn to adapt to use different ``resolutions'' to characterize different regions of the manifold.
-% might want to reference "chicken's foot" figure here
+This is motivated by the idea that the induced graphs will learn to adapt to use different ``resolutions'' to characterize different regions of the manifold (see Figure~\ref{fig:methods:cluster-resolution}.
 
-\begin{figure}[ht!]
-    \centering
-    \includegraphics[width=2.5in]{images/cluster-resolution.pdf}\\
-    \vspace{1cm}
-    \includegraphics[width=2.5in]{images/cluster-resolution-graph.pdf}
-    \caption{
-        \textbf{Cluster resolution.}
-        Consider this toy dataset whose manifold comprises the four named branches.
-        With each branch, we show clusters that we might get from different depths in the tree.
-        Clusters on branches A and B come from low depths in the tree and have large voids, i.e.\ regions with no points in them.
-        Note that a graph induced from these clusters would not represent the structure of the two distinct branches.
-        Clusters on branch D come from a high depth in the tree and are, in a sense, too small for the ``thickness'' of the branch they cover.
-        Note that a graph induced from these clusters would consist of many disconnected subgraphs, and would not represent the structure of the entire branch.
-        Clusters on branch C are ``just right'' because their diameters are roughly equal to the thickness of the branch and they contain no large voids.
-        Note that a graph induced from these clusters would represent the structure of this branch.
-        We can track how the local fractal dimension of these clusters changes as we traverse the tree and as we move along clusters that are adjacent on the manifold.
-        In this way, changes in the local fractal dimension can serve as a proxy for deciding which clusters would help ``well characterize'' the underlying manifold.
-    }
-    \label{fig:methods:cluster-resolution}
-\end{figure}
+
+
 
 We can also consider \textit{child-parent ratios} of the cardinality, radius, and local fractal dimension of a cluster, as well as the \textit{exponential moving averages} of those child-parent ratios along a branch of the tree.
 In particular, we use the child-parent ratios and their exponential moving averages generalize CHAODA from a small set of training datasets to a large, distinct set of testing datasets.
@@ -122,26 +115,9 @@ By \textit{graph cardinality} we mean \textit{vertex cardinality}; i.e.,\ the nu
 Note that \textit{cluster cardinality} refers to the number of points within a cluster.
 We use \textit{layer-graph} to refer to a graph built from clusters at a fixed depth from the tree and \textit{optimal-graph} to refer to a graph built from clusters selected by the processes described in Section~\ref{subsec:methods:cluster-selection-for-graphs}.
 
-Figure~\ref{fig:methods:graph-generation} illustrates how CLAM induces a graph from non-uniform depths in a cluster tree.
+Figure~\ref{fig:methods:graph-generation} illustrates how CLAM induces a graph from non-uniform depths in a cluster tree, while Figure~\ref{fig:methods:cluster-resolution} illustrates how, if clusters are chosen at the right ``resolution,'' these graphs can capture the structure of the manifold.
 Interestingly, the clusters are not necessarily hyperspheres, but polytopes akin to a high-dimensional Voronoi diagram~\cite{voronoi1908nouvelles}.
 The induced graph need not be fully connected and, in practice, often contains many small, disjoint connected components.
-
-For our purposes, a CLAM graph exhibits an important invariant.
-The clusters corresponding to vertices in the graph collectively contain every point in the dataset and each point in the dataset is contained in, i.e.\ assigned to, exactly one cluster in the graph.
-A corollary to this invariant is that a graph will never contain two clusters such that one cluster is an ancestor or descendant of another cluster.
-This also assures that a \textit{graph's population} is equal to the cardinality of the dataset, i.e. $|\textbf{X}|$ or $n$.
-
-\begin{figure*}[ht!]
-    \centering
-    \includegraphics[width=6in]{images/chaoda-workflow.pdf}
-    \caption{\textbf{Overview of the CHAODA workflow.}
-        Beginning with a dataset and a distance metric, CLAM builds a cluster tree and induces several graphs from this tree; for the sake of simplicity, we illustrate only one such graph here.
-        Each of CHAODA's constituent algorithms provides distinct anomaly scores on its graph.
-        These scores are normalized and aggregated into a final score for each cluster, and by extension, each datum.
-        In this figure, we have simplified the scores to a ternary color scheme; actual scores are real-valued between 0 and 1.
-        Note that each algorithm provides its own scoring, but there may be similarities such as between vertex degree and stationary distribution.}
-    \label{fig:methods:chaoda-workflow}
-\end{figure*}
 
 \begin{figure}[ht!]
     \centering
@@ -153,6 +129,40 @@ This also assures that a \textit{graph's population} is equal to the cardinality
         Gray arrows point to the induced graph components, which are indicated in blue below the horizontal line.}
     \label{fig:methods:graph-generation}
 \end{figure}
+
+For our purposes, a CLAM graph exhibits an important invariant.
+The clusters corresponding to vertices in the graph collectively contain every point in the dataset and each point in the dataset is contained in, i.e.\ assigned to, exactly one cluster in the graph.
+A corollary to this invariant is that a graph will never contain two clusters such that one cluster is an ancestor or descendant of another cluster.
+This also assures that a \textit{graph's population} is equal to the cardinality of the dataset, i.e. $|\textbf{X}|$ or $n$.
+
+
+
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=2.5in]{images/cluster-resolution.pdf}\\
+    \vspace{1cm}
+    \includegraphics[width=2.5in]{images/cluster-resolution-graph.pdf}
+    \caption{
+        \textbf{Cluster resolution.}
+        Consider this toy dataset whose manifold comprises the four named branches.
+        In the top part of the figure, with each branch, we show clusters that we might get from different depths in the tree.
+        Clusters on branches A and B come from low depths in the tree and have large voids, i.e.\ regions with no points in them.
+        Clusters on branch D come from a high depth in the tree and are, in a sense, too small for the ``thickness'' of the branch they cover.
+        Clusters on branch C are ``just right'' because their diameters are roughly equal to the thickness of the branch and they contain no large voids.
+        We can track how the local fractal dimension of these clusters changes as we traverse the tree and as we move along clusters that are adjacent on the manifold.
+        In this way, changes in the local fractal dimension can serve as a proxy for deciding which clusters would help ``well characterize'' the underlying manifold.
+        In the bottom part of the figure, we show the graphs CLAM would induce from these different clusters.
+        Note that branches A and B are not distinguished; the separation between the branches is lost in the graph representation.
+        A graph induced from branch D would consist of many disconnected subgraphs, and would not represent the structure of the entire branch.
+        Finally, a graph induced from branch C represents the branch structure, including its connection to branches A and B.
+    }
+    \label{fig:methods:cluster-resolution}
+\end{figure}
+
+
+
+
 
 
 \subsection{Individual Algorithms}
