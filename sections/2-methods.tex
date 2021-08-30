@@ -131,38 +131,59 @@ This also assures that \textit{graph population} is equal to the cardinality of 
 \end{figure*}
 
 
-% \subsection{Induced Graphs}
-% \label{subsec:methods:induced-graphs}
+% \subsection{Ensemble}
+% \label{subsec:methods:ensemble}
 
-% The heart of the problem with CHAODA is building the right graph(s) to represent the underlying manifold.
-% One could try using every possible combination of clusters to form every possible graph but this leads to combinatorial explosion.
-% Instead, we must intelligently select those clusters that build a graph which will perform well for anomaly detection.
+% Given a dataset and a list of distance functions for the dataset, we start by building a CLAM tree for each distance function on the dataset.
+% We extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
+% Given the set of meta-ml models learned from the training datasets as described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster.
+% The highest ranked clusters from each tree are then used to build a graph.
+% This gives us one graph for each combination of meta-ML model and distance function used.
+% We apply each of the six methods described in~\ref{subsec:methods:individual-algorithms} on each such graph.
+% With two meta-ML models (linear regression and regression trees) and two distance metrics ($L1$-norm and $L2$-norm), we have $24$ anomaly scores for each point in the dataset.
+% These scores are then combined into an ensemble by simply taking the mean of all scores for each point.
+% We present the AUC-ROC from this ensemble in Section~\ref{sec:results}.
 
-% Area under the curve (AUC) of the receiver operating characteristic (ROC) is often used to measure the performance of anomaly detectors;
-% we wish to choose clusters that are expected to maximize this measure.
-% We use the definition of AUC-ROC based on CHAODA being an \emph{unsupervised} model where ground truth can be examined post-hoc from the datasets; a score is given to every point, and the AUC is computed in the usual fashion~\cite{fawcett2006introduction}.
+% % The individual algorithms described in~\ref{subsec:methods:individual-algorithms} produce outlier scores for each cluster, rather than for each point.
+% % We remedy this by assigning to each point the score of the cluster to which it belongs.
+% % Since our graphs guarantee that each point is in exactly one cluster and that every point from the dataset is accounted for, this assigns an outlier score to each point in a dataset.
+% Our individual methods produce scores with a wide range of values.
+% The only common feature among these scores is that low scores correspond to inliers and high scores correspond to outliers.
+% Therefore, we cannot directly compare scores across methods, which we need to be able to do for a functional ensemble.
+% Thus, we normalize the scores to the range $[0, 1]$, using gaussian normalization~\cite{kriegel2011interpreting}.
+% We include sigmoid and min-max normalization as options in our implementation.
+
+
+% \subsection{Datasets}
+% \label{subsec:methods:datasets}
+
+% We sourced 24 datasets containing only numerical features from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}.
+% All of these datasets were adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and were standardized by ODDS for benchmarks on anomaly and outlier detection.
+% Note that CHAODA is able to handle entirely-categorical datasets, but not mixed datasets.
+
+% We randomly select six datasets to train CHAODA: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
+% We benchmarked CHAODA 30 times on the test datasets, with different random seeds.
+% We provide more details on the datasets in the Supplement.
+% During testing, we noticed that even though we often see $|V| \ll n $, the graph neighborhood size and stationary probabilities methods from~\ref{subsec:methods:individual-algorithms} were prohibitive, so we only run them when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
+% We present these results in Table~\ref{table:results:test-performance} under the CHAODA-fast and CHAODA rows.
+% CHAODA-fast exhibits comparable performance to CHAODA, so we set CHAODA-fast as the default in our implementation.
+% All benchmarks were conducted on a 28-core Intel Xeon E5-2690 v4 2.60GHz, 512GB RAM and CentOS 7 Linux with kernel 3.10.0-1127.13.1.el7.x86\_64 \#1 SMP and Python 3.6.8.
+
+% CHAODA, being an unsupervised algorithm, is only compared against other unsupervised algorithms.
+% We compared against $18$ unsupervised algorithms collected in the pyOD suite~\cite{zhao2019pyod} and Scikit-Learn~\cite{pedregosa2011scikit}, as well as RS-Hash~\cite{sathe2016subspace}.
+% A supervised version of CHAODA is possible future work which will open up comparisons against supervised or weakly-supervised methods such as DAGMM~\cite{zong2018deep}.
+
+
+% \subsection{Notes}
+% \label{subsec:methods:notes}
+
+% % From intro:our-approach
+% The space may also be defined by a distance \textit{function} that does not obey the triangle inequality, though we have not explored what difficulties this might introduce.
+
+% % From methods:induced-graphs
 % The ground-truth labels are only used during training for the training set of datasets, while the ground-truth for the test set of datasets is used purely for post-hoc performance calculations.
 % Thus, CHAODA is supervised only in the sense of learning where to build a graph on training datasets, but unsupervised on any new (e.g. test) datasets.
 
-% We find the ``right graphs'' by learning a function that takes the parent-child ratios of cardinality, radius and local fractal dimension and the exponential moving averages (from the root to the cluster) of these ratios for a cluster and predicts the contribution to AUC-ROC of selecting that cluster for the graph.
-% We thus need to learn a function of the form $f: \mathbb{R}^6 \mapsto \mathbb{R}^+$ that takes these six ratios learn the AUC from the scores assigned to points in the corresponding cluster.
-% By using these parent-child ratios and exponential moving averages thereof, we gain some agnosticity to dataset-specific properties and instead learn geometric and topological properties that generalize over datasets in Banach Spaces that obey the Manifold Hypothesis.
-% This is essentially transfer learning: we will learn such functions from a set of datasets \emph{completely distinct from} the set of datasets we use for benchmarking.
-% We are effectively learning a set of criteria that can enable selection of a useful depth (perhaps not truly optimal), varying along the cluster tree, with regards to anomaly detection.
-
-% We choose a linear regression model and a regression tree model to fill this role.
-% Such models require training data.
-% To generate this data, we take a random sample from the datasets described in Section~\ref{subsec:methods:datasets}, choosing six datasets at random with between 1,000 and 100,000 points.
-% We generate a clustering for each dataset, and start by inducing several uniform-depth (layer) graphs from the tree.
-% We apply each individual algorithm described in Section~\ref{subsec:methods:individual-algorithms} to each such graph and, using the labels, we calculate the AUC over the subset of points in each cluster.
-% We use that AUC as the training target for our meta-ml models.
-% The corresponding feature vector is, as stated earlier, the six-element vector of the parent-child ratios and their exponential moving averages.
-% This concludes the first epoch of training and gives us a set of trained meta-ml models.
-% For each subsequent epoch of training, we use the meta-ml models from the previous epoch to rank the clusters in each tree (corresponding to each training dataset) and select graphs that perform better, as measured by AUC-ROC, for anomaly detection.
-% Each epoch, thus, iteratively improves the meta-ml models used to select graphs and each newly selected graph produces better data for the meta-ml models to be used in the next epoch.
-
-% Once we are satisfied with the performance of our meta-ml models on the set of training datasets, we freeze the meta-ml models and use them to select graphs for the test set of datasets.
-% Since the ratios used to train and predict from these meta-ml models are agnostic to dataset specific properties such as cardinality and dimensionality, the trained models transfer from the training set of datasets to the \textit{completely distinct} test set of datasets.
 
 \begin{figure}[ht!]
     \centering
@@ -182,6 +203,7 @@ This also assures that \textit{graph population} is equal to the cardinality of 
 Having induced several graphs to characterize a manifold, we must extract information about the anomalousness of clusters in those graphs.
 Here we describe six simple algorithms for anomaly detection, each using a CLAM graph to calculate an anomalousness score for each cluster and datum.
 Given that the key to an effective ensemble is that each member contributes a unique inductive bias~\cite{chen2017outlier}, we also note the intuition behind each algorithm's contributions.
+These scores can be used, along with the ground-truth labels, to compute the area under the curve (AUC) of the receiver operating characteristic (ROC)~\cite{fawcett2006introduction} to measure the anomaly detection performance of graph which produced those scores.
 
 In the following,
 $V$ and $E$ are the sets of clusters and edges respectively in a graph,
@@ -304,7 +326,31 @@ Its time complexity is $\mathcal{O}(|V|)$.
 
 \subsection{Training Meta-ML Models}
 \label{subsec:methods:training-meta-ml-models}
-TODO
+
+Section~\ref{subsec:methods:clustering} makes note of three important geometric and topological properties of CLAM clusters, i.e.\ cardinality, radius and local fractal dimension.
+We take the child-parent ratios of these properties and the exponential moving averages of these ratios along each branch in the tree.
+Using these ratios instead of the raw values themselves lets CHAODA be agnostic to dataset-specific properties and, instead, only consider how those properties change as we traverse the tree.
+For a given graph, we can take the average values of the six ratios from its constituent clusters to form a feature-vector.
+We can use the methods described in Section~\ref{subsec:methods:individual-algorithms} to compute the ROC-AUC of using each individual algorithm to predict anomalousness scores from that graph.
+Each pairing of the feature-vector and an AUC score forms a training sample for our meta-ml models.
+We use linear regression and decision-tree regressors to fill the role of those meta-ml models.
+We use these data to train the meta-ml models to predict the ROC-AUC score for a graph from its feature-vector.
+
+We randomly selected six datasets whose cardinality is between $10^3$ and $10^5$ for training and we used the $L1$-norm and $L2$-norm for each dataset.
+For each pairing of dataset and distance function, CLAM builds a new cluster-tree.
+Meta-ml training then proceeds over several epochs, the first of which we seed with some layer graphs from each tree.
+During each epoch, we extract the feature vector from each graph, and we find the ROC-AUC from applying each individual algorithm to each graph.
+Each pairing of feature-vector and AUC score forms a training sample.
+For each pairing of dataset and distance function, we initialize a linear regressor and a decision-tree regressor to form our suite of meta-ml models.
+We train each meta-ml model with every training sample collected thus far.
+We use the trained meta-ml models to select clusters (see Section~\ref{subsec:methods:cluster-selection-for-graphs}) for new graphs that are used for the next epoch.
+
+During the earlier epochs, we expect to have selected graphs which exhibit poor anomaly detection performance, as measured by ROC-AUC.
+For later epochs, we expect this performance to improve.
+With each epoch, we add to the training data being used and we train a new suite of meta-ml models for selecting better clusters.
+This is so that the meta-ml models can learn to distinguish between cluster ratios that select for low ROC-AUC from those ratios that select for high ROC-AUC.
+Each meta-ml model sees training data from each pairing of dataset and distance function.
+This lets CHAODA generalize across different datasets and distance functions.
 
 
 \subsection{Cluster Selection for Graphs}
@@ -313,7 +359,7 @@ TODO
 The heart of the problem with CHAODA is in selecting the ``right'' clusters that would build a graph that provides a useful representation of the underlying manifold.
 One could try every possible combination of clusters to build graphs but this quickly leads to combinatorial explosion.
 Instead, CHAODA focuses on intelligently selecting clusters for a graph which is expected to perform well for anomaly detection.
-Area under the curve (AUC) of the receiver operating characteristic (ROC) is often used to benchmark anomaly detectors.
+Area under the curve (AUC) of the receiver operating characteristic (ROC) is often used to benchmark anomaly detectors~\cite{fawcett2006introduction}.
 CHAODA selects clusters to optimize for this measure.
 
 \begin{figure}[ht!]
@@ -327,9 +373,9 @@ CHAODA selects clusters to optimize for this measure.
 Specifically, we train a number of meta-ml models (see Section~\ref{subsec:methods:training-meta-ml-models} for details) and, from each model, we extract a function of the form $g : c \rightarrow \mathbb{R}$.
 This function assigns high values to clusters which would increase ROC-AUC and low values to clusters which would decrease ROC-AUC.
 As described in Algorithm~\ref{alg:cluster-selection}, the selection process begins by sorting, in non-increasing order, all clusters in the tree by the value assigned by $g$.
-This sorting represents a ranking of clusters for expected anomaly detection performance.
-We iteratively select the best cluster from the ranking and with each selection, we remove the ancestors and descendants of the selected cluster for the list of rankings.
-Once the list of ranking is exhausted, we have selected the clusters to build an \textit{optimal graph}.
+This sorting represents a ranking of the clusters for expected anomaly detection performance.
+We iteratively select the best cluster from the ranking and with each selection, we remove the ancestors and descendants of the selected cluster from the list of rankings.
+Once the list of rankings is exhausted, we have selected the clusters with which to build an \textit{optimal graph}.
 
 \begin{algorithm}[h]
     \caption{Cluster Selection}
@@ -356,54 +402,3 @@ TODO
 \subsection{Datasets and Comparisons}
 \label{subsec:methods:datasets-and-comparisons}
 TODO
-
-
-% \subsection{Ensemble}
-% \label{subsec:methods:ensemble}
-
-% Given a dataset and a list of distance functions for the dataset, we start by building a CLAM tree for each distance function on the dataset.
-% We extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
-% Given the set of meta-ml models learned from the training datasets as described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster.
-% The highest ranked clusters from each tree are then used to build a graph.
-% This gives us one graph for each combination of meta-ML model and distance function used.
-% We apply each of the six methods described in~\ref{subsec:methods:individual-algorithms} on each such graph.
-% With two meta-ML models (linear regression and regression trees) and two distance metrics ($L1$-norm and $L2$-norm), we have $24$ anomaly scores for each point in the dataset.
-% These scores are then combined into an ensemble by simply taking the mean of all scores for each point.
-% We present the AUC-ROC from this ensemble in Section~\ref{sec:results}.
-
-% % The individual algorithms described in~\ref{subsec:methods:individual-algorithms} produce outlier scores for each cluster, rather than for each point.
-% % We remedy this by assigning to each point the score of the cluster to which it belongs.
-% % Since our graphs guarantee that each point is in exactly one cluster and that every point from the dataset is accounted for, this assigns an outlier score to each point in a dataset.
-% Our individual methods produce scores with a wide range of values.
-% The only common feature among these scores is that low scores correspond to inliers and high scores correspond to outliers.
-% Therefore, we cannot directly compare scores across methods, which we need to be able to do for a functional ensemble.
-% Thus, we normalize the scores to the range $[0, 1]$, using gaussian normalization~\cite{kriegel2011interpreting}.
-% We include sigmoid and min-max normalization as options in our implementation.
-
-
-% \subsection{Datasets}
-% \label{subsec:methods:datasets}
-
-% We sourced 24 datasets containing only numerical features from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}.
-% All of these datasets were adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and were standardized by ODDS for benchmarks on anomaly and outlier detection.
-% Note that CHAODA is able to handle entirely-categorical datasets, but not mixed datasets.
-
-% We randomly select six datasets to train CHAODA: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
-% We benchmarked CHAODA 30 times on the test datasets, with different random seeds.
-% We provide more details on the datasets in the Supplement.
-% During testing, we noticed that even though we often see $|V| \ll n $, the graph neighborhood size and stationary probabilities methods from~\ref{subsec:methods:individual-algorithms} were prohibitive, so we only run them when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
-% We present these results in Table~\ref{table:results:test-performance} under the CHAODA-fast and CHAODA rows.
-% CHAODA-fast exhibits comparable performance to CHAODA, so we set CHAODA-fast as the default in our implementation.
-% All benchmarks were conducted on a 28-core Intel Xeon E5-2690 v4 2.60GHz, 512GB RAM and CentOS 7 Linux with kernel 3.10.0-1127.13.1.el7.x86\_64 \#1 SMP and Python 3.6.8.
-
-% CHAODA, being an unsupervised algorithm, is only compared against other unsupervised algorithms.
-% We compared against $18$ unsupervised algorithms collected in the pyOD suite~\cite{zhao2019pyod} and Scikit-Learn~\cite{pedregosa2011scikit}, as well as RS-Hash~\cite{sathe2016subspace}.
-% A supervised version of CHAODA is possible future work which will open up comparisons against supervised or weakly-supervised methods such as DAGMM~\cite{zong2018deep}.
-
-
-% \subsection{Notes}
-% \label{subsec:methods:notes}
-
-% % From intro:our-approach
-% The space may also be defined by a distance \textit{function} that does not obey the triangle inequality, though we have not explored what difficulties this might introduce.
-
