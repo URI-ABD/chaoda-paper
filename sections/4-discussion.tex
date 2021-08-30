@@ -6,15 +6,21 @@ We have presented CHAODA, an ensemble of six algorithms that use the map of the 
 The six individual algorithms are simple to implement on top of CLAM and, when combined into an ensemble, often outperform state-of-the-art methods.
 In future work, new ideas for additional algorithms that contribute novel inductive biases can be easily incorporated into CHAODA.
 
+While the meta-ml models in CHAODA optimize for the best ROC-AUC scores for anomaly detection, this approach can be used to optimize for any measure on any type of task.
+Future work should explore tasks other then anomaly detection and come up with mathematical measures for performance on those tasks.
+Variants of CHAODA could then be trained for such tasks.
+
 CLAM uses the geometric and topological properties such as fractal dimension of the data to build a map of the low-dimensional manifold that the data occupy.
-CLAM is inspired by the clustering algorithm from CHESS~\cite{ishaq2019clustered} but differs by the introduction a novel graph-induction approach and a notion of optimal depths, learned via a form of ``meta-machine-learning'' and transfer learning.
-While the standard approach in machine learning is to split a single dataset into many folds, CLAM and CHAODA are unusual in that they learn geometric and topological properties for inducing a graph from a \emph{set} of training datasets, and \emph{transfer} that knowledge to entirely different datasets.
-CLAM's selection of ``poles'' (i.e. a pair of well-separated points) for partitioning clusters is also more efficient than CHESS.
+CLAM extends CHESS~\cite{ishaq2019clustered} by:
+a better selection of ``poles'' (i.e. a pair of well-separated points) for partitioning clusters,
+by memoizing important cluster properties, and
+by introducing a novel graph-induction approach and a notion of optimal depths, learned via a form of ``meta-machine-learning'' and transfer learning.
+While the standard approach in machine learning is to split a single dataset into many folds, CLAM and CHAODA are unusual in that they learn geometric and topological properties for inducing graphs from a \emph{set} of training datasets, and \emph{transfer} that knowledge to entirely different datasets.
 Whereas CHESS was developed specifically for accelerating search,
-CHAODA uses this manifold-mapping framework to discover properties of the manifold for anomaly and outlier detection.
+CHAODA uses this manifold-mapping framework to discover properties of the manifold that are useful for anomaly detection.
 Intuitively, we expect CHAODA to perform particularly well when the data lie on an ``interesting'' manifold, and to perform merely average when the data derive from an easily-described distribution (or ``boring'' manifold).
 Just as CHESS demonstrated an acceleration of search when the data exhibited \emph{low fractal dimension} and \emph{low metric entropy}, with CHAODA, we see that AUC scores are vastly improved when the data exhibit these properties and often competitive when the data do not exhibit these properties.
-We believe that CLAM is free of hyperparameters; the weights learned from the meta-ML step could vary, but we learned them once on a distinct training set.
+CLAM is free of hyperparameters; the weights learned from the meta-ML step could vary, but we learned them once on a distinct training set of datasets.
 
 We should note the Vertebral Column (Vert.) dataset.
 Most tested algorithms perform similarly to random guessing, while CHAODA performs much worse.
@@ -24,8 +30,7 @@ This dataset contains 210 instances of the Abnormal class treated as inliers and
 Each attribute has a narrow range to be in the Normal class but can have a wider range in the Abnormal class.
 This causes the Normal instances to group together, while Abnormal instances remain distant from each other.
 Since CHAODA relies on clusters as the substrate, it assigns low scores to instances in the Normal class, i.e.\ the outliers, and high scores to those in the Abnormal class, i.e.\ the inliers.
-Put plainly, CHAODA sees the manifold as the Normal class, which the dataset labels as outliers.
-This curiosity could be remedied by a supervised version of CHAODA.
+Put plainly, CHAODA sees the manifold as the Normal class, which the ground-truth labels as outliers.
 
 The choice of distance function could significantly impact anomaly-detection performance.
 In this case, domain knowledge is likely the best way to determine the distance function of choice.
