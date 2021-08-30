@@ -123,7 +123,7 @@ CLAM then provides this map of the manifold to be used by a collection of anomal
 
 CLAM extends CHESS~\cite{ishaq2019clustered} by adding memoized calculations of several geometric and topological properties of clusters that are useful to CHAODA, and does so in expected $\mathcal{O}(n \lg n)$ time.
 While, in principle, we could have used any hierarchical clustering algorithm, these memoized calculations are not provided for by any other algorithm.
-Other clustering algorithms also suffer from problems such as:
+Other clustering algorithms also suffer from problems, such as:
 an ineffective treatment of high dimensionality,
 an inability to interpret results, and
 an inability to scale to exponentially-growing datasets~\cite{agrawal1998automatic}.
@@ -132,11 +132,11 @@ Thus, CLAM and CHAODA are well-suited to anomaly detection on large, high-dimens
 
 CHESS was used to build a hierarchical clustering to a user-specific depth for the sole purpose of accelerating search.
 CLAM, however, divisively clusters the data until each cluster contains only one datum.
-Using the cluster-tree, CLAM induces graphs by mapping specific clusters to vertices of a graph, and drawing an edge between any two vertices whose corresponding clusters have overlapping volumes (i.e.\ the sum of their radii is greater than the distance between their centers).
+Using the cluster-tree, CLAM induces graphs by mapping specific clusters to vertices of a graph, and drawing an edge between any two vertices whose corresponding clusters have overlapping volumes (i.e., the distance between their centers is less than or equal to the sum of their radii).
 Clusters can be selected from a fixed depth, or from heterogeneous depths based on properties such as their local fractal dimension, cardinality, radius, etc.
 We can consider clusters at lower depths in the tree to be, in some sense, ``lower resolution'' than those at greater depths.
-Inducing a graph across a variety of depths effectively maps a manifold with a variety of ``resolutions'', the intuition being that some regions of the manifold may have a higher density of points than others and, thus, graphs induced from clusters deeper in the tree may be more informative for those regions.
+Inducing a graph across a variety of depths effectively maps a manifold with a variety of ``resolutions,'' the intuition being that some regions of the manifold may have a higher density of points than others and, thus, graphs induced from clusters deeper in the tree may be more informative for those regions.
 
 Having mapped a manifold by clustering and inducing graphs, we can start to analyze several properties of the clusters in the graphs.
-For example; what are the relative cardinalities of the clusters in the graph, how connected are the clusters, how often is each cluster visited by a random walk?
+For example: what are the relative cardinalities of the clusters in the graph, how connected are the clusters, how often is each cluster visited by a random walk?
 CHAODA uses answers to such questions, among others, to build an ensemble approach to anomaly detection.
