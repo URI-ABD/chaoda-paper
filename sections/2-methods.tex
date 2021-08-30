@@ -131,49 +131,6 @@ This also assures that \textit{graph population} is equal to the cardinality of 
 \end{figure*}
 
 
-% \subsection{Ensemble}
-% \label{subsec:methods:ensemble}
-
-% Given a dataset and a list of distance functions for the dataset, we start by building a CLAM tree for each distance function on the dataset.
-% We extract the parent-child ratios and the exponential moving averages of those ratios for each cluster in each tree.
-% Given the set of meta-ml models learned from the training datasets as described in Section~\ref{subsec:methods:induced-graphs}, we use each model to rank every cluster.
-% The highest ranked clusters from each tree are then used to build a graph.
-% This gives us one graph for each combination of meta-ML model and distance function used.
-% We apply each of the six methods described in~\ref{subsec:methods:individual-algorithms} on each such graph.
-% With two meta-ML models (linear regression and regression trees) and two distance metrics ($L1$-norm and $L2$-norm), we have $24$ anomaly scores for each point in the dataset.
-% These scores are then combined into an ensemble by simply taking the mean of all scores for each point.
-% We present the AUC-ROC from this ensemble in Section~\ref{sec:results}.
-
-% % The individual algorithms described in~\ref{subsec:methods:individual-algorithms} produce outlier scores for each cluster, rather than for each point.
-% % We remedy this by assigning to each point the score of the cluster to which it belongs.
-% % Since our graphs guarantee that each point is in exactly one cluster and that every point from the dataset is accounted for, this assigns an outlier score to each point in a dataset.
-% Our individual methods produce scores with a wide range of values.
-% The only common feature among these scores is that low scores correspond to inliers and high scores correspond to outliers.
-% Therefore, we cannot directly compare scores across methods, which we need to be able to do for a functional ensemble.
-% Thus, we normalize the scores to the range $[0, 1]$, using gaussian normalization~\cite{kriegel2011interpreting}.
-% We include sigmoid and min-max normalization as options in our implementation.
-
-
-% \subsection{Datasets}
-% \label{subsec:methods:datasets}
-
-% We sourced 24 datasets containing only numerical features from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}.
-% All of these datasets were adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and were standardized by ODDS for benchmarks on anomaly and outlier detection.
-% Note that CHAODA is able to handle entirely-categorical datasets, but not mixed datasets.
-
-% We randomly select six datasets to train CHAODA: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
-% We benchmarked CHAODA 30 times on the test datasets, with different random seeds.
-% We provide more details on the datasets in the Supplement.
-% During testing, we noticed that even though we often see $|V| \ll n $, the graph neighborhood size and stationary probabilities methods from~\ref{subsec:methods:individual-algorithms} were prohibitive, so we only run them when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
-% We present these results in Table~\ref{table:results:test-performance} under the CHAODA-fast and CHAODA rows.
-% CHAODA-fast exhibits comparable performance to CHAODA, so we set CHAODA-fast as the default in our implementation.
-% All benchmarks were conducted on a 28-core Intel Xeon E5-2690 v4 2.60GHz, 512GB RAM and CentOS 7 Linux with kernel 3.10.0-1127.13.1.el7.x86\_64 \#1 SMP and Python 3.6.8.
-
-% CHAODA, being an unsupervised algorithm, is only compared against other unsupervised algorithms.
-% We compared against $18$ unsupervised algorithms collected in the pyOD suite~\cite{zhao2019pyod} and Scikit-Learn~\cite{pedregosa2011scikit}, as well as RS-Hash~\cite{sathe2016subspace}.
-% A supervised version of CHAODA is possible future work which will open up comparisons against supervised or weakly-supervised methods such as DAGMM~\cite{zong2018deep}.
-
-
 % \subsection{Notes}
 % \label{subsec:methods:notes}
 
@@ -396,9 +353,32 @@ Once the list of rankings is exhausted, we have selected the clusters with which
 
 \subsection{The Ensemble}
 \label{subsec:methods:the-ensemble}
-TODO
+
+During the testing and inference phases, we begin with a new dataset (not included in the training set of datasets) and one or more distance functions.
+CLAM first builds cluster-trees using each distance function with the given dataset.
+CHAODA uses the trained meta-ml models to select a different graph from each tree for each individual algorithm.
+CHAODA applies each individual algorithm to its corresponding graph and produces anomalousness scores for each datum.
+With two distance functions, six individual algorithms, and two meta-ml models, we can get up-to $24$ different members with which to form an ensemble.
+CHAODA normalizes the scores from all members and aggregates the normalized scores into a final set of predictions for the anomalousness of each datum.
 
 
 \subsection{Datasets and Comparisons}
 \label{subsec:methods:datasets-and-comparisons}
-TODO
+
+We sourced 24 datasets containing only numerical features, i.e.\ not categorical features, from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}.
+All of these datasets were adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and were standardized by ODDS for benchmarks on anomaly and outlier detection.
+Note that CHAODA is able to handle either entirely-numerical or entirely-categorical datasets, but not mixed datasets.
+We discuss some future work relating to this in Section~\ref{sec:discussion}.
+
+We randomly selected six datasets to train CHAODA: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
+The other eighteen datasets were used for testing and benchmarks: arrhythmia, breastw, cardio, cover, glass, http, ionosphere, lymphography, mammography, musk, optdigits, pima, satimage-2, smtp, vertebral, vowels, wbc, and wine.
+We benchmarked CHAODA 30 times, using different random seeds, on the test set of datasets (see the Supplement for more details).
+During testing, we noticed that even though we often see $|V| \ll n $, the graph neighborhood size and stationary probabilities methods from~\ref{subsec:methods:individual-algorithms} were prohibitively expensive in running-time, so we only use them when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
+We present these results in Table~\ref{table:results:test-performance} under the CHAODA-fast and CHAODA rows.
+CHAODA-fast exhibits comparable performance to CHAODA, so we set CHAODA-fast as the default in our implementation (TODO add github link).
+All benchmarks were conducted on a 28-core Intel Xeon E5-2690 v4 2.60GHz, 512GB RAM and CentOS 7 Linux with kernel 3.10.0-1127.13.1.el7.x86\_64 \#1 SMP and Python 3.6.8 (TODO Add Rust).
+
+Having once been trained, CHAODA becomes an unsupervised algorithm for any new dataset.
+As such, compared it only against other unsupervised algorithms.
+We selected $18$ unsupervised algorithms from the pyOD suite~\cite{zhao2019pyod} and Scikit-Learn~\cite{pedregosa2011scikit}, as well as RS-Hash~\cite{sathe2016subspace}.
+A supervised version of CHAODA is possible future work which will open up comparisons against supervised or weakly-supervised methods such as REPEN~\cite{pang2018learning} and DAGMM~\cite{zong2018deep}.
