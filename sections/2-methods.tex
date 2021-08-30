@@ -26,10 +26,10 @@ CLAM and CHAODA learn the geometric and topological properties of these manifold
 We demonstrate this genericity by our anomaly detection performance in Section~\ref{sec:results}.
 
 Note that we often speak of each datum as embedded in a $D$-dimensional Banach space and we use Euclidean notions, such as voids and volumes, to talk about the geometric and topological properties of the manifold.
-However, these notions help to build intuition and to aid understanding.
+The purpose of such notions is to help build intuition and aid understanding.
 Mathematically, CLAM does not rely on such notions; in-fact, the details of an embedding space can be abstracted away behind the distance function.
 
-Also note that we can provide certain guarantees (see CHESS~\cite{ishaq2019clustered}) when the distance function used is a metric, i.e.\ it obeys the triangle inequality.
+Also note that we can provide certain guarantees (see CHESS~\cite{ishaq2019clustered}) when the distance function is a metric, i.e.\ it obeys the triangle inequality.
 While CLAM and CHAODA work well with distance functions that are not metrics, we have not investigated how the lack of the triangle inequality changes, or breaks, those guarantees in the context of anomaly detection.
 For this paper, we show results using the $L1$-norm and $L2$-norm.
 
@@ -50,16 +50,16 @@ This procedure improves upon the clustering approach from CHESS~\cite{ishaq2019c
     \REQUIRE $cluster$
     \STATE $k \leftarrow \lfloor \sqrt{|cluster.points|} \rfloor$
     \STATE $seeds \leftarrow k$ random points from $cluster.points$
-    \STATE $c \leftarrow$ geometric median of $cluster.points$
+    \STATE $c \leftarrow$ geometric median of $seeds$
     \STATE $r \leftarrow \argmax d(c,x) \ \forall \ x \in cluster.points$
     \STATE $l \leftarrow \argmax d(r,x) \ \forall \ x \in cluster.points$
-    \STATE $cluster.left \leftarrow \{x | x \in cluster.points \land d(l,x) \le d(r,x)\}$
-    \STATE $cluster.right \leftarrow \{x | x \in cluster.points \land d(r,x) < d(l,x)\}$
-    \IF{$|cluster.left| > 1$}
-        \STATE Partition(cluster.left)
+    \STATE $left \leftarrow \{x | x \in cluster.points \land d(l,x) \le d(r,x)\}$
+    \STATE $right \leftarrow \{x | x \in cluster.points \land d(r,x) < d(l,x)\}$
+    \IF{$|left| > 1$}
+        \STATE Partition($left$)
     \ENDIF
-    \IF{$|cluster.right| > 1$}
-        \STATE Partition(cluster.right)
+    \IF{$|right| > 1$}
+        \STATE Partition($right$)
     \ENDIF
 \end{algorithmic}
 \end{algorithm}
@@ -72,17 +72,17 @@ and \textit{local fractal dimension},
 as given by:
 
 \begin{gather}
-    \log_2\bigg(\frac{|B_D(c, r)|}{|B_D(c, \frac{r}{2})|}\bigg)
+    \log_2\bigg(\frac{|B_X(c, r)|}{|B_X(c, \frac{r}{2})|}\bigg)
     \label{fractal-dimension}
 \end{gather}
 
-where $B_D(c,r)$ is the set of points contained in a ball on the dataset $D$ of radius $r$ centered on a point $c$~\cite{ishaq2019clustered}.
+where $B_X(c,r)$ is the set of points contained in a ball of radius $r$ on the dataset $X$ centered on a point $c$~\cite{ishaq2019clustered}.
 Thus, local fractal dimension captures the ``spread'' of points on the manifold in comparison to the (typically much larger) embedding space.
 This is motivated by the idea that the induced graphs will learn to adapt to use different ``resolutions'' to characterize different regions of the manifold.
 % might want to reference "chicken's foot" figure here
 
-We can also consider individual \textit{parent-child ratios} of cardinality, radius, and local fractal dimension, as well as the \textit{exponential moving averages} of those parent-child ratios along a branch of the tree.
-In particular, we use the parent-child ratios and the exponential moving averages of those ratios to generalize our method from a small set of training datasets to a large, distinct set of testing datasets.
+We can also consider \textit{child-parent ratios} of cardinality, radius, and local fractal dimension of a cluster, as well as the \textit{exponential moving averages} of those child-parent ratios along a branch of the tree.
+In particular, we use the child-parent ratios and the exponential moving averages of those ratios to generalize CHAODA from a small set of training datasets to a large, distinct set of testing datasets.
 During clustering, we memoize these ratios as we create each cluster.
 CHAODA can then make direct use of these ratios to aid in anomaly detection.
 
@@ -92,10 +92,10 @@ CHAODA can then make direct use of these ratios to aid in anomaly detection.
 
 Clusters that are close together sometimes have overlapping volumes; i.e.,\ the distance between their centers is less than or equal to the sum of their radii.
 We define a graph $G=(V,E)$ with vertices in one-to-one correspondence to CLAM clusters and with an edge between two vertices if and only if their corresponding clusters overlap.
-While it is fairly standard in the literature to define graphs using this geometric property of overlapping volumes, the challenge is in selecting the right clusters to build useful graphs.
+While it is fairly standard in the literature to define graphs in this way, the challenge lies in selecting the right clusters to build useful graphs.
 Our selection process, presented in Section~\ref{subsec:methods:cluster-selection-for-graphs}, is among the major novel contributions of CLAM and CHAODA.
 
-In the context of graphs, we use \textit{cluster} and \textit{vertex} interchangeably.
+In the context of graphs, we use the terms \textit{cluster} and \textit{vertex} interchangeably.
 By \textit{graph cardinality} we mean \textit{vertex cardinality}; i.e.,\ the number of clusters in the graph, and by \textit{graph population} we mean the sum of cardinalities of all clusters in the graph.
 Note that \textit{cluster cardinality} refers to the number of datapoints within a cluster.
 %TODO might not need graph population.
@@ -103,12 +103,12 @@ We use \textit{layer-graph} to refer to a graph built from clusters at a fixed d
 
 Figure~\ref{fig:methods:graph-generation} illustrates how CLAM induces a graph from non-uniform depths in a cluster tree.
 Interestingly, the clusters are not necessarily hyperspheres, but polytopes akin to a high-dimensional Voronoi diagram~\cite{voronoi1908nouvelles}.
-The induced graph need not be fully connected, and in practice often contains many small, disjoint connected components.
+The induced graph need not be fully connected and, in practice, often contains many small, disjoint connected components.
 
 For our purposes, a CLAM graph exhibits an important invariant.
 The clusters corresponding to vertices in the graph collectively contain every point in the dataset and each point in the dataset is contained in, i.e.\ assigned to, exactly one cluster in the graph.
 A corollary to this invariant is that a graph will never contain two clusters such that one cluster is an ancestor or descendant of another cluster.
-This also assures that \textit{graph population} is equal to the cardinality of the dataset, i.e. $|\textbf{X}|$.
+This also assures that \textit{graph population} is equal to the cardinality of the dataset, i.e. $|\textbf{X}|$ or $n$.
 
 \begin{figure*}[ht!]
     \centering
@@ -173,37 +173,36 @@ This also assures that \textit{graph population} is equal to the cardinality of 
 
 Having induced several graphs to characterize a manifold, we must extract information about the anomalousness of clusters in those graphs.
 Here we describe six simple algorithms for anomaly detection, each using a CLAM graph to calculate an anomalousness score for each cluster and datum.
-Given that the key to an effective ensemble method is that each member contributes a unique inductive bias~\cite{chen2017outlier}, we also note the intuition behind each algorithm's contributions to the ensemble.
+Given that the key to an effective ensemble is that each member contributes a unique inductive bias~\cite{chen2017outlier}, we also note the intuition behind each algorithm's contributions.
 
 In the following,
-$V$ and $E$ are the sets of clusters and edges, respectively, in a graph,
+$V$ and $E$ are the sets of clusters and edges respectively in a graph,
 $|c|$ is the cardinality of a cluster $c$,
 and $|C|$ is the cardinality of a component $C$.
 Each algorithm assigns an anomalousness score to each cluster.
 Each point is then assigned the anomalousness score of the cluster it belongs to.
 These scores are internally consistent for each individual algorithm, i.e.\ low scores indicate inliers and high scores indicate outliers.
 However, different algorithms assign scores in wide, and often different, ranges of values.
-We use gaussian normalization constrain the raw scores to a $[0, 1]$ range.
-This lets us combine scores into an ensemble (see Section~\ref{subsec:methods:ensemble}).
+We use gaussian normalization to constrain the raw scores to a $[0, 1]$ range.
+This lets us combine scores into an ensemble (see Section~\ref{subsec:methods:the-ensemble}).
 See~\cite{kriegel2011interpreting} for a more thorough discussion of anomaly-score normalization in ensemble methods.
 
 \subsubsection{Relative Cluster Cardinality}
 \label{subsubsec:methods:individual-algorithms:relative-cluster-cardinality}
-We measure the anomalousness of point by the cardinality of the cluster that the point belongs to relative to the cardinalities of the other clusters in the graph.
+We measure the anomalousness of a point by the cardinality of the cluster that the point belongs to relative to the cardinalities of the other clusters in the graph.
 Points in the same cluster are considered equally anomalous.
 Points in clusters with lower cardinalities are considered more anomalous than points in clusters with higher cardinalities.
 Formally, $\forall c \in G, \score(c) = -|c|$.
 
-The intuition here is that points in clusters with higher cardinalities are all close to each other and are, thus, likely to be inliers, i.e.\ not anomalous.
-The time complexity is $\mathcal{O}(|V|)$ because it requires a single pass over the clusters in a graph.
+The intuition here is that points in clusters with higher cardinalities are all close to each other and are, thus, less likely to be anomalous.
+The time complexity is $\mathcal{O}(|V|)$ because this requires a single pass over the clusters in a graph.
 
 \subsubsection{Relative Component Cardinality}
 \label{subsubsec:methods:individual-algorithms:relative-component-cardinality}
 We use the usual definition of connected components:
-no two nodes from different components have an edge between them, and
-every pair of nodes in the same component has a path connecting them.
-Consider the relative cardinalities of each component in much the same way as in the previous algorithm.
-Points in clusters in smaller components are considered more anomalous than those in clusters in larger components.
+no two vertices from different components have an edge between them, and
+every pair of vertices in the same component has a path connecting them.
+We consider points in clusters in smaller components to be more anomalous than those in clusters in larger components.
 Points in clusters in the same component are considered equally anomalous.
 Formally, $\forall C \in G, \forall c \in C, \score(c) = -|C|$.
 
@@ -214,7 +213,7 @@ The time complexity is $\mathcal{O}(|E| + |V|)$ because we first need to find th
 \label{subsubsec:methods:individual-algorithms:graph-neighborhood-size}
 Given the graph, we consider the number of clusters reachable from a starting cluster within a given graph distance $k$, i.e.\ within $k$ hops along edges.
 We call this number the \textit{graph-neighborhood size} of the starting cluster.
-With $k$ small compared to the diameter of the graph, we consider the relative graph-neighborhood-sizes of the clusters.
+With $k$ small compared to the diameter of the graph, we consider the relative graph-neighborhood-sizes of all clusters.
 Clusters with small graph-neighborhoods are considered more anomalous than clusters with large graph-neighborhoods.
 
 The intuition here is to capture information about the connectivity of the graph in the region around each cluster.
@@ -226,10 +225,10 @@ Its time complexity is $\mathcal{O}(|E| \cdot |V|)$ because we need to compute t
     \label{alg:graph-neighborhood-size}
 \begin{algorithmic}[1]
     \REQUIRE $G$, a graph
-    \REQUIRE $f \in \mathbb{R}$ in the range $(0,1]$ ($0.25$ by default).
+    \REQUIRE $\alpha \in \mathbb{R}$ in the range $(0,1]$ ($0.25$ by default).
     \FOR {cluster $c \in G$}
         \STATE $e_c \gets$ the eccentricity of $c$
-        \STATE $s \gets e_c \cdot f$
+        \STATE $s \gets e_c \cdot \alpha$
         \STATE perform a breadth-first traversal from $c$ with $s$ steps
         \STATE $v \gets$ the number of unique clusters visited by the traversal
         \STATE $\score(c) \gets -v$
@@ -241,8 +240,8 @@ Its time complexity is $\mathcal{O}(|E| \cdot |V|)$ because we need to compute t
 \subsubsection{Child-Parent Cardinality Ratio}
 \label{subsubsec:methods:individual-algorithms:child-parent-cardinality-ratio}
 As described in Section~\ref{subsec:methods:clustering}, the partition algorithm used in clustering splits a cluster into two children.
-If a child-cluster contains only a small fraction of its parent's points, then we consider that child-cluster to be more anomalous.
-These child-parent cardinality ratios are accumulated along each branch in the tree, terminating when the child-cluster is among those selected in the graph.
+If a child cluster contains only a small fraction of its parent's points, then we consider that child cluster to be more anomalous.
+These child-parent cardinality ratios are accumulated along each branch in the tree, terminating when the child cluster is among those selected in the graph.
 Clusters with a low value of these accumulated ratios are considered more anomalous than clusters with a higher value.
 Formally, $\forall c \in G, \score(c) = \frac{|p|}{|c|} + score(p)$ where $p$ is the parent cluster of $c$.
 
@@ -253,19 +252,19 @@ The time complexity of this algorithm is $\mathcal{O}(|V|)$ because these ratios
 
 \subsubsection{Stationary Probabilities}
 \label{subsubsec:methods:individual-algorithms:stationary-probabilities}
-We take an induced graph and assign each edge a weight inversely proportional to the distance between the centers of the two clusters that connect to form that edge.
-We compute the transition probability matrix of each component of the graph that contains at least two clusters.
-These probabilities are stochastic over the edge weights for each cluster.
-This process of successively squaring this matrix will converge so long as the graph is connected~\cite{levin2017markov}.
+For each edge in the graph, we assign a probability inversely proportional to the distance between the centers of the two clusters that connect to form that edge.
+The outgoing probabilities are stochastic over the edge weights for each cluster.
+We compute the transition probability matrix of each component that contains at least two clusters.
+The process of successively squaring this matrix will converge so long as the graph is connected~\cite{levin2017markov}.
 We follow this process for each component in the graph and find the convergent matrix.
 Consider the sum of the values along a row in the convergent matrix.
-This is the expected proportion of visits to that cluster during a long random walk over the graph component.
+This is the expected proportion of visits to that cluster during aan infinitely long random walk over the component.
 We consider this sum to be inversely related to the anomalousness of the corresponding cluster.
 
 The intuition here is that clusters that are more difficult to reach during an infinite random walk are more likely to contain anomalous points.
 The algorithm is defined in Algorithm~\ref{alg:stationary-probabilities}.
 Its worst-case time complexity is $\mathcal{O}(|V|^{2.3728596})$ given by the matrix multiplication algorithm from~\cite{alman2021refined}.
-In practice, however, this algorithm has much better performance because the induced graphs are often composed of several small components rather than one, or a few, large component(s).
+In practice, however, this algorithm has much better performance than indicated by the theoretical complexity because the induced graphs are often composed of several small components rather than one, or a few, large component(s).
 
 \begin{algorithm}[h]
     \caption{Stationary Probabilities}
