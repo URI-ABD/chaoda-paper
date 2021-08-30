@@ -372,7 +372,7 @@ CLAM first builds cluster-trees using each distance function with the given data
 CHAODA uses the trained meta-ml models to select a different graph from each tree for each individual algorithm.
 CHAODA applies each individual algorithm to its corresponding graph and produces anomalousness scores for each datum.
 With two distance functions, six individual algorithms, and two meta-ml models, we can get up-to $24$ different members with which to form an ensemble.
-CHAODA normalizes the scores from all members and aggregates the normalized scores into a final set of predictions for the anomalousness of each datum.
+CHAODA normalizes the scores from all members and aggregates them, by their mean, into a final set of predictions for the anomalousness of each datum.
 
 
 \subsection{Datasets and Comparisons}
