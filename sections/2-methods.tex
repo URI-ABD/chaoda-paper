@@ -81,6 +81,14 @@ Thus, local fractal dimension captures the ``spread'' of points on the manifold 
 This is motivated by the idea that the induced graphs will learn to adapt to use different ``resolutions'' to characterize different regions of the manifold.
 % might want to reference "chicken's foot" figure here
 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=2.5in]{images/cluster-resolution.pdf}
+    \caption{\textbf{Cluster resolution.}
+        Blah blah.}
+    \label{fig:methods:cluster-resolution}
+\end{figure}
+
 We can also consider \textit{child-parent ratios} of cardinality, radius, and local fractal dimension of a cluster, as well as the \textit{exponential moving averages} of those child-parent ratios along a branch of the tree.
 In particular, we use the child-parent ratios and the exponential moving averages of those ratios to generalize CHAODA from a small set of training datasets to a large, distinct set of testing datasets.
 During clustering, we memoize these ratios as we create each cluster.
@@ -302,11 +310,19 @@ TODO
 \subsection{Cluster Selection for Graphs}
 \label{subsec:methods:cluster-selection-for-graphs}
 
-The heart of the problem with CHAODA is in selecting the "right" clusters that would build a graph that provides a useful representation of the underlying manifold.
+The heart of the problem with CHAODA is in selecting the ``right'' clusters that would build a graph that provides a useful representation of the underlying manifold.
 One could try every possible combination of clusters to build graphs but this quickly leads to combinatorial explosion.
 Instead, CHAODA focuses on intelligently selecting clusters for a graph which is expected to perform well for anomaly detection.
 Area under the curve (AUC) of the receiver operating characteristic (ROC) is often used to benchmark anomaly detectors.
 CHAODA selects clusters to optimize for this measure.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=2.5in]{images/chaoda-cluster-properties.pdf}
+    \caption{\textbf{Cluster properties.}
+        Blah blah.}
+    \label{fig:methods:cluster-properties}
+\end{figure}
 
 Specifically, we train a number of meta-ml models (see Section~\ref{subsec:methods:training-meta-ml-models} for details) and, from each model, we extract a function of the form $g : c \rightarrow \mathbb{R}$.
 This function assigns high values to clusters which would increase ROC-AUC and low values to clusters which would decrease ROC-AUC.
