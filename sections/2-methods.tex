@@ -130,18 +130,6 @@ This also assures that \textit{graph population} is equal to the cardinality of 
     \label{fig:methods:chaoda-workflow}
 \end{figure*}
 
-
-% \subsection{Notes}
-% \label{subsec:methods:notes}
-
-% % From intro:our-approach
-% The space may also be defined by a distance \textit{function} that does not obey the triangle inequality, though we have not explored what difficulties this might introduce.
-
-% % From methods:induced-graphs
-% The ground-truth labels are only used during training for the training set of datasets, while the ground-truth for the test set of datasets is used purely for post-hoc performance calculations.
-% Thus, CHAODA is supervised only in the sense of learning where to build a graph on training datasets, but unsupervised on any new (e.g. test) datasets.
-
-
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=2.5in]{images/tree-graph.pdf}
@@ -174,6 +162,7 @@ We use gaussian normalization to constrain the raw scores to a $[0, 1]$ range.
 This lets us combine scores into an ensemble (see Section~\ref{subsec:methods:the-ensemble}).
 See~\cite{kriegel2011interpreting} for a thorough discussion of anomaly-score normalization in ensemble methods.
 
+
 \subsubsection{Relative Cluster Cardinality}
 \label{subsubsec:methods:individual-algorithms:relative-cluster-cardinality}
 We measure the anomalousness of a point by the cardinality of the cluster that the point belongs to relative to the cardinalities of the other clusters in the graph.
@@ -183,6 +172,7 @@ Formally, $\forall c \in G, \score(c) = -|c|$.
 
 The intuition here is that points in clusters with higher cardinalities are all close to each other and are, thus, less likely to be anomalous.
 The time complexity is $\mathcal{O}(|V|)$ because this requires a single pass over the clusters in a graph.
+
 
 \subsubsection{Relative Component Cardinality}
 \label{subsubsec:methods:individual-algorithms:relative-component-cardinality}
@@ -195,6 +185,7 @@ Formally, $\forall C \in G, \forall c \in C, \score(c) = -|C|$.
 
 The intuition here, as distinct from the previous algorithm, is to capture larger-scale structural information based on disjoint connected components from the graph.
 The time complexity is $\mathcal{O}(|E| + |V|)$ because we first need to find the components of the graph, using a single pass over the edges, and then score each cluster in the graph, using a single pass over those clusters.
+
 
 \subsubsection{Graph Neighborhood Size}
 \label{subsubsec:methods:individual-algorithms:graph-neighborhood-size}
@@ -378,6 +369,7 @@ We present these results in Table~\ref{table:results:test-performance} under the
 CHAODA-fast exhibits comparable performance to CHAODA, so we set CHAODA-fast as the default in our implementation (TODO add github link).
 All benchmarks were conducted on a 28-core Intel Xeon E5-2690 v4 2.60GHz, 512GB RAM and CentOS 7 Linux with kernel 3.10.0-1127.13.1.el7.x86\_64 \#1 SMP and Python 3.6.8 (TODO Add Rust).
 
+We use the ground-truth labels only during the training phase with a small set of datasets.
 Having once been trained, CHAODA becomes an unsupervised algorithm for any new dataset.
 As such, compared it only against other unsupervised algorithms.
 We selected $18$ unsupervised algorithms from the pyOD suite~\cite{zhao2019pyod} and Scikit-Learn~\cite{pedregosa2011scikit}, as well as RS-Hash~\cite{sathe2016subspace}.
