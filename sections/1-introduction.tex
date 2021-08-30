@@ -119,11 +119,11 @@ Subspace Outlier Detection (SOD)~\cite{kriegel2009sod}.
 With the term \emph{manifold learning} being largely synonymous with dimension reduction, we propose \emph{manifold mapping} to refer to approaches that study the the geometric and topological properties of manifolds in their original embedding spaces.
 We introduce a novel technique, Clustered Learning of Approximate Manifolds (CLAM) for datasets in a Banach space~\cite{banach1929fonctionnelles} defined by a distance metric.
 CLAM presupposes the manifold hypothesis and uses a divisive hierarchical clustering to build a map of the manifold occupied by the dataset.
-CLAM then provides this manifold as input to a collection of anomaly detection algorithms, which we call CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms).
+CLAM then provides this map of the manifold to be used by a collection of anomaly detection algorithms, which we call CHAODA (Clustered Hierarchical Anomaly and Outlier Detection Algorithms).
 
 CLAM extends CHESS~\cite{ishaq2019clustered} by adding memoized calculations of several geometric and topological properties of clusters that are useful to CHAODA, and does so in expected $\mathcal{O}(n \lg n)$ time.
-While, in principle, we could have used any hierarchical clustering algorithm, these memoized calculations are not provided for by other clustering algorithms.
-Other clustering algorithms have also suffered from problems such as:
+While, in principle, we could have used any hierarchical clustering algorithm, these memoized calculations are not provided for by any other algorithm.
+Other clustering algorithms also suffer from problems such as:
 an ineffective treatment of high dimensionality,
 an inability to interpret results, and
 an inability to scale to exponentially-growing datasets~\cite{agrawal1998automatic}.

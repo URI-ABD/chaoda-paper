@@ -3,14 +3,15 @@
 
 % Overview
 CLAM and CHAODA comprise many components, all described in this section.
-Here, we give a brief overview of those components.
+We start with a brief overview of those components.
 CLAM begins with a dataset and a distance metric, to which it applies hierarchical clustering to build a tree.
 CLAM selects clusters from the tree using meta-ml models trained\footnote{Note that during training, CHAODA is somewhat supervised.
 CHAODA uses this training to learn a set of meta-ml models for selecting clusters and inducing graphs.
 During testing, and inference, on new datasets, CHAODA is unsupervised and uses the learned meta-ml models.} according to several geometric and topological properties.
 These meta-ml models learn relationships between these properties and expected anomaly-detection performance.
 CLAM then induces graphs from the selected clusters.
-CHAODA applies its consituent algorithms to these graphs, and combines the individual scores into an ensemble, ultimately producing anomaly scores for each datum.
+CHAODA applies its constituent algorithms to these graphs, and combines the individual scores into an ensemble, ultimately producing anomaly scores for each datum.
+See Figure~\ref{fig:methods:chaoda-workflow} for a high-level illustration.
 
 
 \subsection{Dataset and Distance Function}
@@ -18,7 +19,7 @@ CHAODA applies its consituent algorithms to these graphs, and combines the indiv
 
 We start with a dataset $\textbf{X} = \{x_1 \dots x_n\}$ with $n$ points and a distance function $f : (\textbf{X}, \textbf{X}) \mapsto \mathbb{R}^+$.
 The distance function takes two points from the dataset and deterministically produces a non-negative real number.
-We also require that the distance function is symmetric and that the distance between two identical points is zero, i.e.\ $\forall x, y \in X$, $f(x, y) = f(y, x)$ and $f(x, y) = 0 \Leftrightarrow x = y$.
+We also require the distance function to be symmetric and for the distance between two identical points to be zero, i.e.\ $\forall x, y \in X$, $f(x, y) = f(y, x)$ and $f(x, y) = 0 \Leftrightarrow x = y$.
 CLAM and CHAODA are general over any distance function that obeys these constraints.
 
 CLAM assumes the ``manifold hypothesis''~\cite{fefferman2016testing}, i.e.\ datasets collected from constrained generating phenomena that are embedded in a high-dimensional space typically only occupy a low-dimensional manifold in that space.
@@ -86,7 +87,7 @@ This is motivated by the idea that the induced graphs will learn to adapt to use
     \includegraphics[width=2.5in]{images/cluster-resolution.pdf}
     \caption{
         \textbf{Cluster resolution.}
-        Consider this toy dataset whose manifold comprises the four named branches.
+        Consider this toy dataset whose manifold is comprised of the four named branches.
         With each branch, we show clusters that we might get from different depths in the tree.
         Clusters on branches A and B come from low depths in the tree and have large voids, i.e.\ regions with no points in them.
         Note that a graph induced from these clusters would not represent the structure of the two distinct branches.
@@ -100,8 +101,8 @@ This is motivated by the idea that the induced graphs will learn to adapt to use
     \label{fig:methods:cluster-resolution}
 \end{figure}
 
-We can also consider \textit{child-parent ratios} of cardinality, radius, and local fractal dimension of a cluster, as well as the \textit{exponential moving averages} of those child-parent ratios along a branch of the tree.
-In particular, we use the child-parent ratios and the exponential moving averages of those ratios to generalize CHAODA from a small set of training datasets to a large, distinct set of testing datasets.
+We can also consider \textit{child-parent ratios} of the cardinality, radius, and local fractal dimension of a cluster, as well as the \textit{exponential moving averages} of those child-parent ratios along a branch of the tree.
+In particular, we use the child-parent ratios and their exponential moving averages generalize CHAODA from a small set of training datasets to a large, distinct set of testing datasets.
 During clustering, we memoize these ratios as we create each cluster.
 CHAODA can then make direct use of these ratios to aid in anomaly detection.
 
@@ -116,9 +117,8 @@ Our selection process, presented in Section~\ref{subsec:methods:cluster-selectio
 
 In the context of graphs, we use the terms \textit{cluster} and \textit{vertex} interchangeably.
 By \textit{graph cardinality} we mean \textit{vertex cardinality}; i.e.,\ the number of clusters in the graph, and by \textit{graph population} we mean the sum of cardinalities of all clusters in the graph.
-Note that \textit{cluster cardinality} refers to the number of datapoints within a cluster.
-%TODO might not need graph population.
-We use \textit{layer-graph} to refer to a graph built from clusters at a fixed depth from the tree, and \textit{optimal-graph} to refer to a graph built from clusters selected by the processes described in Section~\ref{subsec:methods:cluster-selection-for-graphs}.
+Note that \textit{cluster cardinality} refers to the number of points within a cluster.
+We use \textit{layer-graph} to refer to a graph built from clusters at a fixed depth from the tree and \textit{optimal-graph} to refer to a graph built from clusters selected by the processes described in Section~\ref{subsec:methods:cluster-selection-for-graphs}.
 
 Figure~\ref{fig:methods:graph-generation} illustrates how CLAM induces a graph from non-uniform depths in a cluster tree.
 Interestingly, the clusters are not necessarily hyperspheres, but polytopes akin to a high-dimensional Voronoi diagram~\cite{voronoi1908nouvelles}.
@@ -127,7 +127,7 @@ The induced graph need not be fully connected and, in practice, often contains m
 For our purposes, a CLAM graph exhibits an important invariant.
 The clusters corresponding to vertices in the graph collectively contain every point in the dataset and each point in the dataset is contained in, i.e.\ assigned to, exactly one cluster in the graph.
 A corollary to this invariant is that a graph will never contain two clusters such that one cluster is an ancestor or descendant of another cluster.
-This also assures that \textit{graph population} is equal to the cardinality of the dataset, i.e. $|\textbf{X}|$ or $n$.
+This also assures that a \textit{graph's population} is equal to the cardinality of the dataset, i.e. $|\textbf{X}|$ or $n$.
 
 \begin{figure*}[ht!]
     \centering
@@ -156,10 +156,10 @@ This also assures that \textit{graph population} is equal to the cardinality of 
 \subsection{Individual Algorithms}
 \label{subsec:methods:individual-algorithms}
 
-Having induced several graphs to characterize a manifold, we must extract information about the anomalousness of clusters in those graphs.
+Given an induced graph that characterizes a manifold, we must extract information about the anomalousness of clusters in that graph.
 Here we describe six simple algorithms for anomaly detection, each using a CLAM graph to calculate an anomalousness score for each cluster and datum.
-Given that the key to an effective ensemble is that each member contributes a unique inductive bias~\cite{chen2017outlier}, we also note the intuition behind each algorithm's contributions.
-These scores can be used, along with the ground-truth labels, to compute the area under the curve (AUC) of the receiver operating characteristic (ROC)~\cite{fawcett2006introduction} to measure the anomaly detection performance of graph which produced those scores.
+Given that the key to an effective ensemble is for each member to contribute a unique inductive bias~\cite{chen2017outlier}, we also note the intuition behind each algorithm's contributions.
+These scores can be used, along with the ground-truth labels, to compute the area under the curve (AUC) of the receiver operating characteristic (ROC)~\cite{fawcett2006introduction} to measure the anomaly detection performance of the graph which produced those scores.
 
 In the following,
 $V$ and $E$ are the sets of clusters and edges respectively in a graph,
@@ -179,7 +179,7 @@ See~\cite{kriegel2011interpreting} for a thorough discussion of anomaly-score no
 We measure the anomalousness of a point by the cardinality of the cluster that the point belongs to relative to the cardinalities of the other clusters in the graph.
 Points in the same cluster are considered equally anomalous.
 Points in clusters with lower cardinalities are considered more anomalous than points in clusters with higher cardinalities.
-Formally, $\forall c \in G, \score(c) = -|c|$.
+Formally, $\forall c \in G, \ \score(c) = -|c|$.
 
 The intuition here is that points in clusters with higher cardinalities are all close to each other and are, thus, less likely to be anomalous.
 The time complexity is $\mathcal{O}(|V|)$ because this requires a single pass over the clusters in a graph.
@@ -188,11 +188,10 @@ The time complexity is $\mathcal{O}(|V|)$ because this requires a single pass ov
 \subsubsection{Relative Component Cardinality}
 \label{subsubsec:methods:individual-algorithms:relative-component-cardinality}
 We use the usual definition of connected components:
-no two vertices from different components have an edge between them, and
-every pair of vertices in the same component has a path connecting them.
-We consider points in clusters in smaller components to be more anomalous than those in clusters in larger components.
+no two vertices from different components have an edge between them and every pair of vertices in the same component has a path connecting them.
+We consider points in clusters in smaller components to be more anomalous than points in clusters in larger components.
 Points in clusters in the same component are considered equally anomalous.
-Formally, $\forall C \in G, \forall c \in C, \score(c) = -|C|$.
+Formally, $\forall C \in G, \ \forall c \in C,  \\score(c) = -|C|$.
 
 The intuition here, as distinct from the previous algorithm, is to capture larger-scale structural information based on disjoint connected components from the graph.
 The time complexity is $\mathcal{O}(|E| + |V|)$ because we first need to find the components of the graph, using a single pass over the edges, and then score each cluster in the graph, using a single pass over those clusters.
@@ -202,7 +201,7 @@ The time complexity is $\mathcal{O}(|E| + |V|)$ because we first need to find th
 \label{subsubsec:methods:individual-algorithms:graph-neighborhood-size}
 Given the graph, we consider the number of clusters reachable from a starting cluster within a given graph distance $k$, i.e.\ within $k$ hops along edges.
 We call this number the \textit{graph-neighborhood size} of the starting cluster.
-With $k$ small compared to the diameter of the graph, we consider the relative graph-neighborhood-sizes of all clusters.
+With $k$ small compared to the diameter of a component, we consider the relative graph-neighborhood-sizes of all clusters.
 Clusters with small graph-neighborhoods are considered more anomalous than clusters with large graph-neighborhoods.
 
 The intuition here is to capture information about the connectivity of the graph in the region around each cluster.
@@ -217,9 +216,9 @@ Its time complexity is $\mathcal{O}(|E| \cdot |V|)$ because we need to compute t
     \REQUIRE $\alpha \in \mathbb{R}$ in the range $(0,1]$ ($0.25$ by default).
     \FOR {cluster $c \in G$}
         \STATE $e_c \gets$ the eccentricity of $c$
-        \STATE $s \gets e_c \cdot \alpha$
+        \STATE $s \gets e_c \cdot \alpha$  % Add \ceil operator
         \STATE perform a breadth-first traversal from $c$ with $s$ steps
-        \STATE $v \gets$ the number of unique clusters visited by the traversal
+        \STATE $v \gets$ the number of unique clusters visited
         \STATE $\score(c) \gets -v$
     \ENDFOR
 \end{algorithmic}
@@ -232,21 +231,21 @@ As described in Section~\ref{subsec:methods:clustering}, the partition algorithm
 If a child cluster contains only a small fraction of its parent's points, then we consider that child cluster to be more anomalous.
 These child-parent cardinality ratios are accumulated along each branch in the tree, terminating when the child cluster is among those selected in the graph.
 Clusters with a low value of these accumulated ratios are considered more anomalous than clusters with a higher value.
-Formally, $\forall c \in G, \score(c) = \frac{|p|}{|c|} + score(p)$ where $p$ is the parent cluster of $c$.
+Formally, $\forall c \in G, \ \score(c) = \frac{|p|}{|c|} + score(p)$ where $p$ is the parent cluster of $c$.
 
 This algorithm was inspired by iForest~\cite{tony2008iforest}, and captures information from the tree and from the graph.
-Unlike the other individual algorithms, this one accumulates parent scores into the children.
-The time complexity of this algorithm is $\mathcal{O}(|V|)$ because these ratios are memoized during the clustering process.
+Unlike the other individual algorithms, this accumulates parent scores into the children.
+The time complexity of this algorithm is $\mathcal{O}(|V|)$ because these ratios are memoized during the clustering process and we need only look them up once for each cluster in the graph.
 
 
 \subsubsection{Stationary Probabilities}
 \label{subsubsec:methods:individual-algorithms:stationary-probabilities}
-For each edge in the graph, we assign a probability inversely proportional to the distance between the centers of the two clusters that connect to form that edge.
-The outgoing probabilities are stochastic over the edge weights for each cluster.
+For each edge in the graph, we assign a weight inversely proportional to the distance between the centers of the two clusters that connect to form that edge.
+The outgoing probabilities from a cluster are stochastic over the edge weights for that cluster.
 We compute the transition probability matrix of each component that contains at least two clusters.
-The process of successively squaring this matrix will converge so long as the graph is connected~\cite{levin2017markov}.
+The process of successively squaring this matrix will converge~\cite{levin2017markov}.
 We follow this process for each component in the graph and find the convergent matrix.
-Consider the sum of the values along a row in the convergent matrix.
+Consider the sum of the values along a row in this matrix.
 This is the expected proportion of visits to that cluster during aan infinitely long random walk over the component.
 We consider this sum to be inversely related to the anomalousness of the corresponding cluster.
 
@@ -276,19 +275,19 @@ In practice, however, this algorithm has much better performance than indicated 
 
 \subsubsection{Relative Vertex Degree}
 \label{subsubsec:methods:individual-algorithms:relative-vertex-degree}
-For each cluster in the induced graph, consider its vertex degree, i.e. the number of edges connecting to that cluster.
-We consider a cluster with a high degree to be less anomalous than a cluster with low degree.
-This is essentially a version of the previous algorithm that ignores edge weights, and may have different biases with regard to the sampling density of the dataset.
-Formally, $\forall c \in G, \score(c) = -\deg(c)$.
+For each cluster in the induced graph, consider its degree, i.e. the number of edges connecting to that cluster.
+We consider a cluster with high degree to be less anomalous than a cluster with low degree.
+This is essentially a version of the previous algorithm that ignores edge weights, and will have different biases with regard to the sampling density of the dataset.
+Formally, $\forall c \in G, \ \score(c) = -\deg(c)$.
 Its time complexity is $\mathcal{O}(|V|)$.
 
 
 \subsection{Training Meta-ML Models}
 \label{subsec:methods:training-meta-ml-models}
 
-Section~\ref{subsec:methods:clustering} makes note of three important geometric and topological properties of CLAM clusters, i.e.\ cardinality, radius and local fractal dimension.
-We take the child-parent ratios of these properties and the exponential moving averages of these ratios along each branch in the tree.
-Using these ratios instead of the raw values themselves lets CHAODA be agnostic to dataset-specific properties and, instead, only consider how those properties change as we traverse the tree.
+Section~\ref{subsec:methods:clustering} makes note of some important geometric and topological properties of CLAM clusters, i.e.\ cardinality, radius and local fractal dimension.
+We find the child-parent ratios of these properties and the exponential moving averages of these ratios along each branch in the tree.
+Using these ratios, instead of the raw values themselves, lets CHAODA be agnostic to dataset-specific properties and, instead, only consider how those properties change as we traverse the tree and/or a graph.
 For a given graph, we can take the average values of the six ratios from its constituent clusters to form a feature-vector.
 We can use the methods described in Section~\ref{subsec:methods:individual-algorithms} to compute the ROC-AUC of using each individual algorithm to predict anomalousness scores from that graph.
 Each pairing of the feature-vector and an AUC score forms a training sample for our meta-ml models.
@@ -298,16 +297,16 @@ We use these data to train the meta-ml models to predict the ROC-AUC score for a
 We randomly selected six datasets whose cardinality is between $10^3$ and $10^5$ for training and we used the $L1$-norm and $L2$-norm for each dataset.
 For each pairing of dataset and distance function, CLAM builds a new cluster-tree.
 Meta-ml training then proceeds over several epochs, the first of which we seed with some layer graphs from each tree.
-During each epoch, we extract the feature vector from each graph, and we find the ROC-AUC from applying each individual algorithm to each graph.
+During each epoch, we extract the feature vector from each graph, and we find the ROC-AUC of applying each individual algorithm to each graph.
 Each pairing of feature-vector and AUC score forms a training sample.
 For each pairing of dataset and distance function, we initialize a linear regressor and a decision-tree regressor to form our suite of meta-ml models.
 We train each meta-ml model with every training sample collected thus far.
 We use the trained meta-ml models to select clusters (see Section~\ref{subsec:methods:cluster-selection-for-graphs}) for new graphs that are used for the next epoch.
 
-During the earlier epochs, we expect to have selected graphs which exhibit poor anomaly detection performance, as measured by ROC-AUC.
+During the earlier epochs, we expect to have selected graphs which exhibit poor anomaly detection performance.
 For later epochs, we expect this performance to improve.
-With each epoch, we add to the training data being used and we train a new suite of meta-ml models for selecting better clusters.
-This is so that the meta-ml models can learn to distinguish between cluster ratios that select for low ROC-AUC from those ratios that select for high ROC-AUC.
+With each epoch, we add to the set of training samples collected thus far and we train a new suite of meta-ml models for selecting better clusters.
+This is so that the meta-ml models can learn to distinguish between ratios that select for low ROC-AUC from those ratios that select for high ROC-AUC.
 Each meta-ml model sees training data from each pairing of dataset and distance function.
 This lets CHAODA generalize across different datasets and distance functions.
 
@@ -342,7 +341,7 @@ Specifically, we train a number of meta-ml models (see Section~\ref{subsec:metho
 This function assigns high values to clusters which would increase ROC-AUC and low values to clusters which would decrease ROC-AUC.
 As described in Algorithm~\ref{alg:cluster-selection}, the selection process begins by sorting, in non-increasing order, all clusters in the tree by the value assigned by $g$.
 This sorting represents a ranking of the clusters for expected anomaly detection performance.
-We iteratively select the best cluster from the ranking and with each selection, we remove the ancestors and descendants of the selected cluster from the list of rankings.
+We iteratively select the best cluster from the rankings and with each selection, we remove the ancestors and descendants of the selected cluster from the list of rankings.
 Once the list of rankings is exhausted, we have selected the clusters with which to build an \textit{optimal graph}.
 
 \begin{algorithm}[h]
@@ -377,20 +376,20 @@ CHAODA normalizes the scores from all members and aggregates the normalized scor
 \label{subsec:methods:datasets-and-comparisons}
 
 We sourced 24 datasets containing only numerical features, i.e.\ not categorical features, from Outlier Detection Datasets (ODDS)~\cite{rayana2016odds}.
-All of these datasets were adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and were standardized by ODDS for benchmarks on anomaly and outlier detection.
+All of these datasets were adapted from the UCI Machine Learning Repository (UCIMLR)~\cite{UCIMLR}, and were standardized by ODDS for anomaly detection benchmarks.
 Note that CHAODA is able to handle either entirely-numerical or entirely-categorical datasets, but not mixed datasets.
 We discuss some future work relating to this in Section~\ref{sec:discussion}.
 
 We randomly selected six datasets to train CHAODA: annthyroid, mnist, pendigits, satellite, shuttle, and thyroid.
 The other eighteen datasets were used for testing and benchmarks: arrhythmia, breastw, cardio, cover, glass, http, ionosphere, lymphography, mammography, musk, optdigits, pima, satimage-2, smtp, vertebral, vowels, wbc, and wine.
 We benchmarked CHAODA 30 times, using different random seeds, on the test set of datasets (see the Supplement for more details).
-During testing, we noticed that even though we often see $|V| \ll n $, the graph neighborhood size and stationary probabilities methods from~\ref{subsec:methods:individual-algorithms} were prohibitively expensive in running-time, so we only use them when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
+During testing, we noticed that even though we often see $|V| \ll n $, the graph neighborhood size and stationary probabilities methods from~\ref{subsec:methods:individual-algorithms} took prohibitively long to run, so we only use them when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
 We present these results in Table~\ref{table:results:test-performance} under the CHAODA-fast and CHAODA rows.
 CHAODA-fast exhibits comparable performance to CHAODA, so we set CHAODA-fast as the default in our implementation (TODO add github link).
 All benchmarks were conducted on a 28-core Intel Xeon E5-2690 v4 2.60GHz, 512GB RAM and CentOS 7 Linux with kernel 3.10.0-1127.13.1.el7.x86\_64 \#1 SMP and Python 3.6.8 (TODO Add Rust).
 
 We use the ground-truth labels only during the training phase with a small set of datasets.
 Having once been trained, CHAODA becomes an unsupervised algorithm for any new dataset.
-As such, compared it only against other unsupervised algorithms.
+As such, we compared CHAODA only against other unsupervised algorithms.
 We selected $18$ unsupervised algorithms from the pyOD suite~\cite{zhao2019pyod} and Scikit-Learn~\cite{pedregosa2011scikit}, as well as RS-Hash~\cite{sathe2016subspace}.
 A supervised version of CHAODA is possible future work which will open up comparisons against supervised or weakly-supervised methods such as REPEN~\cite{pang2018learning} and DAGMM~\cite{zong2018deep}.
