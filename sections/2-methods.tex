@@ -289,6 +289,11 @@ Its time complexity is $\mathcal{O}(|V|)$.
 
 Section~\ref{subsec:methods:clustering} makes note of some important geometric and topological properties of CLAM clusters, i.e.\ cardinality, radius and local fractal dimension.
 We find the child-parent ratios of these properties and the exponential moving averages of these ratios along each branch in the tree.
+Each Child-Parent ratio is obtained by dividing the value for the child by the value for the parent, e.g.\ $cardinality-ratio = \frac{child-cardinality}{parent-cardinality}$.
+Each new exponential moving average (EMA) is the weighted sum of the previous EMA and the current ratio.
+Specifically, $ema_{i+1} = \alpha * ratio_{i + 1} + (1 - \alpha) * ema_i$ for some $\alpha \in [0, 1]$.
+We chose an $\alpha$ of $\frac{2}{11}$.
+
 Using these ratios, instead of the raw values themselves, lets CHAODA be agnostic to dataset-specific properties and, instead, only consider how those properties change as we traverse the tree and/or a graph.
 For a given graph, we can take the average values of the six ratios from its constituent clusters to form a feature-vector.
 We can use the methods described in Section~\ref{subsec:methods:individual-algorithms} to compute the ROC-AUC of using each individual algorithm to predict anomalousness scores from that graph.
@@ -331,10 +336,6 @@ CHAODA selects clusters to optimize for this measure.
         We name the root `1' and we name the descendants as we might for a huffman tree.
         The upper table is an example of the values that intrinsic cluster properties might take on.
         The lower table shows the derived ratios we use for learning how to select clusters.
-        Each Child-Parent ratio is obtained be dividing the value for the child by the value for the parent.
-        Each new exponential moving average (EMA) is the weighted sum of the previous EMA and the current ratio.
-        Specifically, $ema_{i+1} = \alpha * ratio_{i + 1} + (1 - \alpha) * ema_i$ for some $\alpha \in [0, 1]$.
-        We chose an $\alpha$ of $\frac{2}{11}$.
     }
     \label{fig:methods:cluster-properties}
 \end{figure}
