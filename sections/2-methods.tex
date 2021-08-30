@@ -193,7 +193,7 @@ Points in the same cluster are considered equally anomalous.
 Points in clusters with lower cardinalities are considered more anomalous than points in clusters with higher cardinalities.
 Formally, $\forall c \in G, \ \score(c) = -|c|$.
 
-The intuition here is that points in clusters with higher cardinalities are all close to each other and are, thus, less likely to be anomalous.
+The intuition is that points in clusters with higher cardinalities are close to each other and thus are less likely to be anomalous.
 The time complexity is $\mathcal{O}(|V|)$ because this requires a single pass over the clusters in a graph.
 
 
