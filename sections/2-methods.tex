@@ -89,8 +89,11 @@ This is motivated by the idea that the induced graphs will learn to adapt to use
         Consider this toy dataset whose manifold comprises the four named branches.
         With each branch, we show clusters that we might get from different depths in the tree.
         Clusters on branches A and B come from low depths in the tree and have large voids, i.e.\ regions with no points in them.
+        Note that a graph induced from these clusters would not represent the structure of the two distinct branches.
         Clusters on branch D come from a high depth in the tree and are, in a sense, too small for the ``thickness'' of the branch they cover.
+        Note that a graph induced from these clusters would consist of many disconnected subgraphs, and would not represent the structure of the entire branch.
         Clusters on branch C are ``just right'' because their diameters are roughly equal to the thickness of the branch and they contain no large voids.
+        Note that a graph induced from these clusters would represent the structure of this branch.
         We can track how the local fractal dimension of these clusters changes as we traverse the tree and as we move along clusters that are adjacent on the manifold.
         In this way, changes in the local fractal dimension can serve as a proxy for deciding which clusters would help ``well characterize'' the underlying manifold.
     }
@@ -249,7 +252,7 @@ We consider this sum to be inversely related to the anomalousness of the corresp
 
 The intuition here is that clusters that are more difficult to reach during an infinite random walk are more likely to contain anomalous points.
 The algorithm is defined in Algorithm~\ref{alg:stationary-probabilities}.
-Its worst-case time complexity is $\mathcal{O}(|V|^{2.3728596})$ given by the matrix multiplication algorithm from~\cite{alman2021refined}.
+Its worst-case time complexity is $\mathcal{O}(|V|^{2.37})$ given by the matrix multiplication algorithm from~\cite{alman2021refined}.
 In practice, however, this algorithm has much better performance than indicated by the theoretical complexity because the induced graphs are often composed of several small components rather than one, or a few, large component(s).
 
 \begin{algorithm}[h]
