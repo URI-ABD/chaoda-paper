@@ -10,24 +10,28 @@ While the meta-ml models in CHAODA optimize for the best ROC-AUC scores for anom
 Future work should explore tasks other than anomaly detection and come up with mathematical measures for performance on those tasks.
 Variants of CHAODA could then be trained for such tasks.
 
+Cross-validation on a single dataset is commonplace in machine learning.
+While $k$-fold cross-validation splits a single dataset into $k$ folds and then evaluates performance on each fold separately, these folds are still drawn from the same underlying distribution; indeed, this is the principle that justifies cross-validation.
+In contrast, CHAODA's meta-ml approach learns geometric and topological properties for inducing graphs from a \emph{set} of training datasets, and \emph{transfers} that knowledge to an \emph{entirely distinct} set of datasets, which may differ in cardinality, dimensionality, domain, and the generating phenomenon or process that produced the data.
+
 CLAM uses the geometric and topological properties such as fractal dimension of the data to build a map of the low-dimensional manifold that the data occupy.
 CLAM extends CHESS~\cite{ishaq2019clustered} by:
 a better selection of ``poles'' (i.e. a pair of well-separated points) for partitioning clusters,
 memoizing important cluster properties, and
 introducing a novel graph-induction approach using a notion of optimal depths, learned via a form of ``meta-machine-learning'' and transfer learning.
-While the standard approach in machine learning is to split a single dataset into many folds, CLAM and CHAODA are unusual in that they learn geometric and topological properties for inducing graphs from a \emph{set} of training datasets, and \emph{transfer} that knowledge to entirely different datasets.
 Whereas CHESS was developed specifically for accelerating search,
 CHAODA uses this manifold-mapping framework to discover properties of the manifold that are useful for anomaly detection.
 Intuitively, we expect CHAODA to perform particularly well when the data lie on an ``interesting'' manifold, and to perform merely average when the data derive from an easily-described distribution (or ``boring'' manifold).
-Just as CHESS demonstrated an acceleration of search when the data exhibited \emph{low fractal dimension} and \emph{low metric entropy}, with CHAODA, we see that AUC scores are vastly improved when the data exhibit these properties and often competitive when the data do not exhibit these properties.
-CLAM is free of hyper-parameters other than the fairly standard choice of $\alpha$ in Section~\ref{subsec:methods:training-meta-ml-models}; the weights learned from the meta-ML step could vary, but we learned them once on a distinct training set of datasets.
+Just as CHESS demonstrated an acceleration of search when the data exhibited \emph{low fractal dimension} and \emph{low metric entropy}, we see that CHAODA vastly improves ROC scores when the data exhibit these properties.
+When the data do not exhibit these properties, CHAODA is still often competitive with other approaches.
+CLAM is free of hyper-parameters other than the fairly standard choice of $\alpha$ in Section~\ref{subsec:methods:training-meta-ml-models}; the weights learned from the meta-ml step could vary, but we learned them once on a distinct training set of datasets.
 
-We should note the Vertebral Column (Vert.) dataset.
-Most tested algorithms perform similarly to random guessing, while CHAODA performs much worse.
+We briefly discuss the Vertebral Column (Vert.) dataset.
+On this dataset, most algorithms we evaluated performed similarly to random guessing, while CHAODA performed much worse.
 We suspect this is due to how this specific dataset was collected.
 Each instance represents six biomechanical attributes derived from scans of a patient's pelvis and lumbar spine.
 This dataset contains 210 instances of the Abnormal class treated as inliers and 30 instances of the Normal class treated as outliers.
-Each attribute has a narrow range to be in the Normal class but can have a wider range in the Abnormal class.
+Each attribute must have a narrow range to be in the Normal class, but can have a wider range in the Abnormal class.
 This causes the Normal instances to group together, while Abnormal instances remain distant from each other.
 As CHAODA relies on clusters as the substrate, it assigns low scores to instances in the Normal class, i.e.\ the outliers, and high scores to those in the Abnormal class, i.e.\ the inliers.
 Put plainly, CHAODA sees the manifold as the Normal class, which the ground-truth labels as outliers.
@@ -38,9 +42,11 @@ Future work should explore a more diverse collection of domain-appropriate dista
 Currently, CLAM only functions on a Banach space defined by a distance metric.
 This poses a limitation on datasets that have heterogenous features, such as a mix of continuous and categorical variables.
 Future work should explore linear combinations of normalized distance functions to overcome this limitation.
+Additionally, we do not yet know how CHAODA would generalize across distance functions; i.e. predicting anomalousness with distance functions different from those used to train the meta-ml models.
+Future work should investigate this question of generalization.
 
 In this paper, we have used CHAODA (and the methods under comparison) to score entire datasets with known anomaly labels for purposes of evaluating CHAODA's accuracy.
-In real-world usage, one might wish to assign anomaly scores to incoming, streaming data.
+In real-world usage, one might wish to assign anomaly scores to an incoming data stream.
 This is a simple extension: given some corpus of data (some of which may or may not be anomalous), build a CLAM tree and the induced graphs, and assign anomaly scores from the CHAODA algorithms as we have demonstrated.
 Then, as each new datum arrives, simply fit it into the CLAM tree ($\mathcal{O}(\lg |V|)$ time using tree-search from CHESS) into a cluster that is found in a graph and assign it the anomaly score for that cluster.
 If an incoming datum is too far from any cluster (further than any existing datum at that depth from its cluster center) then it can initialize a new cluster, which would be assigned a high anomaly score.

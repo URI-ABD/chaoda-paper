@@ -5,7 +5,7 @@
 CLAM and CHAODA comprise many components, all described in this section.
 We start with a brief overview of those components.
 CLAM begins with a dataset and a distance metric, to which it applies hierarchical clustering to build a tree.
-CLAM selects clusters from the tree using meta-ml models trained\footnote{Note that during training, CHAODA is somewhat supervised.
+CLAM selects clusters from the tree using meta-machine-learning (meta-ml) models trained\footnote{Note that during training, CHAODA is somewhat supervised.
 CHAODA uses this training to learn a set of meta-ml models for selecting clusters and inducing graphs.
 During testing, and inference, on new datasets, CHAODA is unsupervised and uses the learned meta-ml models.} according to several geometric and topological properties.
 These meta-ml models learn relationships between these properties and expected anomaly-detection performance.
@@ -39,7 +39,7 @@ CLAM and CHAODA learn the geometric and topological properties of these manifold
 We demonstrate this genericity by our anomaly detection performance in Section~\ref{sec:results}.
 
 Note that we often speak of each datum as embedded in a $D$-dimensional Banach space and we use Euclidean notions, such as voids and volumes, to talk about the geometric and topological properties of the manifold.
-The purpose of such notions is to help build intuition and aid understanding.
+The purpose of such notions is to help build intuition and to aid understanding.
 Mathematically, CLAM does not rely on such notions; in-fact, the details of an embedding space can be abstracted away behind the distance function.
 
 Also note that we can provide certain guarantees (see CHESS~\cite{ishaq2019clustered}) when the distance function is a metric, i.e.\ it obeys the triangle inequality.
@@ -54,7 +54,7 @@ We start by building a divisive hierarchical clustering of the dataset.
 We partition, as described in Algorithm~\ref{alg:partition}, a cluster with $k$ points using a pair of well-separated points from among a random sampling of $\sqrt k$ points.
 Starting from a root-cluster containing the entire dataset, we continue until each leaf contains only one datum.
 This achieves clustering in expected $\mathcal{O}(n \lg n)$ time.
-This procedure improves upon the clustering approach from CHESS~\cite{ishaq2019clustered} by a better selection of maximally-separated points, and by memoizing critical information about each cluster.
+This procedure improves upon the clustering approach from CHESS~\cite{ishaq2019clustered} by a better selection of maximally-separated points, and by memoizing critical information about each cluster (discussed below).
 
 \begin{algorithm} % enter the algorithm environment
 \caption{Partition} % give the algorithm a caption
@@ -128,7 +128,7 @@ The induced graph need not be fully connected and, in practice, often contains m
 \end{figure}
 
 For our purposes, a CLAM graph exhibits an important invariant.
-The clusters corresponding to vertices in the graph collectively contain every point in the dataset and each point in the dataset is contained in, i.e.\ assigned to, exactly one cluster in the graph.
+The clusters corresponding to vertices in the graph collectively contain every point in the dataset, and each point in the dataset is assigned to exactly one cluster in the graph.
 A corollary to this invariant is that a graph will never contain two clusters such that one cluster is an ancestor or descendant of another cluster.
 This also assures that a \textit{graph's population} is equal to the cardinality of the dataset, i.e. $|\textbf{X}|$ or $n$.
 
@@ -207,7 +207,7 @@ With $k$ small compared to the diameter of a component, we consider the relative
 Clusters with small graph-neighborhoods are considered more anomalous than clusters with large graph-neighborhoods.
 
 The intuition here is to capture information about the connectivity of the graph in the region around each cluster.
-The algorithm is defined in Algorithm~\ref{alg:graph-neighborhood-size}.
+The computation is defined in Algorithm~\ref{alg:graph-neighborhood-size}.
 Its time complexity is $\mathcal{O}(|E| \cdot |V|)$ because we need to compute the eccentricity of each cluster.
 
 \begin{algorithm}[h]
@@ -254,7 +254,7 @@ We consider this sum to be inversely related to the anomalousness of the corresp
 The intuition here is that clusters that are more difficult to reach during an infinite random walk are more likely to contain anomalous points.
 The algorithm is defined in Algorithm~\ref{alg:stationary-probabilities}.
 Its worst-case time complexity is $\mathcal{O}(|V|^{2.37})$ given by the matrix multiplication algorithm from~\cite{alman2021refined}.
-In practice, however, this algorithm has much better performance than indicated by the theoretical complexity. because the induced graphs are often composed of several small components rather than one, or a few large, component(s).
+In practice, however, this algorithm has much better performance than indicated by the theoretical complexity, because the induced graphs are often composed of several small components rather than one, or a few large, component(s).
 
 \begin{algorithm}[h]
     \caption{Stationary Probabilities}
@@ -284,27 +284,27 @@ Formally, $\forall c \in G, \ \score(c) = -\deg(c)$.
 Its time complexity is $\mathcal{O}(|V|)$.
 
 
-\subsection{Training Meta-ML Models}
+\subsection{Training Meta-Machine-Learning Models}
 \label{subsec:methods:training-meta-ml-models}
 
 Section~\ref{subsec:methods:clustering} makes note of some important geometric and topological properties of CLAM clusters, i.e.\ cardinality, radius and local fractal dimension.
 We find the child-parent ratios of these properties and the exponential moving averages of these ratios along each branch in the tree.
-Each Child-Parent ratio is obtained by dividing the value for the child by the value for the parent, e.g.\ $cardinality-ratio = \frac{child-cardinality}{parent-cardinality}$.
+Each child-parent ratio is obtained by dividing the value for the child by the value for the parent, e.g.\ $R= \frac{|child|}{|parent|}$.
 Each new exponential moving average (EMA) is the weighted sum of the previous EMA and the current ratio.
-Specifically, $ema_{i+1} = \alpha * ratio_{i + 1} + (1 - \alpha) * ema_i$ for some $\alpha \in [0, 1]$.
+Specifically, $ema_{i+1} = \alpha * R_{i + 1} + (1 - \alpha) * ema_i$ for some $\alpha \in [0, 1]$.
 We chose an $\alpha$ of $\frac{2}{11}$.
 
-Using these ratios, instead of the raw values themselves, lets CHAODA be agnostic to dataset-specific properties and, instead, only consider how those properties change as we traverse the tree and/or a graph.
+Using these ratios instead of the raw values themselves makes CHAODA agnostic to dataset-specific properties; it need only consider how those properties change as we traverse the tree or a graph.
 For a given graph, we can take the average values of the six ratios from its constituent clusters to form a feature-vector.
 We can use the methods described in Section~\ref{subsec:methods:individual-algorithms} to compute the area under the ROC curve from using each individual algorithm to predict anomalousness scores from that graph.
 Each pairing of the feature-vector and an ROC score forms a training sample for our meta-ml models.
 We use linear regression and decision-tree regressors to fill the role of those meta-ml models.
 We use these data to train the meta-ml models to predict the ROC score for a graph from its feature-vector.
 
-We randomly selected six datasets whose cardinality is between $10^3$ and $10^5$ for training and we used the $L1$-norm and $L2$-norm for each dataset.
+We randomly selected six datasets whose cardinalities are between $10^3$ and $10^5$ for training, and we used the $L1$-norm and $L2$-norm for each dataset.
 For each pairing of dataset and distance function, CLAM builds a new cluster-tree.
 Meta-ml training then proceeds over several epochs, the first of which we seed with some layer graphs from each tree.
-During each epoch, we extract the feature vector from each graph, and we find the ROC-AUC of applying each individual algorithm to each graph.
+During each epoch, we extract the feature vector from each graph, and we find the ROC AUC of applying each individual algorithm to each graph.
 Each pairing of feature-vector and ROC score forms a training sample.
 For each pairing of dataset and distance function, we initialize a linear regressor and a decision-tree regressor to form our suite of meta-ml models.
 We train each meta-ml model with every training sample collected thus far.
@@ -371,7 +371,7 @@ During the testing and inference phases, we begin with a new dataset (not includ
 CLAM first builds cluster-trees using each distance function with the given dataset.
 CHAODA uses the trained meta-ml models to select a different graph from each tree for each individual algorithm.
 CHAODA applies each individual algorithm to its corresponding graph and produces anomalousness scores for each datum.
-With two distance functions, six individual algorithms, and two meta-ml models, we can get up-to $24$ different members with which to form an ensemble.
+With two distance functions, six individual algorithms, and two meta-ml models, we can get up to $24$ different members with which to form an ensemble.
 CHAODA normalizes the scores from all members and aggregates them, by their mean, into a final set of predictions for the anomalousness of each datum.
 
 
