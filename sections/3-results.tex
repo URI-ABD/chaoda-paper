@@ -3,9 +3,9 @@
 
 The performance on the 18 test datasets is in Table~\ref{table:results:test-performance}.
 Performance on the 6 training datasets is shown in the Supplement.
-Each column shows the AUC ROC scores of CHAODA and every competitor.
+Each column shows the ROC scores of CHAODA and every competitor.
 The highest score and every score within $0.02$ is presented in bold.
-We found that setting a different random seed resulted in a variance of at most $0.02$ AUC for CHAODA.
+We found that setting a different random seed resulted in a variance of at most $0.02$ ROC AUC for CHAODA.
 
 If a method exceeded 10 hours on a dataset, we mark the corresponding cell with ``\textit{TO}''.
 If a method crashed, we mark the cell with ``\textit{EX}''.
@@ -17,7 +17,7 @@ An implementation in a high-performance language, such as Rust, would be worthwh
 
 \begin{table*}[!t]
 % \renewcommand{\arraystretch}{1.15}
-\caption{Performance (AUC) of CHAODA vs. other methods on the 18 test datasets.}
+\caption{Performance (ROC AUC) of CHAODA vs. other methods on the 18 test datasets.}
 \label{table:results:test-performance}
 \vskip 0.15in
 \begin{center}

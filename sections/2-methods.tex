@@ -171,7 +171,7 @@ Each algorithm assigns an anomalousness score to each cluster.
 Each point is then assigned the anomalousness score of the cluster it belongs to.
 These scores are internally consistent for each individual algorithm, i.e.\ low scores indicate inliers and high scores indicate outliers.
 However, different algorithms assign scores in wide, and often different, ranges of values.
-We use gaussian normalization to constrain the raw scores to a $[0, 1]$ range.
+We use Gaussian normalization to constrain the raw scores to a $[0, 1]$ range.
 This lets us combine scores into an ensemble (see Section~\ref{subsec:methods:the-ensemble}).
 See~\cite{kriegel2011interpreting} for a thorough discussion of anomaly-score normalization in ensemble methods.
 
@@ -296,16 +296,16 @@ We chose an $\alpha$ of $\frac{2}{11}$.
 
 Using these ratios, instead of the raw values themselves, lets CHAODA be agnostic to dataset-specific properties and, instead, only consider how those properties change as we traverse the tree and/or a graph.
 For a given graph, we can take the average values of the six ratios from its constituent clusters to form a feature-vector.
-We can use the methods described in Section~\ref{subsec:methods:individual-algorithms} to compute the ROC-AUC of using each individual algorithm to predict anomalousness scores from that graph.
-Each pairing of the feature-vector and an AUC score forms a training sample for our meta-ml models.
+We can use the methods described in Section~\ref{subsec:methods:individual-algorithms} to compute the area under the ROC curve from using each individual algorithm to predict anomalousness scores from that graph.
+Each pairing of the feature-vector and an ROC score forms a training sample for our meta-ml models.
 We use linear regression and decision-tree regressors to fill the role of those meta-ml models.
-We use these data to train the meta-ml models to predict the ROC-AUC score for a graph from its feature-vector.
+We use these data to train the meta-ml models to predict the ROC score for a graph from its feature-vector.
 
 We randomly selected six datasets whose cardinality is between $10^3$ and $10^5$ for training and we used the $L1$-norm and $L2$-norm for each dataset.
 For each pairing of dataset and distance function, CLAM builds a new cluster-tree.
 Meta-ml training then proceeds over several epochs, the first of which we seed with some layer graphs from each tree.
 During each epoch, we extract the feature vector from each graph, and we find the ROC-AUC of applying each individual algorithm to each graph.
-Each pairing of feature-vector and AUC score forms a training sample.
+Each pairing of feature-vector and ROC score forms a training sample.
 For each pairing of dataset and distance function, we initialize a linear regressor and a decision-tree regressor to form our suite of meta-ml models.
 We train each meta-ml model with every training sample collected thus far.
 We use the trained meta-ml models to select clusters (see Section~\ref{subsec:methods:cluster-selection-for-graphs}) for new graphs that are used for the next epoch.
@@ -313,7 +313,7 @@ We use the trained meta-ml models to select clusters (see Section~\ref{subsec:me
 During the earlier epochs, we expect to have selected graphs that exhibit poor anomaly detection performance.
 For later epochs, we expect this performance to improve.
 With each epoch, we add to the set of training samples collected thus far and we train a new suite of meta-ml models for selecting better clusters.
-This is so that the meta-ml models can learn to distinguish between ratios that select for low ROC-AUC from those ratios that select for high ROC-AUC.
+This is so that the meta-ml models can learn to distinguish between ratios that select for low ROC AUC from those ratios that select for high ROC AUC.
 Each meta-ml model sees training data from each pairing of dataset and distance function.
 This lets CHAODA generalize across different datasets and distance functions.
 
@@ -341,7 +341,7 @@ CHAODA selects clusters to optimize for this measure.
 \end{figure}
 
 Specifically, we train a number of meta-ml models (see Section~\ref{subsec:methods:training-meta-ml-models} for details) and, from each model, we extract a function of the form $g : c \rightarrow \mathbb{R}$.
-This function assigns high values to clusters which would increase ROC-AUC and low values to clusters which would decrease ROC-AUC.
+This function assigns high values to clusters which would increase ROC AUC and low values to clusters which would decrease ROC AUC.
 As described in Algorithm~\ref{alg:cluster-selection}, the selection process begins by sorting, in non-increasing order, all clusters in the tree by the value assigned by $g$.
 This sorting represents a ranking of the clusters for expected anomaly detection performance.
 We iteratively select the best cluster from the rankings, and with each selection, we remove the ancestors and descendants of the selected cluster from the list of rankings.
