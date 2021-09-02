@@ -44,6 +44,7 @@ This poses a limitation on datasets that have heterogenous features, such as a m
 Future work should explore linear combinations of normalized distance functions to overcome this limitation.
 Additionally, we do not yet know how CHAODA would generalize across distance functions; i.e. predicting anomalousness with distance functions different from those used to train the meta-ml models.
 Future work should investigate this question of generalization.
+It would also be worth exploring the question of whether CHAODA extends to nondeterministic distance functions, as well as performance on other non-metric distance functions, such as those disobeying the triangle inequality (e.g. cosine distance or Damerau-Levenshtein edit distance~\cite{damerau1964technique}).
 
 In this paper, we have used CHAODA (and the methods under comparison) to score entire datasets with known anomaly labels for purposes of evaluating CHAODA's accuracy.
 In real-world usage, one might wish to assign anomaly scores to an incoming data stream.
