@@ -385,7 +385,7 @@ We discuss some future work relating to this in Section~\ref{sec:discussion}.
 
 We randomly selected six datasets to train CHAODA: ann-thyroid, mnist, pendigits, satellite, shuttle, and thyroid.
 The other eighteen datasets were used for testing and benchmarks: arrhythmia, breastw, cardio, cover, glass, http, ionosphere, lymphography, mammography, musk, optdigits, pima, satimage-2, smtp, vertebral, vowels, wbc, and wine.
-We benchmarked CHAODA 30 times, using different random seeds, on the test set of datasets (see the Supplement for more details).
+We benchmarked CHAODA 30 times, using different random seeds, on the test set of datasets (see the Supplement at https://github.com/URI-ABD/chaoda for more details).
 During testing, we noticed that even though we often see $|V| \ll n $, the graph neighborhood size and stationary probabilities methods from~\ref{subsec:methods:individual-algorithms} took prohibitively long to run, so we only use them when $|V| < max(128, \lfloor \sqrt n \rfloor)$.
 We present these results in Table~\ref{table:results:test-performance} under the CHAODA-fast and CHAODA rows.
 CHAODA-fast exhibits comparable performance to CHAODA, so we set CHAODA-fast as the default in our implementation (TODO add github link).
