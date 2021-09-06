@@ -124,3 +124,13 @@ RS-Hash~\cite{sathe2016subspace} reported AUCs of $0.92$ on Cardio, $1.00$ on Ly
 This beats CHAODA on Cardio, ties on Lympho and Musk, and is outperformed by CHAODA on OptDigits.
 We considered Clustering with Outlier Removal~\cite{liu2019clustering} but we could not find a working implementation, and the authors did not report AUC scores, instead only reporting F-measure.
 We considered comparisons against REPEN~\cite{pang2018learning} and RDP~\cite{wang2019unsupervised}, but REPEN's publicly available source code lacks information about dependencies and their versions, and training RDP took prohibitively long.
+
+
+\subsection{SDSS-APOGEE2}
+\label{subsec:results:sdss-apogee2}
+
+We demonstrate the ability of CLAM and CHAODA to scale to the next generation of ``Big-Data'' problems.
+As a proof of concept, we consider the APOGEE2 data.
+This dataset contains spectra of a large number of stars collected, so far, during the SDSS project~\cite{blanton2017sdss}.
+We extracted $528,319$ spectra in $8,575$ dimensions and used CHAODA, under the $L1$-norm and the $L2$-norm, to produce anomaly scores.
+Since there is no ground-truth available, we simply report the scores and the time taken in the Supplement.
