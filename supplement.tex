@@ -390,6 +390,24 @@ The inliers and outliers seem inseparable, and so all the methods perform poorly
 Tables~\ref{supplement:table:results:test-time-1}~and~\ref{supplement:table:results:test-time-2} report the running time, in seconds, of CHAODA and each competitor.
 The fastest methods on each dataset are presented in bold face.
 
+\subsection{AUC and Runtime performance on Train set of Datasets}
+
+Tables~\ref{supplement:table:results:train-performance}~and~\ref{supplement:table:results:train-time} report the  the AUC performance and running time, respectively, of CHAODA and each competitor on the train set of datasets.
+
+\subsection{Performance of Individual CHAODA Algorithms}
+
+The ensemble of CHAODA algorithms is discussed extensively in the main paper, but we did not have room to discuss or present the performance of the individual algorithms.
+Due to the large numbers of graphs generated for the ensemble and with each method being applied to each graph, we cannot provide these intermediate results as a table in this document.
+We instead provide a .csv file which will be available for download.
+
+\subsection{Performance on APOGEE-2}
+
+For a read ``Big-Data'' challenge, we applied CHAODA to the APOGEE-2 dataset from the SDSS.
+This dataset contains spectra of stars, i.e.\ intensity/flux measured at several wavelengths, in $8,757$ dimensions.
+We extracted $528,323$ spectra from data-release 15.
+CHAODA was able to produce anomaly sores for these data in approximately 2 hours and 36 minutes.
+These scores, and the associated metadata, are provided in our github repository in the `apogee' directory.
+
 
 \begin{table*}[!t]
 \renewcommand{\arraystretch}{1.15}
@@ -511,15 +529,6 @@ VAE &         30.38 &              30.58 &          5.67 &               30.41 &
 \end{table*}
 
 
-\subsection{AUC and Runtime performance on Train set of Datasets}
-
-Tables~\ref{supplement:table:results:train-performance}~and~\ref{supplement:table:results:train-time} report the  the AUC performance and running time, respectively, of CHAODA and each competitor on the train set of datasets.
-
-\subsection{Performance of Individual CHAODA Algorithms}
-The ensemble of CHAODA algorithms is discussed extensively in the main paper, but we did not have room to discuss or present the performance of the individual algorithms.
-Due to the large numbers of graphs generated for the ensemble and with each method being applied to each graph, we cannot provide these intermediate results as a table in this document.
-We instead provide a .csv file which will be available for download.
-
 \begin{table*}[!t]
 \renewcommand{\arraystretch}{1.25}
 \caption{Performance on Train Datasets}
@@ -579,6 +588,7 @@ VAE &                0.69 &           0.67 &               0.58 &               
 \end{center}
 \vskip -0.1in
 \end{table*}
+
 
 \begin{table*}[!t]
 \renewcommand{\arraystretch}{1.25}
