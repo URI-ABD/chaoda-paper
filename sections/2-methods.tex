@@ -175,6 +175,29 @@ We use Gaussian normalization to constrain the raw scores to a $[0, 1]$ range.
 This lets us combine scores into an ensemble (see Section~\ref{subsec:methods:the-ensemble}).
 See~\cite{kriegel2011interpreting} for a thorough discussion of anomaly-score normalization in ensemble methods.
 
+The overall computational complexity of these algorithms appears in Table~\ref{table:methods:complexity}.
+
+\begin{table}
+\label{table:methods:complexity}
+\caption{Time complexity of CHAODA algorithms.}
+\begin{tabular}{|l|l|}
+\hline
+\textbf{Algorithm} & \textbf{Complexity} \\
+\hline
+ Relative Cluster Cardinality & $\mathcal{O}(|V|)$ \\
+ \hline
+ Relative Component Cardinality & $\mathcal{O}(|E| + |V|)$  \\
+ \hline
+ Graph Neighborhood Size & $\mathcal{O}(|E| \cdot |V|)$  \\ 
+ \hline
+ Child-Parent Cardinality Ratio & $\mathcal{O}(|V|)$ \\ 
+ \hline
+ Stationary Probabilities & $\mathcal{O}(|V|^{2.37})$ \\ 
+ \hline
+ Relative Vertex Degree & $\mathcal{O}(|V|)$ \\ \cline{1-5}
+ \hline
+\end{tabular}
+\end{table}
 
 \subsubsection{Relative Cluster Cardinality}
 \label{subsubsec:methods:individual-algorithms:relative-cluster-cardinality}
@@ -362,6 +385,7 @@ Once the list of rankings is exhausted, we have selected the clusters with which
     \UNTIL $h$ is empty
 \end{algorithmic}
 \end{algorithm}
+
 
 
 \subsection{The Ensemble}
