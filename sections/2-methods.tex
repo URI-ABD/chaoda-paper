@@ -332,8 +332,9 @@ Meta-ml training then proceeds over several epochs, the first of which we seed w
 During each epoch, we extract the feature vector from each graph, and we find the ROC AUC of applying each individual algorithm to each graph.
 Each pairing of feature-vector and ROC score forms a training sample.
 For each pairing of dataset and distance function, we initialize a linear regressor and a decision-tree regressor to form our suite of meta-ml models.
-We train each meta-ml model with every training sample collected thus far.
+We train each meta-ml model with every training sample collected thus far, for ten epochs.
 We use the trained meta-ml models to select clusters (see Section~\ref{subsec:methods:cluster-selection-for-graphs}) for new graphs that are used for the next epoch.
+We note that this was not $k$-fold cross validation, but a one-time selection of six datasets for training based on size as a selection criterion.
 
 During the earlier epochs, we expect to have selected graphs that exhibit poor anomaly detection performance.
 For later epochs, we expect this performance to improve.
@@ -426,3 +427,6 @@ A supervised version of CHAODA is possible future work, which would open up comp
 For a ``Big-Data'' challenge, we ran CHAODA on the APOGEE2 data from the SDSS~\cite{blanton2017sdss}.
 This dataset has a cardinality of $528,319$ and a dimensionality of $8,575$.
 See Section~\ref{subsec:results:sdss-apogee2} for results.
+All of these datasets were prepared by UCI and ODDS. 
+In our experiments, we simply read them as 2-dimensional arrays where the columns are the features and the rows are the instances. 
+We pre-processed the APOGEE2 data into a similar array, but of course it has no ground-truth labeling.

@@ -134,3 +134,23 @@ As a proof of concept, we consider the APOGEE2 data.
 This dataset contains spectra of a large number of stars collected, so far, during the SDSS project~\cite{blanton2017sdss}.
 We extracted $528,319$ spectra in $8,575$ dimensions and used CHAODA, under the $L1$-norm and the $L2$-norm, to produce anomaly scores.
 Since there is no ground-truth available, we simply report the scores and the time taken in the Supplement.
+
+
+\section{UMAP Visualization}
+\label{sec:umap-visualization}
+
+A visualization in Figure~\ref{fig:conclusions:umap-embeddings-1} using UMAP illustrates a handful of different examples;
+the anomalies in the Cardio and OptDigits datasets, where CHAODA outperforms other methods, appear to be at the edges of a complex manifold (though, clearly, the UMAP projection has distorted the manifold).
+In the Mnist dataset, where several methods perform fairly well, the distribution is less interesting.
+Most anomalies are off to one side but there are several interspersed among the inliers.
+
+\begin{figure*}
+   \centering
+   \includegraphics[width=2.5in]{images/umaps/cardio-euclidean-umap2d.png}
+   \includegraphics[width=2.5in]{images/umaps/optdigits-euclidean-umap2d.png}
+   \caption{UMAP projections of Cardio (left) and Optdigits (right) under Euclidean distance.
+   For Cardio, there is a single main component to the manifold, and anomalies tend to be at the edges of that manifold.
+   For OptDigits, there are several distinct pieces to the manifold, perhaps corresponding to different digits.
+   CHAODA outperforms other approaches on both of these datasets.}
+   \label{fig:conclusions:umap-embeddings-1}
+\end{figure*}
