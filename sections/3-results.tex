@@ -139,10 +139,9 @@ Since there is no ground-truth available, we simply report the scores and the ti
 \section{UMAP Visualization}
 \label{sec:umap-visualization}
 
-A visualization in Figure~\ref{fig:conclusions:umap-embeddings-1} using UMAP illustrates a handful of different examples;
-the anomalies in the Cardio and OptDigits datasets, where CHAODA outperforms other methods, appear to be at the edges of a complex manifold (though, clearly, the UMAP projection has distorted the manifold).
-\textbf{In the Mnist dataset, where several methods perform fairly well, the distribution is less interesting.
-Most anomalies are off to one side but there are several interspersed among the inliers.}
+A visualization in Figure~\ref{fig:conclusions:umap-embeddings-1} using UMAP illustrates three different examples;
+the anomalies in the Cardio and OptDigits datasets, where CHAODA outperforms other methods, appear to be at the edges of a complex manifold (though, clearly, the UMAP projection has distorted the manifold); in the OptDigits dataset, there are several distinct components to the manifold, likely corresponding to differebt digits.
+In the Pima dataset, all methods perform fairly poorly, the anomalies appear to be distributed across the manifold, including in the interior.
 
 \begin{figure*}
    \centering
@@ -152,6 +151,6 @@ Most anomalies are off to one side but there are several interspersed among the 
    \caption{UMAP projections of Cardio (left), Optdigits (middle), and Pima (right) under Euclidean distance.
    For Cardio, there is a single main component to the manifold, and anomalies tend to be at the edges of that manifold.
    For OptDigits, there are several distinct pieces to the manifold, perhaps corresponding to different digits.
-   CHAODA outperforms other approaches on both of these datasets. On Pima...}
+   CHAODA outperforms other approaches on both of these datasets. On Pima, all approaches fare poorly, and the UMAP projection illustrates that the anomalies cover much of the manifold, including in the interior.}
    \label{fig:conclusions:umap-embeddings-1}
 \end{figure*}
